@@ -1,0 +1,2945 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load minoo_filters %}
+
+
+
+{% block title %}
+Trang chủ | MINOO Eyewear
+{% endblock %}
+
+
+
+
+{% block extra_css %}
+
+
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+
+
+<link
+   href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap"
+   rel="stylesheet"
+>
+
+
+<style>
+
+
+/* =========================================================
+  SERVICE FAN - PHẦN DỊCH VỤ TƯƠNG TÁC
+========================================================= */
+
+
+.service-fan-section {
+   position: relative;
+   overflow: hidden;
+   padding: 110px 0 120px;
+
+
+   background:
+       radial-gradient(
+           circle at 15% 15%,
+           rgba(189, 135, 92, .16),
+           transparent 25%
+       ),
+       linear-gradient(
+           135deg,
+           #32170d 0%,
+           #4b2111 55%,
+           #3d1c0f 100%
+       );
+
+
+   color: #fff;
+}
+
+
+
+
+/* Ánh sáng trang trí */
+
+
+.service-fan-section::before {
+   content: "";
+   position: absolute;
+
+
+   width: 500px;
+   height: 500px;
+
+
+   right: -220px;
+   top: -220px;
+
+
+   border-radius: 50%;
+
+
+   background: rgba(215, 169, 127, .08);
+
+
+   filter: blur(5px);
+
+
+   pointer-events: none;
+}
+
+
+
+
+/* =========================================================
+  HEADING
+========================================================= */
+
+
+.service-fan-heading {
+   position: relative;
+   z-index: 2;
+
+
+   display: grid;
+   grid-template-columns: 1fr .7fr;
+
+
+   gap: 70px;
+
+
+   align-items: end;
+
+
+   margin-bottom: 58px;
+}
+
+
+
+
+.service-fan-heading-left > span {
+   display: inline-block;
+
+
+   margin-bottom: 15px;
+
+
+   color: #D7A97F;
+
+
+   font-size: 14px;
+   font-weight: 700;
+
+
+   letter-spacing: 3px;
+}
+
+
+
+
+.service-fan-heading h2 {
+   margin: 0;
+
+
+   color: #fff;
+
+
+   font-family: 'Playfair Display', Georgia, serif;
+
+
+   font-size: clamp(48px, 5vw, 68px);
+
+
+   font-weight: 700;
+
+
+   line-height: 1.06;
+
+
+   letter-spacing: -1.5px;
+}
+
+
+
+
+.service-fan-heading h2 span {
+   display: block;
+
+
+   color: #D7A97F;
+}
+
+
+
+
+.service-fan-heading-right p {
+   margin: 0;
+
+
+   color: rgba(255, 255, 255, .76);
+
+
+   font-size: 18px;
+
+
+   line-height: 1.85;
+}
+
+
+
+
+/* =========================================================
+  FAN WRAPPER
+========================================================= */
+
+
+.service-fan {
+   position: relative;
+   z-index: 2;
+
+
+   display: flex;
+
+
+   gap: 14px;
+
+
+   min-height: 500px;
+}
+
+
+
+
+/* =========================================================
+  CARD
+========================================================= */
+
+
+.service-fan-card {
+   position: relative;
+
+
+   flex: .78;
+
+
+   min-width: 0;
+
+
+   overflow: hidden;
+
+
+   border: 1px solid rgba(255, 255, 255, .10);
+
+
+   border-radius: 30px;
+
+
+   background:
+       linear-gradient(
+           180deg,
+           rgba(255, 255, 255, .065),
+           rgba(255, 255, 255, .025)
+       );
+
+
+   box-shadow: 0 20px 45px rgba(0, 0, 0, .12);
+
+
+   backdrop-filter: blur(8px);
+
+
+   transition:
+       flex .55s cubic-bezier(.2, .8, .2, 1),
+       transform .35s ease,
+       background .35s ease,
+       box-shadow .35s ease;
+}
+
+
+
+
+.service-fan-card:hover {
+   transform: translateY(-7px);
+}
+
+
+
+
+.service-fan-card.is-active {
+   flex: 2.6;
+
+
+   background:
+       radial-gradient(
+           circle at 80% 10%,
+           rgba(215, 169, 127, .20),
+           transparent 32%
+       ),
+       linear-gradient(
+           180deg,
+           rgba(255, 255, 255, .105),
+           rgba(255, 255, 255, .045)
+       );
+
+
+   box-shadow: 0 28px 65px rgba(0, 0, 0, .25);
+}
+
+
+
+
+/* Số lớn phía nền */
+
+
+.service-fan-card::before {
+   content: attr(data-number);
+
+
+   position: absolute;
+
+
+   right: 20px;
+   bottom: -35px;
+
+
+   color: rgba(255, 255, 255, .025);
+
+
+   font-size: 180px;
+
+
+   font-weight: 700;
+
+
+   line-height: 1;
+
+
+   pointer-events: none;
+}
+
+
+
+
+/* =========================================================
+  TRIGGER
+========================================================= */
+
+
+.service-fan-trigger {
+   width: 100%;
+   min-height: 100%;
+
+
+   display: flex;
+   flex-direction: column;
+   align-items: flex-start;
+
+
+   padding: 29px 25px;
+
+
+   border: 0;
+   outline: none;
+
+
+   background: transparent;
+
+
+   color: inherit;
+
+
+   text-align: left;
+
+
+   cursor: pointer;
+
+
+   font-family: inherit;
+}
+
+
+
+
+.service-fan-top {
+   width: 100%;
+
+
+   display: flex;
+
+
+   align-items: flex-start;
+
+
+   justify-content: space-between;
+
+
+   gap: 15px;
+}
+
+
+
+
+.service-fan-number {
+   display: block;
+
+
+   color: #D7A97F;
+
+
+   font-size: clamp(52px, 5vw, 74px);
+
+
+   font-weight: 300;
+
+
+   line-height: 1;
+
+
+   transition: .35s ease;
+}
+
+
+
+
+.service-fan-card.is-active .service-fan-number {
+   color: #F6E1C8;
+}
+
+
+
+
+.service-fan-symbol {
+   width: 38px;
+   height: 38px;
+
+
+   flex: 0 0 38px;
+
+
+   display: grid;
+
+
+   place-items: center;
+
+
+   border: 1px solid rgba(255,255,255,.18);
+
+
+   border-radius: 50%;
+
+
+   color: #fff;
+
+
+   font-size: 22px;
+
+
+   font-weight: 300;
+
+
+   transition:
+       transform .35s ease,
+       background .35s ease;
+}
+
+
+
+
+.service-fan-card.is-active .service-fan-symbol {
+   transform: rotate(45deg);
+
+
+   background: #BD875C;
+
+
+   border-color: #BD875C;
+}
+
+
+
+
+.service-fan-title {
+   margin: auto 0 0;
+
+
+   padding-top: 120px;
+
+
+   color: #fff;
+
+
+   font-size: 22px;
+
+
+   font-weight: 700;
+
+
+   line-height: 1.35;
+
+
+   transition:
+       padding .45s ease,
+       font-size .35s ease;
+}
+
+
+
+
+.service-fan-card.is-active .service-fan-title {
+   padding-top: 45px;
+
+
+   font-size: 29px;
+}
+
+
+
+
+/* =========================================================
+  NỘI DUNG ẨN / HIỆN
+========================================================= */
+
+
+.service-fan-panel {
+   max-width: 440px;
+
+
+   max-height: 0;
+
+
+   margin-top: 0;
+
+
+   overflow: hidden;
+
+
+   opacity: 0;
+
+
+   transform: translateY(20px);
+
+
+   transition:
+       max-height .5s ease,
+       opacity .35s ease,
+       transform .4s ease,
+       margin .4s ease;
+}
+
+
+
+
+.service-fan-card.is-active .service-fan-panel {
+   max-height: 300px;
+
+
+   margin-top: 26px;
+
+
+   opacity: 1;
+
+
+   transform: translateY(0);
+}
+
+
+
+
+.service-fan-icon {
+   width: 56px;
+   height: 56px;
+
+
+   display: grid;
+
+
+   place-items: center;
+
+
+   margin-bottom: 20px;
+
+
+   border-radius: 17px;
+
+
+   background: rgba(215, 169, 127, .16);
+
+
+   border: 1px solid rgba(215, 169, 127, .25);
+
+
+   color: #F6E1C8;
+
+
+   font-size: 25px;
+}
+
+
+
+
+.service-fan-panel p {
+   margin: 0 0 23px;
+
+
+   color: rgba(255,255,255,.84);
+
+
+   font-size: 18px;
+
+
+   line-height: 1.78;
+}
+
+
+
+
+.service-fan-link {
+   display: inline-flex;
+
+
+   align-items: center;
+
+
+   gap: 9px;
+
+
+   padding: 12px 20px;
+
+
+   border-radius: 999px;
+
+
+   background: #D7A97F;
+
+
+   color: #3D1C0F;
+
+
+   font-size: 14px;
+
+
+   font-weight: 700;
+
+
+   text-decoration: none;
+
+
+   transition:
+       background .25s ease,
+       transform .25s ease;
+}
+
+
+
+
+.service-fan-link:hover {
+   background: #F6E1C8;
+
+
+   transform: translateY(-2px);
+}
+
+
+
+
+/* =========================================================
+  HƯỚNG DẪN
+========================================================= */
+
+
+.service-fan-hint {
+   position: relative;
+   z-index: 2;
+
+
+   display: flex;
+
+
+   justify-content: flex-end;
+
+
+   margin-top: 22px;
+
+
+   color: rgba(255,255,255,.53);
+
+
+   font-size: 11px;
+
+
+   font-weight: 600;
+
+
+   letter-spacing: 1.5px;
+
+
+   text-transform: uppercase;
+}
+
+
+
+
+/* =========================================================
+  RESPONSIVE
+========================================================= */
+
+
+@media (max-width: 1050px) {
+
+
+   .service-fan-heading {
+       grid-template-columns: 1fr;
+
+
+       gap: 20px;
+   }
+
+
+   .service-fan-heading-right {
+       max-width: 650px;
+   }
+
+
+   .service-fan {
+       flex-direction: column;
+
+
+       min-height: auto;
+   }
+
+
+   .service-fan-card,
+   .service-fan-card.is-active {
+       flex: none;
+   }
+
+
+   .service-fan-trigger {
+       padding: 24px;
+   }
+
+
+   .service-fan-title,
+   .service-fan-card.is-active .service-fan-title {
+       padding-top: 25px;
+   }
+
+
+   .service-fan-card::before {
+       font-size: 115px;
+   }
+}
+
+
+
+
+@media (max-width: 650px) {
+
+
+   .service-fan-section {
+       padding: 78px 0;
+   }
+
+
+   .service-fan-heading h2 {
+       font-size: 42px;
+   }
+
+
+   .service-fan-heading-right p {
+       font-size: 16px;
+   }
+
+
+   .service-fan-number {
+       font-size: 48px;
+   }
+
+
+   .service-fan-title,
+   .service-fan-card.is-active .service-fan-title {
+       font-size: 22px;
+   }
+
+
+   .service-fan-panel p {
+       font-size: 16px;
+   }
+}
+
+
+</style>
+
+
+{% endblock %}
+
+
+
+
+{% block content %}
+
+
+
+
+<!-- =========================================================
+   SCROLL PROGRESS
+========================================================= -->
+
+
+<div class="home-progress" id="homeProgress"></div>
+
+
+
+
+<!-- =========================================================
+   01. HERO
+========================================================= -->
+
+
+<section class="minoo-hero">
+
+
+   <div class="hero-slider">
+
+
+       <div class="hero-slide active">
+           <img
+               src="{% static 'images/home/cua-hang-phoi-canh.jpg' %}"
+               alt="Không gian MINOO Eyewear"
+           >
+       </div>
+
+
+       <div class="hero-slide">
+           <img
+               src="{% static 'images/home/cua-hang-tong-hop.jpg' %}"
+               alt="Hoạt động tại MINOO Eyewear"
+           >
+       </div>
+
+
+       <div class="hero-slide">
+           <img
+               src="{% static 'images/home/cua-hang-tu-van.jpg' %}"
+               alt="Tư vấn khách hàng tại MINOO"
+           >
+       </div>
+
+
+   </div>
+
+
+
+
+   <div class="hero-overlay"></div>
+
+
+
+
+   <div class="container hero-inner">
+
+
+       <div class="hero-copy">
+
+
+           <span class="hero-label">
+               MINOO EYEWEAR · ĐÀ NẴNG
+           </span>
+
+
+           <h1>
+               Tôn lên phong cách
+               <span>
+                   từ từng chiếc kính.
+               </span>
+           </h1>
+
+
+           <p>
+               Khám phá những mẫu gọng kính hiện đại,
+               dễ lựa chọn và phù hợp với phong cách riêng của bạn.
+           </p>
+
+
+
+
+           <div class="hero-actions">
+
+
+               <a
+                   href="{% url 'products' %}"
+                   class="home-button button-primary"
+               >
+                   Khám phá gọng kính
+                   <span>→</span>
+               </a>
+
+
+               <a
+                   href="{% url 'about' %}"
+                   class="home-button button-glass"
+               >
+                   Về MINOO
+               </a>
+
+
+           </div>
+
+
+       </div>
+
+
+
+
+       <div class="hero-controls">
+
+
+           <div class="hero-dots">
+
+
+               <button
+                   type="button"
+                   class="hero-dot active"
+                   data-slide="0"
+                   aria-label="Slide 1"
+               ></button>
+
+
+               <button
+                   type="button"
+                   class="hero-dot"
+                   data-slide="1"
+                   aria-label="Slide 2"
+               ></button>
+
+
+               <button
+                   type="button"
+                   class="hero-dot"
+                   data-slide="2"
+                   aria-label="Slide 3"
+               ></button>
+
+
+           </div>
+
+
+
+
+           <div class="hero-number">
+               <strong id="currentHeroNumber">01</strong>
+               <span>/ 03</span>
+           </div>
+
+
+       </div>
+
+
+   </div>
+
+
+
+
+   <a href="#home-marquee" class="hero-scroll">
+       <span>Khám phá</span>
+       <i></i>
+   </a>
+
+
+</section>
+
+
+
+
+<!-- =========================================================
+   01B. DẢI THÔNG TIN DƯỚI BANNER
+========================================================= -->
+
+
+<div class="hero-strip">
+
+
+   <div class="container hero-strip-grid">
+
+
+       <div>
+           <strong>Cửa hàng tại Đà Nẵng</strong>
+           <span>112 Thái Thị Bôi</span>
+       </div>
+
+
+       <div>
+           <strong>Thử kính trực tiếp</strong>
+           <span>Nhiều kiểu dáng, màu sắc</span>
+       </div>
+
+
+       <div>
+           <strong>Tư vấn tận tâm</strong>
+           <span>Hỗ trợ chọn mẫu phù hợp</span>
+       </div>
+
+
+       <div>
+           <strong>Xem mẫu trực tuyến</strong>
+           <span>Thông tin rõ ràng, dễ so sánh</span>
+       </div>
+
+
+   </div>
+
+
+</div>
+
+
+
+
+<!-- =========================================================
+   02. MARQUEE
+========================================================= -->
+
+
+<section
+   class="minoo-marquee"
+   id="home-marquee"
+>
+
+
+   <div class="marquee-track">
+
+
+       <div class="marquee-content">
+
+
+           <span>MINOO EYEWEAR</span>
+           <i>✦</i>
+
+
+           <span>SEE BETTER</span>
+           <i>✦</i>
+
+
+           <span>LIVE BETTER</span>
+           <i>✦</i>
+
+
+           <span>THỬ KÍNH TRỰC TIẾP</span>
+           <i>✦</i>
+
+
+           <span>TƯ VẤN TẬN TÂM</span>
+           <i>✦</i>
+
+
+           <span>ĐO MẮT TẠI CỬA HÀNG</span>
+           <i>✦</i>
+
+
+       </div>
+
+
+
+
+       <div class="marquee-content">
+
+
+           <span>MINOO EYEWEAR</span>
+           <i>✦</i>
+
+
+           <span>SEE BETTER</span>
+           <i>✦</i>
+
+
+           <span>LIVE BETTER</span>
+           <i>✦</i>
+
+
+           <span>THỬ KÍNH TRỰC TIẾP</span>
+           <i>✦</i>
+
+
+           <span>TƯ VẤN TẬN TÂM</span>
+           <i>✦</i>
+
+
+           <span>ĐO MẮT TẠI CỬA HÀNG</span>
+           <i>✦</i>
+
+
+       </div>
+
+
+   </div>
+
+
+</section>
+
+
+
+
+<!-- =========================================================
+   03. SẢN PHẨM NỔI BẬT
+========================================================= -->
+
+
+<section class="home-section featured-products">
+
+
+   <div class="container">
+
+
+       <div class="section-heading reveal">
+
+
+           <div>
+
+
+               <span class="section-label">
+                   NEW & FEATURED
+               </span>
+
+
+               <h2>
+                   Những gọng kính
+                   <br>
+                   đáng chú ý
+               </h2>
+
+
+           </div>
+
+
+
+
+           <div class="heading-side">
+
+
+               <p>
+                   Một vài lựa chọn mới tại MINOO
+                   dành cho phong cách hằng ngày.
+               </p>
+
+
+               <a
+                   href="{% url 'products' %}"
+                   class="text-link"
+               >
+                   Xem tất cả
+                   <span>↗</span>
+               </a>
+
+
+           </div>
+
+
+       </div>
+
+
+
+
+       <div class="featured-grid">
+
+
+           {% for product in products %}
+
+
+           <article class="featured-card reveal">
+
+    <!-- ẢNH SẢN PHẨM -->
+    <div class="featured-image">
+
+        {% if product.image %}
+
+            <img
+                src="{{ product.image.url }}"
+                alt="{{ product.name }}"
+                loading="lazy"
+            >
+
+        {% else %}
+
+            <img
+                src="{% static 'images/home/gong-tron-trong.png' %}"
+                alt="{{ product.name }}"
+                loading="lazy"
+            >
+
+        {% endif %}
+
+        <!-- TRẠNG THÁI -->
+        {% if product.in_stock %}
+
+            <span class="product-status">
+                Còn hàng
+            </span>
+
+        {% else %}
+
+            <span class="product-status sold-out">
+                Tạm hết
+            </span>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- THÔNG TIN SẢN PHẨM -->
+    <div class="featured-info">
+
+        <div class="featured-info-main">
+
+            <span class="product-type">
+                {{ product.category|default:"Gọng kính" }}
+            </span>
+
+
+                <a href="{% url 'product_detail' product.id %}" class="product-title-link">
+                    {{ product.name }}</a>
+            </h3>
+
+        </div>
+
+
+        <!-- GIÁ -->
+        <div class="product-prices">
+
+            <strong>
+                {{ product.sale_price|vnd }}₫
+            </strong>
+
+            {% if product.original_price %}
+
+                <del>
+                    {{ product.original_price|vnd}}₫
+                </del>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- NÚT -->
+        <div class="featured-actions">
+
+            <a
+                href="{% url 'product_detail' product.id %}"
+                class="featured-detail-button"
+            >
+                Xem chi tiết
+            </a>
+
+
+            {% if product.in_stock %}
+
+                <form
+                    method="post"
+                    action="{% url 'add_to_cart' product.id %}"
+                    class="featured-cart-form"
+                >
+
+                    {% csrf_token %}
+
+                    <input
+                        type="hidden"
+                        name="quantity"
+                        value="1"
+                    >
+
+                    <input
+                        type="hidden"
+                        name="next"
+                        value="{{ request.path }}"
+                    >
+
+                    <button
+                        type="submit"
+                        class="featured-cart-button"
+                    >
+                        Thêm vào giỏ
+                    </button>
+
+                </form>
+
+            {% else %}
+
+                <button
+                    type="button"
+                    class="featured-cart-button disabled"
+                    disabled
+                >
+                    Hết hàng
+                </button>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</article>
+
+
+
+
+           {% empty %}
+
+
+           <!-- DEMO 01 -->
+
+
+           <article class="featured-card reveal">
+
+
+               <div class="featured-image">
+
+
+                   <img
+                       src="{% static 'images/home/gong-tron-trong.png' %}"
+                       alt="MINOO Clear Round"
+                   >
+
+
+                   <span class="product-status">
+                       Gợi ý
+                   </span>
+
+
+               </div>
+
+
+
+
+               <div class="featured-info">
+
+
+                   <div>
+
+
+                       <span class="product-type">
+                           Gọng tròn
+                       </span>
+
+
+                       <h3>
+                           MINOO Clear Round
+                       </h3>
+
+
+                   </div>
+
+
+               </div>
+
+
+           </article>
+
+
+
+
+           <!-- DEMO 02 -->
+
+
+           <article class="featured-card reveal">
+
+
+               <div class="featured-image">
+
+
+                   <img
+                       src="{% static 'images/home/gong-oval-dong.png' %}"
+                       alt="MINOO Copper Oval"
+                   >
+
+
+                   <span class="product-status">
+                       Gợi ý
+                   </span>
+
+
+               </div>
+
+
+
+
+               <div class="featured-info">
+
+
+                   <div>
+
+
+                       <span class="product-type">
+                           Gọng oval
+                       </span>
+
+
+                       <h3>
+                           MINOO Copper Oval
+                       </h3>
+
+
+                   </div>
+
+
+               </div>
+
+
+           </article>
+
+
+
+
+           <!-- DEMO 03 -->
+
+
+           <article class="featured-card reveal">
+
+
+               <div class="featured-image">
+
+
+                   <img
+                       src="{% static 'images/home/gong-mat-meo.png' %}"
+                       alt="MINOO Cat Eye"
+                   >
+
+
+                   <span class="product-status">
+                       Gợi ý
+                   </span>
+
+
+               </div>
+
+
+
+
+               <div class="featured-info">
+
+
+                   <div>
+
+
+                       <span class="product-type">
+                           Gọng mắt mèo
+                       </span>
+
+
+                       <h3>
+                           MINOO Cat Eye
+                       </h3>
+
+
+                   </div>
+
+
+               </div>
+
+
+           </article>
+
+
+
+
+           <!-- DEMO 04 -->
+
+
+           <article class="featured-card reveal">
+
+
+               <div class="featured-image">
+
+
+                   <img
+                       src="{% static 'images/home/gong-oval-bac.png' %}"
+                       alt="MINOO Silver Oval"
+                   >
+
+
+                   <span class="product-status">
+                       Gợi ý
+                   </span>
+
+
+               </div>
+
+
+
+
+               <div class="featured-info">
+
+
+                   <div>
+
+
+                       <span class="product-type">
+                           Gọng oval
+                       </span>
+
+
+                       <h3>
+                           MINOO Silver Oval
+                       </h3>
+
+
+                   </div>
+
+
+               </div>
+
+
+           </article>
+
+
+           {% endfor %}
+
+
+       </div>
+
+
+
+
+       <div class="center-button reveal">
+
+
+           <a
+               href="{% url 'products' %}"
+               class="home-button button-dark"
+           >
+               Xem tất cả gọng kính
+               <span>→</span>
+           </a>
+
+
+       </div>
+
+
+   </div>
+
+
+</section>
+
+
+
+
+<!-- =========================================================
+   04. TRẢI NGHIỆM DỊCH VỤ - FAN INTERACTIVE
+========================================================= -->
+
+
+<section
+   class="service-fan-section"
+   id="minoo-services"
+>
+
+
+   <div class="container">
+
+
+       <div class="service-fan-heading reveal">
+
+
+           <div class="service-fan-heading-left">
+
+
+               <span>
+                   MINOO SERVICE
+               </span>
+
+
+               <h2>
+                   Trải nghiệm dịch vụ
+                   <span>theo cách của bạn.</span>
+               </h2>
+
+
+           </div>
+
+
+
+
+           <div class="service-fan-heading-right">
+
+
+               <p>
+                   Chạm vào từng dịch vụ để khám phá cách MINOO hỗ trợ khách hàng từ lúc lựa chọn kính
+                   đến quá trình sử dụng sau mua.
+               </p>
+
+
+           </div>
+
+
+       </div>
+
+
+
+
+       <div
+           class="service-fan"
+           id="serviceFan"
+       >
+
+
+
+
+           <!-- SERVICE 01 -->
+
+
+           <article
+               class="service-fan-card is-active"
+               data-service-card
+               data-number="01"
+           >
+
+
+               <button
+                   type="button"
+                   class="service-fan-trigger"
+                   aria-expanded="true"
+               >
+
+
+                   <div class="service-fan-top">
+
+
+                       <span class="service-fan-number">
+                           01
+                       </span>
+
+
+                       <span class="service-fan-symbol">
+                           +
+                       </span>
+
+
+                   </div>
+
+
+
+
+                   <h3 class="service-fan-title">
+                       Đo mắt
+                   </h3>
+
+
+
+
+                   <div class="service-fan-panel">
+
+
+                       <div class="service-fan-icon">
+                           ◉
+                       </div>
+
+
+                       <p>
+                           Hỗ trợ kiểm tra thị lực tại cửa hàng,
+                           giúp quá trình lựa chọn kính rõ ràng
+                           và phù hợp hơn với nhu cầu sử dụng.
+                       </p>
+
+
+                       <a
+                           href="#appointment"
+                           class="service-fan-link"
+                       >
+                           Đặt lịch đo mắt
+                           <span>→</span>
+                       </a>
+
+
+                   </div>
+
+
+               </button>
+
+
+           </article>
+
+
+
+
+           <!-- SERVICE 02 -->
+
+
+           <article
+               class="service-fan-card"
+               data-service-card
+               data-number="02"
+           >
+
+
+               <button
+                   type="button"
+                   class="service-fan-trigger"
+                   aria-expanded="false"
+               >
+
+
+                   <div class="service-fan-top">
+
+
+                       <span class="service-fan-number">
+                           02
+                       </span>
+
+
+                       <span class="service-fan-symbol">
+                           +
+                       </span>
+
+
+                   </div>
+
+
+
+
+                   <h3 class="service-fan-title">
+                       Tư vấn chọn kính
+                   </h3>
+
+
+
+
+                   <div class="service-fan-panel">
+
+
+                       <div class="service-fan-icon">
+                           ◇
+                       </div>
+
+
+                       <p>
+                           Gợi ý kiểu dáng phù hợp với nhu cầu,
+                           phong cách cá nhân và đặc điểm khuôn mặt
+                           để việc chọn kính trở nên dễ dàng hơn.
+                       </p>
+
+
+                       <a
+                           href="{% url 'products' %}"
+                           class="service-fan-link"
+                       >
+                           Khám phá gọng kính
+                           <span>→</span>
+                       </a>
+
+
+                   </div>
+
+
+               </button>
+
+
+           </article>
+
+
+
+
+           <!-- SERVICE 03 -->
+
+
+           <article
+               class="service-fan-card"
+               data-service-card
+               data-number="03"
+           >
+
+
+               <button
+                   type="button"
+                   class="service-fan-trigger"
+                   aria-expanded="false"
+               >
+
+
+                   <div class="service-fan-top">
+
+
+                       <span class="service-fan-number">
+                           03
+                       </span>
+
+
+                       <span class="service-fan-symbol">
+                           +
+                       </span>
+
+
+                   </div>
+
+
+
+
+                   <h3 class="service-fan-title">
+                       Chăm sóc kính
+                   </h3>
+
+
+
+
+                   <div class="service-fan-panel">
+
+
+                       <div class="service-fan-icon">
+                           ✦
+                       </div>
+
+
+                       <p>
+                           Hỗ trợ căn chỉnh, kiểm tra và vệ sinh kính
+                           trong quá trình sử dụng để kính luôn
+                           thoải mái và giữ được trạng thái tốt.
+                       </p>
+
+
+                       <a
+                           href="#appointment"
+                           class="service-fan-link"
+                       >
+                           Yêu cầu hỗ trợ
+                           <span>→</span>
+                       </a>
+
+
+                   </div>
+
+
+               </button>
+
+
+           </article>
+
+
+
+
+           <!-- SERVICE 04 -->
+
+
+           <article
+               class="service-fan-card"
+               data-service-card
+               data-number="04"
+           >
+
+
+               <button
+                   type="button"
+                   class="service-fan-trigger"
+                   aria-expanded="false"
+               >
+
+
+                   <div class="service-fan-top">
+
+
+                       <span class="service-fan-number">
+                           04
+                       </span>
+
+
+                       <span class="service-fan-symbol">
+                           +
+                       </span>
+
+
+                   </div>
+
+
+
+
+                   <h3 class="service-fan-title">
+                       Đặt lịch ưu tiên
+                   </h3>
+
+
+
+
+                   <div class="service-fan-panel">
+
+
+                       <div class="service-fan-icon">
+                           ◷
+                       </div>
+
+
+                       <p>
+                           Chủ động thời gian ghé MINOO
+                           để được hỗ trợ nhanh hơn,
+                           hạn chế chờ đợi vào thời điểm đông khách.
+                       </p>
+
+
+                       <a
+                           href="#appointment"
+                           class="service-fan-link"
+                       >
+                           Đặt lịch ngay
+                           <span>→</span>
+                       </a>
+
+
+                   </div>
+
+
+               </button>
+
+
+           </article>
+
+
+
+
+           <!-- SERVICE 05 -->
+
+
+           <article
+               class="service-fan-card"
+               data-service-card
+               data-number="05"
+           >
+
+
+               <button
+                   type="button"
+                   class="service-fan-trigger"
+                   aria-expanded="false"
+               >
+
+
+                   <div class="service-fan-top">
+
+
+                       <span class="service-fan-number">
+                           05
+                       </span>
+
+
+                       <span class="service-fan-symbol">
+                           +
+                       </span>
+
+
+                   </div>
+
+
+
+
+                   <h3 class="service-fan-title">
+                       Hỗ trợ sau mua
+                   </h3>
+
+
+
+
+                   <div class="service-fan-panel">
+
+
+                       <div class="service-fan-icon">
+                           ♡
+                       </div>
+
+
+                       <p>
+                           MINOO tiếp tục đồng hành khi khách hàng
+                           cần kiểm tra, điều chỉnh kính
+                           hoặc được tư vấn thêm sau khi mua.
+                       </p>
+
+
+                       <a
+                           href="#appointment"
+                           class="service-fan-link"
+                       >
+                           Liên hệ MINOO
+                           <span>→</span>
+                       </a>
+
+
+                   </div>
+
+
+               </button>
+
+
+           </article>
+
+
+       </div>
+
+
+
+
+       <div class="service-fan-hint">
+           Chọn một dịch vụ để xem chi tiết
+       </div>
+
+
+   </div>
+
+
+</section>
+
+
+
+
+<!-- =========================================================
+   05. STYLE MARQUEE
+========================================================= -->
+
+
+<section class="style-section">
+
+
+   <div class="container">
+
+
+       <div class="style-heading reveal">
+
+
+           <span class="section-label">
+               FIND YOUR STYLE
+           </span>
+
+
+           <h2>
+               Phong cách nào
+               <br>
+               là bạn?
+           </h2>
+
+
+       </div>
+
+
+   </div>
+
+
+
+
+   <div class="style-running-line">
+
+
+       <div class="style-running-content">
+
+
+           <span>ROUND</span>
+           <i>✦</i>
+
+
+           <span>OVAL</span>
+           <i>✦</i>
+
+
+           <span>CAT EYE</span>
+           <i>✦</i>
+
+
+           <span>MINIMAL</span>
+           <i>✦</i>
+
+
+           <span>CLASSIC</span>
+           <i>✦</i>
+
+
+           <span>DAILY</span>
+           <i>✦</i>
+
+
+           <span>ROUND</span>
+           <i>✦</i>
+
+
+           <span>OVAL</span>
+           <i>✦</i>
+
+
+       </div>
+
+
+   </div>
+
+
+
+
+   <div class="style-running-line reverse">
+
+
+       <div class="style-running-content">
+
+
+           <span>METAL</span>
+           <i>✦</i>
+
+
+           <span>CLEAR</span>
+           <i>✦</i>
+
+
+           <span>SOFT</span>
+           <i>✦</i>
+
+
+           <span>MODERN</span>
+           <i>✦</i>
+
+
+           <span>TIMELESS</span>
+           <i>✦</i>
+
+
+           <span>MINOO</span>
+           <i>✦</i>
+
+
+           <span>METAL</span>
+           <i>✦</i>
+
+
+           <span>CLEAR</span>
+
+
+       </div>
+
+
+   </div>
+
+
+</section>
+
+
+
+
+<!-- =========================================================
+   06. KHÔNG GIAN MINOO
+========================================================= -->
+
+
+<section class="store-experience">
+
+
+   <div class="container">
+
+
+       <div class="store-heading reveal">
+
+
+           <span class="section-label">
+               INSIDE MINOO
+           </span>
+
+
+           <h2>
+               Những khoảnh khắc
+               <br>
+               tại cửa hàng
+           </h2>
+
+
+           <p>
+               Không chỉ là nơi trưng bày kính,
+               MINOO là nơi khách hàng có thể trực tiếp xem,
+               thử và nhận hỗ trợ trong quá trình lựa chọn.
+           </p>
+
+
+       </div>
+
+
+   </div>
+
+
+
+
+   <div
+       class="store-slider"
+       id="storeSlider"
+   >
+
+
+       <div class="store-slider-track">
+
+
+           <figure class="store-slide">
+
+
+               <img
+                   src="{% static 'images/home/cua-hang-phoi-canh.jpg' %}"
+                   alt="Không gian MINOO"
+                   loading="lazy"
+               >
+
+
+               <figcaption>
+                   <span>01</span>
+                   Không gian MINOO
+               </figcaption>
+
+
+           </figure>
+
+
+
+
+           <figure class="store-slide">
+
+
+               <img
+                   src="{% static 'images/home/cua-hang-tu-van.jpg' %}"
+                   alt="Tư vấn tại MINOO"
+                   loading="lazy"
+               >
+
+
+               <figcaption>
+                   <span>02</span>
+                   Tư vấn trực tiếp
+               </figcaption>
+
+
+           </figure>
+
+
+
+
+           <figure class="store-slide">
+
+
+               <img
+                   src="{% static 'images/home/cua-hang-do-mat.jpg' %}"
+                   alt="Đo mắt tại MINOO"
+                   loading="lazy"
+               >
+
+
+               <figcaption>
+                   <span>03</span>
+                   Trải nghiệm đo mắt
+               </figcaption>
+
+
+           </figure>
+
+
+
+
+           <figure class="store-slide">
+
+
+               <img
+                   src="{% static 'images/home/cua-hang-tong-hop.jpg' %}"
+                   alt="Khoảnh khắc MINOO"
+                   loading="lazy"
+               >
+
+
+               <figcaption>
+                   <span>04</span>
+                   Khoảnh khắc tại cửa hàng
+               </figcaption>
+
+
+           </figure>
+
+
+       </div>
+
+
+   </div>
+
+
+
+
+   <div class="container store-actions reveal">
+
+
+       <span class="drag-hint">
+           ← Kéo để khám phá →
+       </span>
+
+
+       <a
+           href="https://www.facebook.com/reel/1699326404498548"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="video-link"
+       >
+           <i>▶</i>
+           Xem video MINOO
+       </a>
+
+
+   </div>
+
+
+</section>
+
+
+
+
+<!-- =========================================================
+   07. CHỌN GỌNG THEO KHUÔN MẶT
+========================================================= -->
+
+
+<section class="face-guide">
+
+
+   <div class="container">
+
+
+       <div class="face-heading reveal">
+
+
+           <span class="section-label">
+               FIND YOUR FRAME
+           </span>
+
+
+           <h2>
+               Chưa biết gọng nào hợp?
+
+
+               <span>
+                   Bắt đầu từ khuôn mặt.
+               </span>
+           </h2>
+
+
+           <p>
+               Ba hướng dẫn ngắn giúp bạn nhận biết
+               dáng khuôn mặt và tham khảo kiểu gọng phù hợp.
+           </p>
+
+
+       </div>
+
+
+
+
+       <div class="face-grid">
+
+
+           <article class="face-card reveal">
+
+
+               <div class="face-image">
+
+
+                   <img
+                       src="{% static 'images/home/khuon-mat-tron.png' %}"
+                       alt="Hướng dẫn khuôn mặt tròn"
+                       loading="lazy"
+                   >
+
+
+               </div>
+
+
+
+
+               <div class="face-footer">
+
+
+                   <span>01</span>
+
+
+                   <h3>
+                       Mặt tròn
+                   </h3>
+
+
+                   <span>↗</span>
+
+
+               </div>
+
+
+           </article>
+
+
+
+
+           <article class="face-card reveal">
+
+
+               <div class="face-image">
+
+
+                   <img
+                       src="{% static 'images/home/khuon-mat-vuong.png' %}"
+                       alt="Hướng dẫn khuôn mặt vuông"
+                       loading="lazy"
+                   >
+
+
+               </div>
+
+
+
+
+               <div class="face-footer">
+
+
+                   <span>02</span>
+
+
+                   <h3>
+                       Mặt vuông
+                   </h3>
+
+
+                   <span>↗</span>
+
+
+               </div>
+
+
+           </article>
+
+
+
+
+           <article class="face-card reveal">
+
+
+               <div class="face-image">
+
+
+                   <img
+                       src="{% static 'images/home/khuon-mat-dai.png' %}"
+                       alt="Hướng dẫn khuôn mặt dài"
+                       loading="lazy"
+                   >
+
+
+               </div>
+
+
+
+
+               <div class="face-footer">
+
+
+                   <span>03</span>
+
+
+                   <h3>
+                       Mặt dài
+                   </h3>
+
+
+                   <span>↗</span>
+
+
+               </div>
+
+
+           </article>
+
+
+       </div>
+
+
+
+
+       <div class="center-button reveal">
+
+
+           <a
+               href="{% url 'products' %}"
+               class="home-button button-dark"
+           >
+               Khám phá gọng kính
+               <span>→</span>
+           </a>
+
+
+       </div>
+
+
+   </div>
+
+
+</section>
+
+
+
+
+<!-- =========================================================
+   08. APPOINTMENT
+========================================================= -->
+
+
+<section
+   class="home-appointment"
+   id="appointment"
+>
+
+
+   <div class="container">
+
+
+       <div class="appointment-layout">
+
+
+
+
+           <div class="appointment-image reveal">
+
+
+               <img
+                   src="{% static 'images/home/cua-hang-do-mat.jpg' %}"
+                   alt="Đo mắt tại MINOO Eyewear"
+                   loading="lazy"
+               >
+
+
+
+
+               <div class="appointment-image-caption">
+
+
+                   <span>
+                       MINOO EYEWEAR
+                   </span>
+
+
+                   <strong>
+                       Đến cửa hàng
+                       <br>
+                       theo thời gian của bạn.
+                   </strong>
+
+
+               </div>
+
+
+           </div>
+
+
+
+
+           <div class="appointment-content reveal">
+
+
+               <span class="section-label">
+                   BOOK YOUR VISIT
+               </span>
+
+
+
+
+               <h2>
+                   Đặt hẹn
+                   <span>
+                       ưu tiên.
+                   </span>
+               </h2>
+
+
+
+
+               <p>
+                   Để lại thông tin để MINOO
+                   chủ động hỗ trợ khi bạn ghé cửa hàng.
+               </p>
+
+
+
+
+               {% if messages %}
+
+
+               <div class="appointment-messages">
+
+
+                   {% for message in messages %}
+
+
+                   <p class="appointment-message">
+                       {{ message }}
+                   </p>
+
+
+                   {% endfor %}
+
+
+               </div>
+
+
+               {% endif %}
+
+
+
+
+               <form
+                   method="post"
+                   class="appointment-form"
+               >
+
+
+                   {% csrf_token %}
+
+
+                   <input
+                       type="hidden"
+                       name="form_type"
+                       value="appointment"
+                   >
+
+
+
+
+                   <div class="appointment-field">
+
+
+                       <label for="appointmentName">
+                           Họ và tên
+                       </label>
+
+
+                       <input
+                           type="text"
+                           id="appointmentName"
+                           name="name"
+                           placeholder="Nhập họ và tên"
+                           required
+                       >
+
+
+                   </div>
+
+
+
+
+                   <div class="appointment-field">
+
+
+                       <label for="appointmentPhone">
+                           Số điện thoại
+                       </label>
+
+
+                       <input
+                           type="tel"
+                           id="appointmentPhone"
+                           name="phone"
+                           placeholder="090..."
+                           required
+                       >
+
+
+                   </div>
+
+
+
+
+                   <div class="appointment-field">
+
+
+                       <label for="appointmentService">
+                           Nhu cầu
+                       </label>
+
+
+                       <select
+                           id="appointmentService"
+                           name="service"
+                           required
+                       >
+
+
+                           <option value="">
+                               Chọn nhu cầu
+                           </option>
+
+
+                           <option value="Đo mắt">
+                               Đo mắt
+                           </option>
+
+
+                           <option value="Tư vấn chọn kính">
+                               Tư vấn chọn kính
+                           </option>
+
+
+                           <option value="Điều chỉnh kính">
+                               Điều chỉnh kính
+                           </option>
+
+
+                           <option value="Khác">
+                               Khác
+                           </option>
+
+
+                       </select>
+
+
+                   </div>
+
+
+
+
+                   <div class="appointment-field">
+
+
+                       <label for="appointmentMessage">
+                           Lời nhắn
+                       </label>
+
+
+                       <textarea
+                           id="appointmentMessage"
+                           name="message"
+                           placeholder="Bạn cần MINOO hỗ trợ gì?"
+                       ></textarea>
+
+
+                   </div>
+
+
+
+
+                   <button
+                       type="submit"
+                       class="appointment-submit"
+                   >
+
+
+                       <span>
+                           Gửi thông tin
+                       </span>
+
+
+                       <span>
+                           →
+                       </span>
+
+
+                   </button>
+
+
+               </form>
+
+
+           </div>
+
+
+       </div>
+
+
+   </div>
+
+
+</section>
+
+
+
+
+<!-- =========================================================
+   09. FINAL CTA
+========================================================= -->
+
+
+<section class="home-final">
+
+
+   <div class="container">
+
+
+       <div class="final-inner reveal">
+
+
+           <span class="section-label">
+               FIND YOUR MINOO
+           </span>
+
+
+           <h2>
+               Sẵn sàng tìm
+
+
+               <span>
+                   chiếc kính của bạn?
+               </span>
+           </h2>
+
+
+           <p>
+               Khám phá các mẫu gọng kính tại MINOO
+               và tìm phong cách phù hợp với chính bạn.
+           </p>
+
+
+           <a
+               href="{% url 'products' %}"
+               class="home-button button-dark"
+           >
+               Khám phá ngay
+               <span>→</span>
+           </a>
+
+
+       </div>
+
+
+   </div>
+
+
+</section>
+
+
+
+
+<!-- =========================================================
+   HOME JAVASCRIPT
+========================================================= -->
+
+
+<script src="{% static 'js/home.js' %}"></script>
+
+
+
+
+<script>
+/* =========================================================
+  SERVICE FAN
+  Click card -> mở card đó
+========================================================= */
+
+
+document.addEventListener(
+   "DOMContentLoaded",
+   function () {
+
+
+       const serviceCards =
+           document.querySelectorAll(
+               "[data-service-card]"
+           );
+
+
+
+
+       serviceCards.forEach(
+           function (card) {
+
+
+               const trigger =
+                   card.querySelector(
+                       ".service-fan-trigger"
+                   );
+
+
+
+
+               if (!trigger) {
+                   return;
+               }
+
+
+
+
+               trigger.addEventListener(
+                   "click",
+                   function (event) {
+
+
+                       /*
+                        * Nếu người dùng bấm vào link
+                        * bên trong panel thì để link
+                        * hoạt động bình thường.
+                        */
+
+
+                       if (
+                           event.target.closest(
+                               ".service-fan-link"
+                           )
+                       ) {
+                           return;
+                       }
+
+
+
+
+                       /*
+                        * Đóng tất cả card.
+                        */
+
+
+                       serviceCards.forEach(
+                           function (item) {
+
+
+                               item.classList.remove(
+                                   "is-active"
+                               );
+
+
+
+
+                               const itemTrigger =
+                                   item.querySelector(
+                                       ".service-fan-trigger"
+                                   );
+
+
+
+
+                               if (itemTrigger) {
+
+
+                                   itemTrigger.setAttribute(
+                                       "aria-expanded",
+                                       "false"
+                                   );
+
+
+                               }
+
+
+                           }
+                       );
+
+
+
+
+                       /*
+                        * Mở card được click.
+                        */
+
+
+                       card.classList.add(
+                           "is-active"
+                       );
+
+
+
+
+                       trigger.setAttribute(
+                           "aria-expanded",
+                           "true"
+                       );
+
+
+                   }
+               );
+
+
+           }
+       );
+
+
+   }
+);
+</script>
+
+
+
+
+{% endblock %}
+

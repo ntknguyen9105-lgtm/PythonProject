@@ -1,0 +1,1547 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load minoo_filters %}
+
+{% block title %}
+    {{ product.name }} | Minoo Eyewear
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/product_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+
+
+<div class="detail-page">
+
+
+<!-- =========================================================
+     BREADCRUMB
+========================================================== -->
+
+<nav class="detail-breadcrumb">
+    <a href="{% url 'home' %}">Trang chủ</a>
+    <span>/</span>
+
+    <a href="{% url 'products' %}">Sản phẩm</a>
+    <span>/</span>
+
+    <span>{{ product.name }}</span>
+</nav>
+
+
+<!-- =========================================================
+     KHU VỰC CHI TIẾT SẢN PHẨM
+========================================================== -->
+
+<section class="detail-product">
+
+
+    <!-- =====================================================
+         THƯ VIỆN ẢNH
+    ====================================================== -->
+
+    <div class="detail-gallery">
+
+        <!-- ẢNH CHÍNH -->
+
+        <div class="detail-main-image detail-zoom-container">
+
+            {% if product.image %}
+
+                <img
+                    id="detail-main-img"
+                    src="{{ product.image.url }}"
+                    alt="{{ product.name }}"
+                >
+
+            {% else %}
+
+                <div class="detail-no-image">
+                    <span>MINOO</span>
+                    <small>Chưa có hình ảnh</small>
+                </div>
+
+            {% endif %}
+
+
+            <!-- PHẦN TRĂM GIẢM GIÁ -->
+
+            {% if product.discount_percent > 0 %}
+
+                <span class="detail-discount">
+                    -{{ product.discount_percent }}%
+                </span>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ẢNH NHỎ -->
+
+        <div class="detail-thumbnails">
+
+            {% if product.image %}
+
+                <button
+                    type="button"
+                    class="detail-thumbnail is-active"
+                    data-image="{{ product.image.url }}"
+                    aria-label="Ảnh sản phẩm chính"
+                >
+
+                    <img
+                        src="{{ product.image.url }}"
+                        alt="{{ product.name }}"
+                    >
+
+                </button>
+
+            {% endif %}
+
+
+            {% for item in related_images %}
+
+                {% if item.image %}
+
+                    <button
+                        type="button"
+                        class="detail-thumbnail"
+                        data-image="{{ item.image.url }}"
+                        aria-label="Xem ảnh chi tiết"
+                    >
+
+                        <img
+                            src="{{ item.image.url }}"
+                            alt="{{ item.alt_text|default:product.name }}"
+                            loading="lazy"
+                        >
+
+                    </button>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+
+        <p class="detail-gallery-note">
+            <span>⌕</span>
+            Chọn ảnh nhỏ để xem các góc khác của sản phẩm
+        </p>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         THÔNG TIN VÀ MUA HÀNG
+    ====================================================== -->
+
+    <div class="detail-information">
+
+
+        <!-- THƯƠNG HIỆU -->
+
+        <div class="detail-brand">
+            MINOO EYEWEAR
+        </div>
+
+
+        <!-- TÊN SẢN PHẨM -->
+
+        <h1>
+            {{ product.name }}
+        </h1>
+
+
+        <!-- SKU -->
+
+        <div class="detail-product-code">
+            Mã sản phẩm:
+            <strong>{{ product.sku }}</strong>
+        </div>
+
+
+        <!-- =================================================
+             GIÁ
+        ================================================== -->
+
+        <div class="detail-price-area">
+
+            <span class="detail-sale-price">
+                {{ product.sale_price|vnd }}đ
+            </span>
+
+
+            {% if product.original_price > product.sale_price %}
+
+                <span class="detail-original-price">
+                    {{ product.original_price|vnd }}đ
+                </span>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- TIẾT KIỆM -->
+
+        {% if product.discount_percent > 0 %}
+
+            <div class="detail-saving">
+                Tiết kiệm {{ product.discount_percent }}% so với giá gốc
+            </div>
+
+        {% endif %}
+
+
+        <!-- =================================================
+             ĐÁNH GIÁ TÓM TẮT
+        ================================================== -->
+
+        <div class="detail-rating-summary">
+
+            <span class="detail-rating-stars">
+                ★
+            </span>
+
+            <strong>
+                {{ average_rating|floatformat:1 }}
+            </strong>
+
+            <span>
+                ({{ total_reviews }} đánh giá)
+            </span>
+
+        </div>
+
+
+        <div class="detail-divider"></div>
+
+
+
+        <!-- =================================================
+             FORM MUA HÀNG
+        ================================================== -->
+
+        <form
+            id="detail-purchase-form"
+            method="post"
+
+            class="detail-purchase-form"
+        >
+
+            {% csrf_token %}
+
+
+            <!-- =================================================
+                 BIẾN THỂ SẢN PHẨM
+            ================================================== -->
+
+            {% if variants %}
+
+
+<div class="detail-variant-field">
+
+    {% with first_variant=variants.0 %}
+        <label class="detail-field-label">
+            {% if first_variant.variant_type == "degree" %}
+                Độ cận
+            {% else %}
+                Màu sắc
+            {% endif %}
+        </label>
+    {% endwith %}
+
+    <div class="detail-color-options">
+
+        {% for variant in variants %}
+
+            {% with variant_name=variant.value|default:variant.color|default:variant.degree %}
+
+                <label
+                    class="detail-color-option{% if variant.stock <= 0 %} is-disabled{% endif %}"
+                    title="{{ variant_name|default:'Biến thể' }}"
+                >
+
+                    <input
+                        type="radio"
+                        name="variant_id"
+                        value="{{ variant.id }}"
+                        data-stock="{{ variant.stock }}"
+                        data-color="{{ variant_name|default:'' }}"
+                        data-variant-type="{{ variant.variant_type }}"
+                        data-image="{% if variant.image %}{{ variant.image.url }}{% endif %}"
+                        data-price="{% if variant.price %}{{ variant.price }}{% else %}{{ product.sale_price }}{% endif %}"
+                        {% if variant.stock <= 0 %}disabled{% endif %}
+                        required
+                    >
+
+                    <span
+                        class="detail-color-dot"
+                        data-color-name="{{ variant_name|default:''|lower }}"
+                    ></span>
+
+                    <span class="detail-color-name">
+                        {{ variant_name|default:"Chưa có tên biến thể" }}
+                    </span>
+
+                    {% if variant.stock <= 0 %}
+                        <small>Hết hàng</small>
+                    {% endif %}
+
+                </label>
+
+            {% endwith %}
+
+        {% endfor %}
+
+    </div>
+
+    <p
+        class="detail-variant-status"
+        id="detail-variant-status"
+    >
+        Vui lòng chọn biến thể
+    </p>
+
+</div>
+
+
+
+            {% else %}
+
+
+                <!-- =================================================
+                     KHÔNG CÓ BIẾN THỂ
+                ================================================== -->
+
+                <div class="detail-stock">
+
+                    <span
+                        class="detail-stock-dot{% if not product.in_stock %} is-out{% endif %}"
+                    ></span>
+
+
+                    {% if product.in_stock %}
+
+                        <span>
+                            Còn {{ product.stock }} sản phẩm
+                        </span>
+
+                    {% else %}
+
+                        <span>
+                            Tạm hết hàng
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+            {% endif %}
+
+
+
+            <!-- =================================================
+                 SỐ LƯỢNG
+            ================================================== -->
+
+            <div class="detail-quantity-field">
+
+                <label
+                    class="detail-field-label"
+                    for="detail-quantity"
+                >
+                    Số lượng
+                </label>
+
+
+                <div class="detail-quantity-control">
+
+                    <button
+                        type="button"
+                        id="detail-qty-minus"
+                        aria-label="Giảm số lượng"
+                    >
+                        −
+                    </button>
+
+
+                    <input
+                        type="number"
+                        id="detail-quantity"
+                        name="quantity"
+                        value="1"
+                        min="1"
+                        {% if not variants and product.stock > 0 %}
+                            max="{{ product.stock }}"
+                        {% endif %}
+                        required
+                    >
+
+
+                    <button
+                        type="button"
+                        id="detail-qty-plus"
+                        aria-label="Tăng số lượng"
+                    >
+                        +
+                    </button>
+
+                </div>
+
+
+                <small
+                    class="detail-quantity-note"
+                    id="detail-quantity-note"
+                >
+                    Vui lòng kiểm tra tồn kho trước khi đặt hàng.
+                </small>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 NÚT MUA
+            ================================================== -->
+
+            <div class="detail-purchase-actions">
+
+    <button
+        type="submit"
+        formaction="{% url 'add_to_cart' product.id %}"
+        class="detail-add-cart-button"
+        {% if not variants and not product.in_stock %}
+            disabled
+        {% endif %}
+    >
+        <span>＋</span>
+        Thêm vào giỏ hàng
+    </button>
+
+
+    <button
+        type="submit"
+        formaction="{% url 'buy_now' product.id %}"
+        class="detail-buy-now-button"
+        {% if not variants and not product.in_stock %}
+            disabled
+        {% endif %}
+    >
+        Mua ngay
+        <span>→</span>
+    </button>
+
+</div>
+
+        </form>
+
+
+
+        <!-- =================================================
+             LỢI ÍCH
+        ================================================== -->
+
+        <div class="detail-quick-benefits">
+
+            <div>
+
+                <span class="detail-benefit-icon">
+                    ◇
+                </span>
+
+                <span>
+                    Thông tin sản phẩm rõ ràng
+                </span>
+
+            </div>
+
+
+            <div>
+
+                <span class="detail-benefit-icon">
+                    ✦
+                </span>
+
+                <span>
+                    Hỗ trợ tư vấn lựa chọn
+                </span>
+
+            </div>
+
+
+            <div>
+
+                <span class="detail-benefit-icon">
+                    ✓
+                </span>
+
+                <span>
+                    Kiểm tra tồn kho trước khi mua
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     THÔNG TIN CHI TIẾT SẢN PHẨM
+========================================================== -->
+
+<section class="detail-tabs-section">
+
+
+    <!-- =====================================================
+         NÚT TAB
+    ====================================================== -->
+
+    <div class="detail-tab-buttons">
+
+        <button
+            type="button"
+            class="detail-tab-button is-active"
+            data-tab="description"
+        >
+            Mô tả sản phẩm
+        </button>
+
+
+        <button
+            type="button"
+            class="detail-tab-button"
+            data-tab="specifications"
+        >
+            Thông số kỹ thuật
+        </button>
+
+
+        <button
+            type="button"
+            class="detail-tab-button"
+            data-tab="care"
+        >
+            Hướng dẫn bảo quản
+        </button>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         TAB 1 - MÔ TẢ
+    ====================================================== -->
+
+    <div
+        class="detail-tab-content is-active"
+        id="detail-tab-description"
+    >
+
+        {% if product.description %}
+
+            <div class="detail-description-content">
+                {{ product.description|linebreaks }}
+            </div>
+
+        {% else %}
+
+            <p class="detail-empty-description">
+                Thông tin mô tả sản phẩm đang được cập nhật.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+
+
+    <!-- =====================================================
+         TAB 2 - THÔNG SỐ KỸ THUẬT
+    ====================================================== -->
+
+    <div
+        class="detail-tab-content"
+        id="detail-tab-specifications"
+    >
+
+        <div class="detail-specifications">
+
+
+            {% if product.category %}
+
+                <div class="detail-spec-row">
+
+                    <span>
+                        Danh mục
+                    </span>
+
+                    <strong>
+                        {{ product.category.name }}
+                    </strong>
+
+                </div>
+
+            {% endif %}
+
+
+
+            {% if product.frame_shape %}
+
+                <div class="detail-spec-row">
+
+                    <span>
+                        Kiểu dáng
+                    </span>
+
+                    <strong>
+                        {{ product.frame_shape }}
+                    </strong>
+
+                </div>
+
+            {% endif %}
+
+
+
+            {% if product.material %}
+
+                <div class="detail-spec-row">
+
+                    <span>
+                        Chất liệu
+                    </span>
+
+                    <strong>
+                        {{ product.material }}
+                    </strong>
+
+                </div>
+
+            {% endif %}
+
+
+
+            {% if product.color %}
+
+                <div class="detail-spec-row">
+
+                    <span>
+                        Màu sắc mặc định
+                    </span>
+
+                    <strong>
+                        {{ product.color }}
+                    </strong>
+
+                </div>
+
+            {% endif %}
+
+
+
+            {% if product.size %}
+
+                <div class="detail-spec-row">
+
+                    <span>
+                        Kích thước
+                    </span>
+
+                    <strong>
+                        {{ product.size }}
+                    </strong>
+
+                </div>
+
+            {% endif %}
+
+
+
+            <div class="detail-spec-row">
+
+                <span>
+                    Mã sản phẩm
+                </span>
+
+                <strong>
+                    {{ product.sku }}
+                </strong>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         TAB 3 - BẢO QUẢN
+    ====================================================== -->
+
+    <div
+        class="detail-tab-content"
+        id="detail-tab-care"
+    >
+
+        <ul class="detail-care-list">
+
+            <li>
+                Bảo quản kính trong hộp khi không sử dụng.
+            </li>
+
+            <li>
+                Sử dụng khăn mềm chuyên dụng để lau tròng kính.
+            </li>
+
+            <li>
+                Tránh đặt kính ở nơi có nhiệt độ cao.
+            </li>
+
+            <li>
+                Hạn chế để tròng kính tiếp xúc với bề mặt cứng
+                hoặc vật sắc nhọn.
+            </li>
+
+        </ul>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     ĐÁNH GIÁ SẢN PHẨM
+========================================================== -->
+
+<section class="product-reviews">
+
+
+    <!-- TIÊU ĐỀ -->
+
+    <div class="reviews-heading">
+
+        <span class="reviews-eyebrow">
+            MINOO EYEWEAR
+        </span>
+
+        <h2>
+            Đánh giá từ khách hàng
+        </h2>
+
+        <p>
+            Những chia sẻ về trải nghiệm sản phẩm tại Minoo.
+        </p>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         TỔNG QUAN ĐÁNH GIÁ
+    ====================================================== -->
+
+    <div class="reviews-summary">
+
+        <div class="reviews-average">
+
+            <strong>
+                {{ average_rating|floatformat:1 }}
+            </strong>
+
+
+            <div class="reviews-stars">
+
+                {% for star in "12345" %}
+
+                    {% if forloop.counter <= average_rating %}
+
+                        <span class="star-filled">
+                            ★
+                        </span>
+
+                    {% else %}
+
+                        <span class="star-empty">
+                            ★
+                        </span>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+
+
+            <span>
+                {{ total_reviews }} đánh giá
+            </span>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         DANH SÁCH ĐÁNH GIÁ
+    ====================================================== -->
+
+    <div class="reviews-list">
+
+
+        {% for review in reviews %}
+
+            <article class="review-card">
+
+
+                <div class="review-card-header">
+
+                    <div>
+
+                        <strong>
+                            {{ review.reviewer_name }}
+                        </strong>
+
+
+                        <div class="review-stars">
+
+                            {% for star in "12345" %}
+
+                                {% if forloop.counter <= review.rating %}
+
+                                    <span class="star-filled">
+                                        ★
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="star-empty">
+                                        ★
+                                    </span>
+
+                                {% endif %}
+
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+
+                    <time>
+                        {{ review.created_at|date:"d/m/Y" }}
+                    </time>
+
+                </div>
+
+
+                <p class="review-comment">
+                    {{ review.comment|linebreaksbr }}
+                </p>
+
+
+            </article>
+
+
+        {% empty %}
+
+            <div class="reviews-empty">
+
+                <span>
+                    ☆
+                </span>
+
+                <h3>
+                    Chưa có đánh giá nào
+                </h3>
+
+                <p>
+                    Các đánh giá sẽ được hiển thị tại đây sau khi được duyệt.
+                </p>
+
+            </div>
+
+        {% endfor %}
+
+
+    </div>
+
+</section>
+<!-- =========================================================
+     SẢN PHẨM GỢI Ý - UPSELL
+========================================================== -->
+
+{% if upsell_products %}
+
+<section class="product-recommendations">
+
+    <div class="recommendations-heading">
+
+        <span class="recommendations-eyebrow">
+            GỢI Ý CHO BẠN
+        </span>
+
+        <h2>
+            Bạn có thể thích sản phẩm cao cấp hơn
+        </h2>
+
+        <p>
+            Một số lựa chọn khác với thiết kế và mức giá cao hơn.
+        </p>
+
+    </div>
+
+
+    <div class="recommendation-grid">
+
+        {% for item in upsell_products %}
+
+        <article class="recommendation-card">
+
+            <a
+                href="{% url 'product_detail' item.id %}"
+                class="recommendation-image"
+            >
+
+                {% if item.image %}
+
+                    <img
+                        src="{{ item.image.url }}"
+                        alt="{{ item.name }}"
+                        loading="lazy"
+                    >
+
+                {% else %}
+
+                    <div class="recommendation-no-image">
+                        MINOO
+                    </div>
+
+                {% endif %}
+
+            </a>
+
+
+            <div class="recommendation-info">
+
+                <span class="recommendation-label">
+                    UPSELL
+                </span>
+
+                <h3>
+                    <a href="{% url 'product_detail' item.id %}">
+                        {{ item.name }}
+                    </a>
+                </h3>
+
+                <div class="recommendation-price">
+
+                    <strong>
+                        {{ item.sale_price|vnd }}đ
+                    </strong>
+
+                    {% if item.original_price > item.sale_price %}
+
+                        <del>
+                            {{ item.original_price|vnd }}đ
+                        </del>
+
+                    {% endif %}
+
+                </div>
+
+                <a
+                    href="{% url 'product_detail' item.id %}"
+                    class="recommendation-link"
+                >
+                    Xem sản phẩm →
+                </a>
+
+            </div>
+
+        </article>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+{% endif %}
+
+
+<!-- =========================================================
+     SẢN PHẨM GỢI Ý - CROSS-SELL
+========================================================== -->
+
+{% if cross_sell_products %}
+
+<section class="product-recommendations product-cross-sell">
+
+    <div class="recommendations-heading">
+
+        <span class="recommendations-eyebrow">
+            CÓ THỂ MUA CÙNG
+        </span>
+
+        <h2>
+            Hoàn thiện lựa chọn của bạn
+        </h2>
+
+        <p>
+            Những sản phẩm có thể kết hợp cùng sản phẩm bạn đang xem.
+        </p>
+
+    </div>
+
+
+    <div class="recommendation-grid">
+
+        {% for item in cross_sell_products %}
+
+        <article class="recommendation-card">
+
+            <!-- ẢNH SẢN PHẨM -->
+
+            <a
+                href="{% url 'product_detail' item.id %}"
+                class="recommendation-image"
+            >
+
+                {% if item.image %}
+
+                    <img
+                        src="{{ item.image.url }}"
+                        alt="{{ item.name }}"
+                        loading="lazy"
+                    >
+
+                {% else %}
+
+                    <div class="recommendation-no-image">
+                        MINOO
+                    </div>
+
+                {% endif %}
+
+            </a>
+
+
+            <!-- THÔNG TIN SẢN PHẨM -->
+
+            <div class="recommendation-info">
+
+                <span class="recommendation-label">
+                    GỢI Ý MUA CÙNG
+                </span>
+
+
+                <h3>
+
+                    <a
+                        href="{% url 'product_detail' item.id %}"
+                    >
+                        {{ item.name }}
+                    </a>
+
+                </h3>
+
+
+                <!-- GIÁ -->
+
+                <div class="recommendation-price">
+
+                    <strong>
+                        {{ item.sale_price|vnd }}đ
+                    </strong>
+
+
+                    {% if item.original_price > item.sale_price %}
+
+                        <del>
+                            {{ item.original_price|vnd }}đ
+                        </del>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- XEM SẢN PHẨM -->
+
+                <a
+                    href="{% url 'product_detail' item.id %}"
+                    class="recommendation-link"
+                >
+                    Xem sản phẩm →
+                </a>
+
+            </div>
+
+        </article>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+</div>
+
+<!-- =========================================================
+     JAVASCRIPT TRANG CHI TIẾT SẢN PHẨM
+========================================================== -->
+</div>
+
+<!-- =========================================================
+     JAVASCRIPT TRANG CHI TIẾT SẢN PHẨM
+========================================================== -->
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    console.log("MINOO PRODUCT DETAIL JS: LOADED");
+
+
+    /* =====================================================
+       1. CHUYỂN ẢNH CHÍNH
+    ===================================================== */
+
+    const mainImage = document.getElementById("detail-main-img");
+
+    const thumbnails = document.querySelectorAll(
+        ".detail-thumbnail"
+    );
+
+    console.log(
+        "Số thumbnail:",
+        thumbnails.length
+    );
+
+
+    thumbnails.forEach(function (thumbnail) {
+
+        thumbnail.addEventListener("click", function () {
+
+            console.log(
+                "Đã click thumbnail:",
+                thumbnail.dataset.image
+            );
+
+            const imageUrl =
+                thumbnail.dataset.image;
+
+            if (mainImage && imageUrl) {
+
+                mainImage.src = imageUrl;
+
+            }
+
+            thumbnails.forEach(function (item) {
+
+                item.classList.remove("is-active");
+
+            });
+
+            thumbnail.classList.add("is-active");
+
+        });
+
+    });
+
+
+
+    /* =====================================================
+       2. TAB
+    ===================================================== */
+
+    const tabButtons = document.querySelectorAll(
+        ".detail-tab-button"
+    );
+
+    const tabContents = document.querySelectorAll(
+        ".detail-tab-content"
+    );
+
+    console.log(
+        "Số nút TAB:",
+        tabButtons.length
+    );
+
+
+    tabButtons.forEach(function (button) {
+
+        button.addEventListener("click", function () {
+
+            console.log(
+                "Đã click TAB:",
+                button.dataset.tab
+            );
+
+
+            const tabName =
+                button.dataset.tab;
+
+
+            /* Xóa active của tất cả TAB */
+
+            tabButtons.forEach(function (item) {
+
+                item.classList.remove("is-active");
+
+            });
+
+
+            /* Ẩn tất cả nội dung */
+
+            tabContents.forEach(function (content) {
+
+                content.classList.remove("is-active");
+
+            });
+
+
+            /* Active nút hiện tại */
+
+            button.classList.add("is-active");
+
+
+            /* Hiển thị nội dung */
+
+            const selectedContent =
+                document.getElementById(
+                    "detail-tab-" + tabName
+                );
+
+
+            if (selectedContent) {
+
+                selectedContent.classList.add(
+                    "is-active"
+                );
+
+            }
+
+        });
+
+    });
+
+
+
+    /* =====================================================
+       3. CHỌN BIẾN THỂ
+    ===================================================== */
+
+    const variantInputs =
+        document.querySelectorAll(
+            'input[name="variant_id"]'
+        );
+
+    const variantStatus =
+        document.getElementById(
+            "detail-variant-status"
+        );
+
+    const quantityInput =
+        document.getElementById(
+            "detail-quantity"
+        );
+
+    const quantityNote =
+        document.getElementById(
+            "detail-quantity-note"
+        );
+
+
+    variantInputs.forEach(function (input) {
+
+        input.addEventListener(
+            "change",
+            function () {
+
+                const stock =
+                    parseInt(
+                        input.dataset.stock || "0"
+                    );
+
+                const color =
+                    input.dataset.color || "";
+
+                const image =
+                    input.dataset.image || "";
+
+
+                if (variantStatus) {
+
+                    if (stock > 0) {
+
+                        variantStatus.textContent =
+                            "Đã chọn màu " +
+                            color +
+                            " - Còn " +
+                            stock +
+                            " sản phẩm";
+
+                    } else {
+
+                        variantStatus.textContent =
+                            "Màu này hiện đã hết hàng.";
+
+                    }
+
+                }
+
+
+                if (quantityInput) {
+
+                    quantityInput.max =
+                        stock > 0
+                            ? stock
+                            : 1;
+
+                    if (
+                        parseInt(
+                            quantityInput.value
+                        ) > stock
+                    ) {
+
+                        quantityInput.value = 1;
+
+                    }
+
+                }
+
+
+                if (quantityNote) {
+
+                    if (stock > 0) {
+
+                        quantityNote.textContent =
+                            "Còn " +
+                            stock +
+                            " sản phẩm cho màu " +
+                            color +
+                            ".";
+
+                    } else {
+
+                        quantityNote.textContent =
+                            "Biến thể này hiện đã hết hàng.";
+
+                    }
+
+                }
+
+
+                if (
+                    image &&
+                    mainImage
+                ) {
+
+                    mainImage.src = image;
+
+                }
+
+            }
+        );
+
+    });
+
+
+
+    /* =====================================================
+       4. SỐ LƯỢNG
+    ===================================================== */
+
+    const minusButton =
+        document.getElementById(
+            "detail-qty-minus"
+        );
+
+    const plusButton =
+        document.getElementById(
+            "detail-qty-plus"
+        );
+
+
+    if (
+        minusButton &&
+        quantityInput
+    ) {
+
+        minusButton.addEventListener(
+            "click",
+            function () {
+
+                let value =
+                    parseInt(
+                        quantityInput.value || "1"
+                    );
+
+                if (value > 1) {
+
+                    value--;
+
+                }
+
+                quantityInput.value = value;
+
+            }
+        );
+
+    }
+
+
+    if (
+        plusButton &&
+        quantityInput
+    ) {
+
+        plusButton.addEventListener(
+            "click",
+            function () {
+
+                let value =
+                    parseInt(
+                        quantityInput.value || "1"
+                    );
+
+                const max =
+                    parseInt(
+                        quantityInput.max ||
+                        "999999"
+                    );
+
+                if (value < max) {
+
+                    value++;
+
+                }
+
+                quantityInput.value = value;
+
+            }
+        );
+
+    }
+
+
+
+    /* =====================================================
+       5. KIỂM TRA FORM
+    ===================================================== */
+
+    const purchaseForm =
+        document.getElementById(
+            "detail-purchase-form"
+        );
+
+
+    if (purchaseForm) {
+
+        purchaseForm.addEventListener(
+            "submit",
+            function (event) {
+
+                if (
+                    variantInputs.length > 0
+                ) {
+
+                    const selectedVariant =
+                        document.querySelector(
+                            'input[name="variant_id"]:checked'
+                        );
+
+
+                    if (!selectedVariant) {
+
+                        event.preventDefault();
+
+                        if (variantStatus) {
+
+                            variantStatus.textContent =
+                                "Vui lòng chọn màu kính trước khi mua.";
+
+                        }
+
+                        return;
+
+                    }
+
+
+                    const stock =
+                        parseInt(
+                            selectedVariant.dataset.stock ||
+                            "0"
+                        );
+
+
+                    const quantity =
+                        parseInt(
+                            quantityInput.value ||
+                            "1"
+                        );
+
+
+                    if (stock <= 0) {
+
+                        event.preventDefault();
+
+                        if (variantStatus) {
+
+                            variantStatus.textContent =
+                                "Biến thể này hiện đã hết hàng.";
+
+                        }
+
+                        return;
+
+                    }
+
+
+                    if (quantity > stock) {
+
+                        event.preventDefault();
+
+                        if (quantityNote) {
+
+                            quantityNote.textContent =
+                                "Số lượng vượt quá tồn kho. Chỉ còn " +
+                                stock +
+                                " sản phẩm.";
+
+                        }
+
+                        return;
+
+                    }
+
+                }
+
+            }
+        );
+
+    }
+
+});
+</script>
+{% endblock %}

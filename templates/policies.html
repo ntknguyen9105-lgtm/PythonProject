@@ -1,0 +1,132 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Chính sách | MINOO Eyewear
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/policy.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- =====================================================
+     POLICY HERO
+===================================================== -->
+
+<section class="policy-hero">
+
+    <img
+        src="{% static 'images/about/store-main.jpg' %}"
+        alt="Không gian MINOO Eyewear"
+        class="policy-hero-image"
+    >
+
+    <div class="policy-hero-overlay"></div>
+
+    <div class="container policy-hero-content">
+
+        <span class="policy-label">
+            MINOO EYEWEAR
+        </span>
+
+        <h1>
+            Chính sách
+        </h1>
+
+        <p>
+            Những thông tin cần biết khi mua sắm và sử dụng
+            sản phẩm tại MINOO Eyewear.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     POLICY LIST
+===================================================== -->
+
+<section class="policy-main">
+
+    <div class="container">
+
+        <div class="policy-card-grid">
+
+            {% for policy in policies %}
+
+                <a
+                    href="{% url 'policy_detail' policy.slug %}"
+                    class="policy-card"
+                >
+
+                    <div class="policy-card-num">
+                        {{ forloop.counter|stringformat:"02d" }}
+                    </div>
+
+                    <h2>
+                        {{ policy.title }}
+                    </h2>
+
+                    <p>
+                        {{ policy.summary }}
+                    </p>
+
+                    <span class="policy-card-link">
+                        Xem chi tiết →
+                    </span>
+
+                </a>
+
+            {% empty %}
+
+                <div class="policy-empty">
+
+                    <h2>
+                        Chưa có chính sách
+                    </h2>
+
+                    <p>
+                        Nội dung chính sách hiện chưa được cập nhật.
+                    </p>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- =================================================
+             HELP
+        ================================================== -->
+
+        <div class="policy-help">
+
+            <div>
+
+                <strong>
+                    Cần hỗ trợ thêm?
+                </strong>
+
+                <span>
+                    Nếu bạn có bất kỳ thắc mắc nào,
+                    hãy liên hệ với MINOO.
+                </span>
+
+            </div>
+
+            <a href="{% url 'contact' %}">
+                Liên hệ MINOO →
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,581 @@
+/* =========================================================
+   MINOO EYEWEAR - LENSES HERO
+   ========================================================= */
+
+.lenses-hero {
+    position: relative;
+    min-height: 560px;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 80% 45%,
+            rgba(198, 145, 99, 0.18),
+            transparent 35%
+        ),
+        #F7EBDD;
+
+    isolation: isolate;
+}
+
+
+/* =========================================================
+   DECORATION
+========================================================= */
+
+.lenses-hero::before {
+    content: "";
+    position: absolute;
+
+    width: 500px;
+    height: 500px;
+
+    right: -180px;
+    top: -220px;
+
+    border: 1px solid rgba(183, 124, 80, 0.20);
+    border-radius: 50%;
+
+    pointer-events: none;
+}
+
+.lenses-hero::after {
+    content: "";
+
+    position: absolute;
+
+    width: 650px;
+    height: 650px;
+
+    left: -420px;
+    bottom: -500px;
+
+    border: 1px solid rgba(183, 124, 80, 0.16);
+    border-radius: 50%;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   MAIN CONTAINER
+========================================================= */
+
+.lenses-hero-inner {
+    position: relative;
+    z-index: 2;
+
+    display: grid;
+    grid-template-columns: 0.95fr 1.05fr;
+
+    align-items: center;
+
+    min-height: 560px;
+
+    gap: 65px;
+}
+
+
+/* =========================================================
+   LEFT CONTENT
+========================================================= */
+
+.lenses-hero-content {
+    position: relative;
+    z-index: 5;
+
+    padding: 55px 0;
+}
+
+
+/* EYEBROW */
+
+.lenses-eyebrow {
+    display: inline-flex;
+    align-items: center;
+
+    margin-bottom: 24px;
+    padding: 9px 18px;
+
+    border: 1px solid #C58B5B;
+    border-radius: 50px;
+
+    color: #A96F43;
+
+    font-family: "Be Vietnam Pro", sans-serif;
+    font-size: 12px;
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    background: rgba(255,255,255,0.25);
+
+    animation: lensFadeUp 0.8s ease both;
+}
+
+
+/* TITLE */
+
+.lenses-hero h1 {
+    margin: 0 0 25px;
+
+    color: #3D1C0F;
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-size: clamp(52px, 5vw, 76px);
+
+    font-weight: 600;
+
+    line-height: 1.02;
+
+    letter-spacing: -2px;
+
+    animation: lensFadeUp 0.8s 0.1s ease both;
+}
+
+.lenses-hero h1 em {
+    color: #B77C50;
+    font-style: normal;
+}
+
+
+/* DESCRIPTION */
+
+.lenses-hero p {
+    max-width: 570px;
+
+    margin: 0 0 30px;
+
+    color: #6E5345;
+
+    font-family: "Be Vietnam Pro", sans-serif;
+
+    font-size: 17px;
+
+    line-height: 1.75;
+
+    animation: lensFadeUp 0.8s 0.2s ease both;
+}
+
+
+/* =========================================================
+   BUTTON
+========================================================= */
+
+.lenses-btn {
+    position: relative;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 20px;
+
+    padding: 15px 24px;
+
+    overflow: hidden;
+
+    border: 1px solid #3D1C0F;
+    border-radius: 50px;
+
+    background: #3D1C0F;
+    color: #fff;
+
+    font-family: "Be Vietnam Pro", sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+
+    box-shadow:
+        0 12px 25px rgba(61, 28, 15, 0.18);
+
+    transition:
+        transform 0.3s ease,
+        background 0.3s ease,
+        box-shadow 0.3s ease;
+
+    animation: lensFadeUp 0.8s 0.3s ease both;
+}
+
+.lenses-btn::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: -100%;
+
+    width: 60%;
+    height: 100%;
+
+    background: linear-gradient(
+        100deg,
+        transparent,
+        rgba(255,255,255,0.25),
+        transparent
+    );
+
+    transform: skewX(-20deg);
+
+    transition: left 0.6s ease;
+}
+
+.lenses-btn:hover::before {
+    left: 140%;
+}
+
+.lenses-btn span {
+    font-size: 20px;
+    line-height: 1;
+}
+
+.lenses-btn:hover {
+    transform: translateY(-4px);
+
+    background: #B77C50;
+
+    border-color: #B77C50;
+
+    box-shadow:
+        0 18px 35px rgba(183, 124, 80, 0.28);
+}
+
+
+/* =========================================================
+   RIGHT VISUAL
+========================================================= */
+
+.lenses-hero-visual {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 430px;
+
+    animation: lensVisualIn 1s 0.15s ease both;
+}
+
+
+/* =========================================================
+   GLOW BEHIND IMAGE
+========================================================= */
+
+.lenses-glow {
+    position: absolute;
+
+    width: 430px;
+    height: 430px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(194, 139, 93, 0.28),
+            rgba(194, 139, 93, 0.05) 45%,
+            transparent 70%
+        );
+
+    filter: blur(8px);
+
+    animation: lensGlow 4s ease-in-out infinite;
+}
+
+
+/* =========================================================
+   IMAGE WRAPPER
+========================================================= */
+
+.lenses-image-wrap {
+    position: relative;
+
+    width: 100%;
+    max-width: 650px;
+
+    aspect-ratio: 1.8 / 1;
+
+    overflow: hidden;
+
+    border-radius: 30px;
+
+    background: #DCC5B0;
+
+    box-shadow:
+        0 30px 70px rgba(61, 28, 15, 0.20),
+        0 10px 25px rgba(61, 28, 15, 0.12);
+
+    transform: rotate(0deg);
+
+    transition:
+        transform 0.5s ease,
+        box-shadow 0.5s ease;
+
+    animation: lensFloat 5s ease-in-out infinite;
+}
+
+
+/* IMAGE */
+
+.lenses-banner-image {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    transition:
+        transform 0.8s ease,
+        filter 0.8s ease;
+}
+
+
+/* HOVER */
+
+.lenses-image-wrap:hover {
+    transform: translateY(-8px) scale(1.015);
+
+    box-shadow:
+        0 40px 90px rgba(61, 28, 15, 0.27),
+        0 15px 35px rgba(183, 124, 80, 0.20);
+}
+
+.lenses-image-wrap:hover .lenses-banner-image {
+    transform: scale(1.035);
+}
+
+
+/* =========================================================
+   LIGHT SHINE
+========================================================= */
+
+.lenses-image-shine {
+    position: absolute;
+
+    top: 0;
+    left: -80%;
+
+    width: 45%;
+    height: 100%;
+
+    background: linear-gradient(
+        100deg,
+        transparent,
+        rgba(255,255,255,0.35),
+        transparent
+    );
+
+    transform: skewX(-20deg);
+
+    pointer-events: none;
+
+    animation: lensShine 5s 1.5s ease-in-out infinite;
+}
+
+
+/* =========================================================
+   FLOATING LABEL
+========================================================= */
+
+.lenses-floating-label {
+    position: absolute;
+
+    right: 25px;
+    bottom: 15px;
+
+    z-index: 5;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: flex-end;
+
+    padding: 12px 15px;
+
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 12px;
+
+    background: rgba(61, 28, 15, 0.58);
+
+    backdrop-filter: blur(10px);
+
+    color: #fff;
+
+    box-shadow:
+        0 10px 25px rgba(61,28,15,0.15);
+}
+
+.lenses-floating-label span {
+    font-family: "Be Vietnam Pro", sans-serif;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: 3px;
+}
+
+.lenses-floating-label strong {
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-size: 22px;
+
+    letter-spacing: 2px;
+}
+
+
+/* =========================================================
+   PRODUCT AREA
+========================================================= */
+
+.lenses-products {
+    padding: 70px 0 100px;
+
+    background: #FFFDFC;
+}
+
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+@keyframes lensFadeUp {
+
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+
+@keyframes lensVisualIn {
+
+    from {
+        opacity: 0;
+        transform: translateX(45px) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+
+}
+
+
+@keyframes lensFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+
+}
+
+
+@keyframes lensGlow {
+
+    0%,
+    100% {
+        transform: scale(0.95);
+        opacity: 0.65;
+    }
+
+    50% {
+        transform: scale(1.05);
+        opacity: 1;
+    }
+
+}
+
+
+@keyframes lensShine {
+
+    0% {
+        left: -80%;
+    }
+
+    20%,
+    100% {
+        left: 140%;
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1000px) {
+
+    .lenses-hero-inner {
+        grid-template-columns: 1fr;
+        gap: 20px;
+
+        padding-top: 65px;
+        padding-bottom: 70px;
+    }
+
+    .lenses-hero-content {
+        padding: 0;
+    }
+
+    .lenses-hero-visual {
+        min-height: 380px;
+    }
+
+    .lenses-image-wrap {
+        max-width: 720px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .lenses-hero {
+        min-height: auto;
+    }
+
+    .lenses-hero-inner {
+        padding-top: 45px;
+        padding-bottom: 50px;
+    }
+
+    .lenses-hero h1 {
+        font-size: 44px;
+        letter-spacing: -1px;
+    }
+
+    .lenses-hero p {
+        font-size: 15px;
+    }
+
+    .lenses-hero-visual {
+        min-height: 230px;
+    }
+
+    .lenses-image-wrap {
+        border-radius: 20px;
+    }
+
+    .lenses-floating-label {
+        right: 12px;
+        bottom: 10px;
+    }
+
+    .lenses-floating-label strong {
+        font-size: 17px;
+    }
+
+}

@@ -1,0 +1,1378 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+{{ block.super }}
+
+<style>
+    :root {
+        --minoo-brown: #3D1C0F;
+        --minoo-brown-soft: #6E5345;
+        --minoo-primary: #BD875C;
+        --minoo-primary-soft: #D7A97F;
+        --minoo-cream: #F7EBDD;
+        --minoo-white: #FFFDF9;
+        --minoo-border: #E8D6C4;
+        --minoo-green: #4E7A62;
+        --minoo-green-soft: #EAF3ED;
+        --minoo-red: #B35442;
+        --minoo-gold: #A66D3F;
+        --minoo-shadow: 0 10px 28px rgba(61, 28, 15, .06);
+    }
+
+    #content {
+        max-width: none;
+    }
+
+    .minoo-dashboard {
+        margin-bottom: 32px;
+        color: var(--minoo-brown);
+        font-family: "Inter", Arial, sans-serif;
+    }
+
+    /* =====================================================
+       HEADER
+    ===================================================== */
+
+    .minoo-dashboard-header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 26px;
+        margin-bottom: 26px;
+    }
+
+    .minoo-dashboard-eyebrow {
+        display: block;
+        margin-bottom: 7px;
+        color: var(--minoo-primary);
+        font-size: 15px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    .minoo-dashboard-header h1 {
+        margin: 0;
+        color: var(--minoo-brown);
+        font-size: 34px;
+        line-height: 1.15;
+        font-weight: 800;
+    }
+
+    .minoo-dashboard-header p {
+        margin: 10px 0 0;
+        color: var(--minoo-brown-soft);
+        font-size: 20px;
+        line-height: 1.65;
+        font-weight: 500;
+    }
+
+    .minoo-refresh {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        padding: 0 18px;
+        border: 1px solid var(--minoo-primary);
+        border-radius: 999px;
+        background: var(--minoo-white);
+        color: var(--minoo-brown);
+        text-decoration: none;
+        font-size: 25px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .minoo-refresh:hover {
+        background: var(--minoo-primary);
+        color: white;
+    }
+
+    /* =====================================================
+       SECTION TITLE
+    ===================================================== */
+
+    .minoo-section-title {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 20px;
+        margin: 28px 0 14px;
+    }
+
+    .minoo-section-title h2 {
+        margin: 0;
+        color: var(--minoo-brown);
+        font-size: 22px;
+        font-weight: 800;
+    }
+
+    .minoo-section-title p {
+        margin: 6px 0 0;
+        color: var(--minoo-brown-soft);
+        font-size: 20px;
+        line-height: 1.6;
+        font-weight: 500;
+    }
+
+    /* =====================================================
+       KPI - THỨ DOANH NGHIỆP CẦN NHÌN ĐẦU TIÊN
+    ===================================================== */
+
+    .minoo-kpi-grid {
+        display: grid;
+        grid-template-columns: 1.35fr 1fr 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 16px;
+    }
+
+    .minoo-kpi {
+        position: relative;
+        overflow: hidden;
+        min-height: 126px;
+        padding: 20px;
+        border: 1px solid var(--minoo-border);
+        border-radius: 18px;
+        background: var(--minoo-white);
+        box-shadow: var(--minoo-shadow);
+    }
+
+    .minoo-kpi--primary {
+        background: linear-gradient(
+            135deg,
+            #3D1C0F 0%,
+            #6E5345 100%
+        );
+        border-color: transparent;
+    }
+
+    .minoo-kpi--primary .minoo-kpi-label {
+        color: #FFFFFF;
+    }
+
+    .minoo-kpi.minoo-kpi--primary strong {
+    color: #FFFFFF !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, .12);
+    }
+
+    .minoo-kpi.minoo-kpi--primary small {
+    color: #FFFFFF !important;
+    }
+    .minoo-kpi-label {
+        display: block;
+        margin-bottom: 11px;
+        color: var(--minoo-brown-soft);
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1.45;
+    }
+
+    .minoo-kpi strong {
+        display: block;
+        color: var(--minoo-brown);
+        font-size: 31px;
+        line-height: 1.1;
+        font-weight: 800;
+    }
+
+    .minoo-kpi small {
+        display: block;
+        margin-top: 11px;
+        color: #7D675B;
+        font-size: 14px;
+        line-height: 1.65;
+        font-weight: 500;
+    }
+
+    /* =====================================================
+       BUSINESS HIGHLIGHTS
+    ===================================================== */
+
+    .minoo-highlight-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+        margin-bottom: 18px;
+    }
+
+    .minoo-highlight {
+        padding: 19px 20px;
+        border: 1px solid var(--minoo-border);
+        border-radius: 16px;
+        background: #FFFDF9;
+        box-shadow: var(--minoo-shadow);
+    }
+
+    .minoo-highlight-label {
+        display: block;
+        margin-bottom: 9px;
+        color: var(--minoo-brown-soft);
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 1.45;
+    }
+
+    .minoo-highlight strong {
+        display: block;
+        color: var(--minoo-brown);
+        font-size: 25px;
+        line-height: 1.15;
+    }
+
+    .minoo-highlight p {
+        margin: 10px 0 0;
+        color: var(--minoo-brown-soft);
+        font-size: 14px;
+        line-height: 1.65;
+        font-weight: 500;
+    }
+
+    .minoo-highlight--good {
+        border-left: 5px solid var(--minoo-green);
+    }
+
+    .minoo-highlight--marketing {
+        border-left: 5px solid var(--minoo-primary);
+    }
+
+    .minoo-highlight--future {
+        border-left: 5px solid var(--minoo-primary-soft);
+    }
+
+    .minoo-highlight--returning {
+        border-left: 5px solid var(--minoo-green);
+        background:
+            linear-gradient(
+                135deg,
+                #FFFDF9 0%,
+                var(--minoo-green-soft) 100%
+            );
+    }
+
+    /* =====================================================
+       PANELS / CHARTS
+    ===================================================== */
+
+    .minoo-chart-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        margin-bottom: 18px;
+    }
+
+    .minoo-panel {
+        min-width: 0;
+        padding: 22px;
+        border: 1px solid var(--minoo-border);
+        border-radius: 18px;
+        background: var(--minoo-white);
+        box-shadow: var(--minoo-shadow);
+    }
+
+    .minoo-panel-heading {
+        margin-bottom: 18px;
+    }
+
+    .minoo-panel-heading h2 {
+        margin: 0;
+        color: var(--minoo-brown);
+        font-size: 20px;
+        line-height: 1.3;
+        font-weight: 800;
+    }
+
+    .minoo-panel-heading p {
+        margin: 7px 0 0;
+        color: var(--minoo-brown-soft);
+        font-size: 20px;
+        line-height: 1.65;
+        font-weight: 500;
+    }
+
+    .minoo-chart-wrap {
+        position: relative;
+        min-height: 315px;
+    }
+
+    .minoo-chart-wrap--donut {
+        min-height: 330px;
+    }
+
+    /* =====================================================
+       MARKETING
+    ===================================================== */
+
+    .minoo-marketing-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 13px;
+    }
+
+    .minoo-mini-stat {
+        padding: 16px;
+        border-radius: 13px;
+        background: var(--minoo-cream);
+    }
+
+    .minoo-mini-stat span {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--minoo-brown-soft);
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.5;
+    }
+
+    .minoo-mini-stat strong {
+        color: var(--minoo-brown);
+        font-size: 24px;
+        line-height: 1.1;
+    }
+
+    .minoo-marketing-note {
+        margin: 14px 0 0;
+        padding: 14px 16px;
+        border-radius: 12px;
+        background: #FFF8F0;
+        color: var(--minoo-brown-soft);
+        font-size: 14px;
+        line-height: 1.65;
+        font-weight: 500;
+    }
+
+    /* =====================================================
+       TABLE
+    ===================================================== */
+
+    .minoo-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .minoo-table th,
+    .minoo-table td {
+        padding: 13px 11px;
+        border-bottom: 1px solid #EFE4DA;
+        text-align: left;
+        vertical-align: middle;
+        font-size: 14px;
+    }
+
+    .minoo-table th {
+        color: var(--minoo-brown-soft);
+        font-size: 12px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: .6px;
+    }
+
+    .minoo-table td {
+        color: var(--minoo-brown);
+        line-height: 1.45;
+    }
+
+    .minoo-table a {
+        color: var(--minoo-primary);
+        font-weight: 800;
+    }
+
+    .minoo-status {
+        display: inline-block;
+        padding: 6px 9px;
+        border-radius: 999px;
+        background: var(--minoo-cream);
+        color: var(--minoo-brown);
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
+
+    @media (max-width: 1200px) {
+        .minoo-kpi-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .minoo-highlight-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 980px) {
+        .minoo-chart-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 700px) {
+        .minoo-dashboard-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .minoo-kpi-grid,
+        .minoo-highlight-grid,
+        .minoo-marketing-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .minoo-dashboard-header h1 {
+            font-size: 28px;
+        }
+
+        .minoo-panel {
+            overflow-x: auto;
+        }
+    }
+</style>
+{% endblock %}
+
+
+{% block extrahead %}
+{{ block.super }}
+<link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+{{ minoo_dashboard.gender_labels|json_script:"minoo-gender-labels" }}
+{{ minoo_dashboard.gender_values|json_script:"minoo-gender-values" }}
+
+{{ minoo_dashboard.age_labels|json_script:"minoo-age-labels" }}
+{{ minoo_dashboard.age_values|json_script:"minoo-age-values" }}
+
+{{ minoo_dashboard.price_labels|json_script:"minoo-price-labels" }}
+{{ minoo_dashboard.price_values|json_script:"minoo-price-values" }}
+
+{{ minoo_dashboard.customer_month_labels|json_script:"minoo-month-labels" }}
+{{ minoo_dashboard.customer_month_values|json_script:"minoo-month-values" }}
+{% endblock %}
+
+
+{% block content %}
+
+<div id="content-main">
+
+    {% if minoo_dashboard %}
+
+    <section class="minoo-dashboard">
+
+        <!-- =================================================
+             HEADER
+             ================================================= -->
+
+        <div class="minoo-dashboard-header">
+
+            <div>
+
+                <span class="minoo-dashboard-eyebrow">
+                    MINOO EYEWEAR
+                </span>
+
+                <h1>
+                    Dashboard quản trị
+                </h1>
+
+                <p>
+                    Tổng quan nhanh tình hình khách hàng, đơn hàng,
+                    doanh số và hiệu quả chương trình ưu đãi.
+                </p>
+
+            </div>
+
+            <a
+                href="{% url 'admin:minoo_dashboard' %}"
+                class="minoo-refresh"
+            >
+                ↻ Cập nhật dữ liệu
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             1. TỔNG QUAN KINH DOANH
+             ================================================= -->
+
+        <div class="minoo-section-title">
+
+            <div>
+
+                <h2>
+                    Tổng quan kinh doanh
+                </h2>
+
+                <p>
+                    Các chỉ số doanh nghiệp nên nhìn đầu tiên khi mở Dashboard.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="minoo-kpi-grid">
+
+            <div class="minoo-kpi minoo-kpi--primary">
+
+                <span class="minoo-kpi-label">
+                    Doanh số đơn chưa hủy
+                </span>
+
+                <strong>
+                    {{ minoo_dashboard.order_value }}
+                </strong>
+
+                <small>
+                    Tổng giá trị của toàn bộ đơn hàng hợp lệ.
+                </small>
+
+            </div>
+
+
+            <div class="minoo-kpi">
+
+                <span class="minoo-kpi-label">
+                    Đơn hàng hợp lệ
+                </span>
+
+                <strong>
+                    {{ minoo_dashboard.total_orders }}
+                </strong>
+
+                <small>
+                    Không bao gồm đơn đã hủy.
+                </small>
+
+            </div>
+
+
+            <div class="minoo-kpi">
+
+                <span class="minoo-kpi-label">
+                    Khách hàng đã thu thập
+                </span>
+
+                <strong>
+                    {{ minoo_dashboard.total_customers }}
+                </strong>
+
+                <small>
+                    Khách đã để lại dữ liệu qua form nhận ưu đãi.
+                </small>
+
+            </div>
+
+
+            <div class="minoo-kpi">
+
+                <span class="minoo-kpi-label">
+                    Giá trị đơn trung bình
+                </span>
+
+                <strong>
+                    {{ minoo_dashboard.average_order_value }}
+                </strong>
+
+                <small>
+                    Giúp doanh nghiệp theo dõi mức chi tiêu trung bình.
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             2. ĐIỂM CẦN CHÚ Ý
+             ================================================= -->
+
+        <div class="minoo-highlight-grid">
+
+            <div class="minoo-highlight minoo-highlight--good">
+
+                <span class="minoo-highlight-label">
+                    Doanh thu đơn hoàn tất
+                </span>
+
+                <strong>
+                    {{ minoo_dashboard.completed_revenue }}
+                </strong>
+
+                <p>
+                    Chỉ tính các đơn đã hoàn thành.
+                </p>
+
+            </div>
+
+
+            <div class="minoo-highlight minoo-highlight--marketing">
+
+                <span class="minoo-highlight-label">
+                    Hiệu quả mã giảm 20%
+                </span>
+
+                <strong>
+                    {{ minoo_dashboard.coupon_20_rate }}%
+                </strong>
+
+                <p>
+                    {{ minoo_dashboard.coupon_20_used }}
+                    / {{ minoo_dashboard.coupon_20_total }}
+                    mã đã được sử dụng.
+                </p>
+
+            </div>
+
+
+            <div class="minoo-highlight minoo-highlight--future">
+
+                <span class="minoo-highlight-label">
+                    Chương trình ưu đãi 25%
+                </span>
+
+                <strong>
+                    {{ minoo_dashboard.coupon_25_total|default:"0" }} mã đã cấp
+                </strong>
+
+                <p>
+                    Đang sẵn sàng:
+                    {{ minoo_dashboard.coupon_25_active|default:"0" }} mã
+                    · Đã dùng:
+                    {{ minoo_dashboard.coupon_25_used|default:"0" }} mã.
+                </p>
+
+            </div>
+
+
+            <div class="minoo-highlight minoo-highlight--returning">
+
+                <span class="minoo-highlight-label">
+                    Tỷ lệ khách quay lại
+                </span>
+
+                <strong>
+                    {{ minoo_dashboard.returning_customer_rate|default:"0" }}%
+                </strong>
+
+                <p>
+                    {{ minoo_dashboard.returning_customers|default:"0" }}
+                    / {{ minoo_dashboard.first_order_customers|default:"0" }}
+                    khách đã quay lại sau đơn đầu.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             3. CHÂN DUNG KHÁCH HÀNG
+             ================================================= -->
+
+        <div class="minoo-section-title">
+
+            <div>
+
+                <h2>
+                    Chân dung khách hàng
+                </h2>
+
+                <p>
+                    Giúp MINOO hiểu khách chính là ai và đang quan tâm mức giá nào.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="minoo-chart-grid">
+
+            <div class="minoo-panel">
+
+                <div class="minoo-panel-heading">
+
+                    <h2>
+                        Cơ cấu giới tính
+                    </h2>
+
+                    <p>
+                        Tỷ trọng Nam, Nữ và nhóm Khác trong khách hàng đã để lại thông tin.
+                    </p>
+
+                </div>
+
+                <div class="minoo-chart-wrap minoo-chart-wrap--donut">
+                    <canvas id="minooGenderChart"></canvas>
+                </div>
+
+            </div>
+
+
+            <div class="minoo-panel">
+
+                <div class="minoo-panel-heading">
+
+                    <h2>
+                        Nhóm độ tuổi
+                    </h2>
+
+                    <p>
+                        Xác định nhóm tuổi đang quan tâm MINOO nhiều nhất.
+                    </p>
+
+                </div>
+
+                <div class="minoo-chart-wrap">
+                    <canvas id="minooAgeChart"></canvas>
+                </div>
+
+            </div>
+
+
+            <div class="minoo-panel">
+
+                <div class="minoo-panel-heading">
+
+                    <h2>
+                        Mức giá khách quan tâm
+                    </h2>
+
+                    <p>
+                        Hỗ trợ lựa chọn phân khúc giá và xây dựng chương trình bán hàng.
+                    </p>
+
+                </div>
+
+                <div class="minoo-chart-wrap">
+                    <canvas id="minooPriceChart"></canvas>
+                </div>
+
+            </div>
+
+
+            <div class="minoo-panel">
+
+                <div class="minoo-panel-heading">
+
+                    <h2>
+                        Khách hàng mới theo tháng
+                    </h2>
+
+                    <p>
+                        Theo dõi tốc độ tăng lượng khách để lại dữ liệu theo thời gian.
+                    </p>
+
+                </div>
+
+                <div class="minoo-chart-wrap">
+                    <canvas id="minooCustomerChart"></canvas>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             4. MARKETING + SẢN PHẨM
+             ================================================= -->
+
+        <div class="minoo-section-title">
+
+            <div>
+
+                <h2>
+                    Marketing & sản phẩm
+                </h2>
+
+                <p>
+                    Theo dõi hiệu quả ưu đãi và sản phẩm đang tạo ra nhu cầu mua.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="minoo-chart-grid">
+
+            <div class="minoo-panel">
+
+                <div class="minoo-panel-heading">
+
+                    <h2>
+                        Hiệu quả chương trình ưu đãi
+                    </h2>
+
+                    <p>
+                        Đánh giá mức độ khách sử dụng coupon sau khi để lại thông tin.
+                    </p>
+
+                </div>
+
+
+                <div class="minoo-marketing-grid">
+
+                    <div class="minoo-mini-stat">
+
+                        <span>
+                            Mã 20% đã cấp
+                        </span>
+
+                        <strong>
+                            {{ minoo_dashboard.coupon_20_total|default:"0" }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="minoo-mini-stat">
+
+                        <span>
+                            Mã 20% đã dùng
+                        </span>
+
+                        <strong>
+                            {{ minoo_dashboard.coupon_20_used|default:"0" }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="minoo-mini-stat">
+
+                        <span>
+                            Tỷ lệ dùng 20%
+                        </span>
+
+                        <strong>
+                            {{ minoo_dashboard.coupon_20_rate|default:"0" }}%
+                        </strong>
+
+                    </div>
+
+
+                    <div class="minoo-mini-stat">
+
+                        <span>
+                            Mã 25% đã cấp
+                        </span>
+
+                        <strong>
+                            {{ minoo_dashboard.coupon_25_total|default:"0" }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="minoo-mini-stat">
+
+                        <span>
+                            Mã 25% đang sẵn sàng
+                        </span>
+
+                        <strong>
+                            {{ minoo_dashboard.coupon_25_active|default:"0" }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="minoo-mini-stat">
+
+                        <span>
+                            Tỷ lệ dùng 25%
+                        </span>
+
+                        <strong>
+                            {{ minoo_dashboard.coupon_25_rate|default:"0" }}%
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="minoo-marketing-note">
+                    <strong>
+                        Khách quay lại:
+                        {{ minoo_dashboard.returning_customers|default:"0" }}
+                        / {{ minoo_dashboard.first_order_customers|default:"0" }}
+                        khách
+                        ({{ minoo_dashboard.returning_customer_rate|default:"0" }}%).
+                    </strong>
+                    Mã 20% hỗ trợ chuyển đổi khách mới; mã 25% giúp theo dõi
+                    khả năng khách quay lại mua lần tiếp theo.
+                </div>
+
+            </div>
+
+
+            <div class="minoo-panel">
+
+                <div class="minoo-panel-heading">
+
+                    <h2>
+                        Top sản phẩm bán nhiều
+                    </h2>
+
+                    <p>
+                        Xếp theo số lượng sản phẩm trong các đơn chưa bị hủy.
+                    </p>
+
+                </div>
+
+
+                <table class="minoo-table">
+
+                    <thead>
+                        <tr>
+                            <th>Sản phẩm</th>
+                            <th>Số lượng</th>
+                            <th>Giá trị</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for item in minoo_dashboard.top_products %}
+
+                        <tr>
+
+                            <td>
+                                <strong>
+                                    {{ item.product_name }}
+                                </strong>
+                            </td>
+
+                            <td>
+                                {{ item.quantity }}
+                            </td>
+
+                            <td>
+                                {{ item.sales_display }}
+                            </td>
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+                            <td colspan="3">
+                                Chưa có dữ liệu đơn hàng.
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             5. ĐƠN HÀNG GẦN ĐÂY
+             ================================================= -->
+
+        <div class="minoo-section-title">
+
+            <div>
+
+                <h2>
+                    Đơn hàng gần đây
+                </h2>
+
+                <p>
+                    Giúp quản lý nhanh trạng thái các đơn mới nhất.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="minoo-panel">
+
+            <table class="minoo-table">
+
+                <thead>
+
+                    <tr>
+                        <th>Mã đơn</th>
+                        <th>Khách hàng</th>
+                        <th>Tổng tiền</th>
+                        <th>Trạng thái</th>
+                        <th>Ngày đặt</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for order in minoo_dashboard.recent_orders %}
+
+                    <tr>
+
+                        <td>
+                            <a href="{% url 'admin:store_order_change' order.id %}">
+                                {{ order.order_code }}
+                            </a>
+                        </td>
+
+                        <td>
+                            {{ order.full_name }}
+                        </td>
+
+                        <td>
+                            <strong>
+                                {{ order.total_display }}
+                            </strong>
+                        </td>
+
+                        <td>
+                            <span class="minoo-status">
+                                {{ order.get_status_display }}
+                            </span>
+                        </td>
+
+                        <td>
+                            {{ order.created_at|date:"d/m/Y H:i" }}
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="5">
+                            Chưa có đơn hàng.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    {% endif %}
+
+</div>
+
+
+<script>
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        if (typeof Chart === "undefined") {
+            return;
+        }
+
+        const readJSON = function (id) {
+
+            const element =
+                document.getElementById(id);
+
+            if (!element) {
+                return [];
+            }
+
+            return JSON.parse(
+                element.textContent
+            );
+        };
+
+
+        Chart.defaults.font.size = 20;
+        Chart.defaults.font.family =
+    '"Inter", Arial, sans-serif';
+
+        Chart.defaults.color =
+            "#5E493E";
+
+
+        const commonOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+
+            plugins: {
+
+                legend: {
+                    position: "bottom",
+
+                    labels: {
+                        padding: 18,
+                        font: {
+                            size: 14,
+                            weight: "600"
+                        }
+                    }
+                },
+
+                tooltip: {
+                    titleFont: {
+                        size: 15
+                    },
+
+                    bodyFont: {
+                        size: 15
+                    },
+
+                    padding: 12
+                }
+            }
+        };
+
+
+        /* =====================================
+           GIỚI TÍNH
+        ===================================== */
+
+        new Chart(
+            document.getElementById(
+                "minooGenderChart"
+            ),
+            {
+                type: "doughnut",
+
+                data: {
+                    labels: readJSON(
+                        "minoo-gender-labels"
+                    ),
+
+                    datasets: [{
+                        data: readJSON(
+                            "minoo-gender-values"
+                        ),
+
+                        backgroundColor: [
+                            "#BD875C",
+                            "#D7A97F",
+                            "#6E5345"
+                        ],
+
+                        borderWidth: 0,
+
+                        hoverOffset: 6
+                    }]
+                },
+
+                options: {
+                    ...commonOptions,
+
+                    cutout: "58%"
+                }
+            }
+        );
+
+
+        /* =====================================
+           ĐỘ TUỔI
+        ===================================== */
+
+        new Chart(
+            document.getElementById(
+                "minooAgeChart"
+            ),
+            {
+                type: "bar",
+
+                data: {
+                    labels: readJSON(
+                        "minoo-age-labels"
+                    ),
+
+                    datasets: [{
+                        label: "Khách hàng",
+
+                        data: readJSON(
+                            "minoo-age-values"
+                        ),
+
+                        backgroundColor:
+                            "#BD875C",
+
+                        borderRadius: 8
+                    }]
+                },
+
+                options: {
+                    ...commonOptions,
+
+                    scales: {
+
+                        x: {
+                            ticks: {
+                                font: {
+                                    size: 13
+                                }
+                            }
+                        },
+
+                        y: {
+                            beginAtZero: true,
+
+                            ticks: {
+                                precision: 0,
+                                font: {
+                                    size: 13
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        );
+
+
+        /* =====================================
+           MỨC GIÁ QUAN TÂM
+        ===================================== */
+
+        new Chart(
+            document.getElementById(
+                "minooPriceChart"
+            ),
+            {
+                type: "bar",
+
+                data: {
+                    labels: readJSON(
+                        "minoo-price-labels"
+                    ),
+
+                    datasets: [{
+                        label: "Khách hàng",
+
+                        data: readJSON(
+                            "minoo-price-values"
+                        ),
+
+                        backgroundColor:
+                            "#D7A97F",
+
+                        borderRadius: 8
+                    }]
+                },
+
+                options: {
+                    ...commonOptions,
+
+                    indexAxis: "y",
+
+                    scales: {
+
+                        x: {
+                            beginAtZero: true,
+
+                            ticks: {
+                                precision: 0,
+                                font: {
+                                    size: 13
+                                }
+                            }
+                        },
+
+                        y: {
+                            ticks: {
+                                font: {
+                                    size: 13
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        );
+
+
+        /* =====================================
+           KHÁCH HÀNG MỚI
+        ===================================== */
+
+        new Chart(
+            document.getElementById(
+                "minooCustomerChart"
+            ),
+            {
+                type: "line",
+
+                data: {
+                    labels: readJSON(
+                        "minoo-month-labels"
+                    ),
+
+                    datasets: [{
+                        label: "Khách hàng mới",
+
+                        data: readJSON(
+                            "minoo-month-values"
+                        ),
+
+                        borderColor:
+                            "#3D1C0F",
+
+                        backgroundColor:
+                            "rgba(189, 135, 92, .14)",
+
+                        fill: true,
+
+                        tension: .35,
+
+                        pointRadius: 5,
+
+                        pointHoverRadius: 7,
+
+                        pointBackgroundColor:
+                            "#BD875C"
+                    }]
+                },
+
+                options: {
+                    ...commonOptions,
+
+                    scales: {
+
+                        x: {
+                            ticks: {
+                                font: {
+                                    size: 13
+                                }
+                            }
+                        },
+
+                        y: {
+                            beginAtZero: true,
+
+                            ticks: {
+                                precision: 0,
+                                font: {
+                                    size: 13
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        );
+
+    }
+);
+</script>
+
+{% endblock %}

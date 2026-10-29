@@ -1,0 +1,1111 @@
+{% extends 'base.html' %}
+
+{% block title %}Thanh toán chuyển khoản | MINOO Eyewear{% endblock %}
+
+{% block content %}
+
+<section class="bank-payment-page">
+
+    <div class="bank-payment-container">
+
+        <!-- =====================================================
+             HEADER
+        ====================================================== -->
+
+        <div class="bank-payment-header">
+
+            <div class="bank-payment-icon">
+                <span>₫</span>
+            </div>
+
+            <span class="bank-payment-brand">
+                MINOO EYEWEAR
+            </span>
+
+            <h1>
+                Thanh toán chuyển khoản
+            </h1>
+
+            <p>
+                Vui lòng quét mã QR hoặc chuyển khoản theo thông tin
+                bên dưới để hoàn tất đơn hàng.
+            </p>
+
+        </div>
+
+
+        <!-- =====================================================
+             ORDER CODE
+        ====================================================== -->
+
+        <div class="bank-order-code">
+
+            <span>
+                MÃ ĐƠN HÀNG
+            </span>
+
+            <strong>
+                {{ order.order_code }}
+            </strong>
+
+        </div>
+
+
+        <!-- =====================================================
+             PAYMENT CARD
+        ====================================================== -->
+
+        <div class="bank-payment-card">
+
+
+            <!-- =================================================
+                 QR PAYMENT
+            ================================================== -->
+
+            <div class="bank-qr-section">
+
+                <span class="bank-section-label">
+                    QUÉT MÃ QR
+                </span>
+
+                <h2>
+                    Thanh toán nhanh qua ngân hàng
+                </h2>
+
+                <div class="qr-wrapper">
+
+                    {% if qr_url %}
+
+                        <img
+                            src="{{ qr_url }}"
+                            alt="QR thanh toán đơn hàng {{ order.order_code }}"
+                        >
+
+                    {% else %}
+
+                        <div class="qr-error">
+                            Không thể tạo mã QR
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+                <p class="qr-note">
+                    Mở ứng dụng ngân hàng và quét mã QR
+                    để thực hiện thanh toán.
+                </p>
+
+            </div>
+
+
+            <!-- =================================================
+                 BANK INFORMATION
+            ================================================== -->
+
+            <div class="bank-info-section">
+
+                <span class="bank-section-label">
+                    THÔNG TIN CHUYỂN KHOẢN
+                </span>
+
+                <h2>
+                    Thông tin tài khoản
+                </h2>
+
+
+                <div class="bank-info-list">
+
+
+                    <!-- NGÂN HÀNG -->
+
+                    <div class="bank-info-row">
+
+                        <span>
+                            Ngân hàng
+                        </span>
+
+                        <strong>
+                            {{ bank_code }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- SỐ TÀI KHOẢN -->
+
+                    <div class="bank-info-row">
+
+                        <span>
+                            Số tài khoản
+                        </span>
+
+                        <strong class="bank-account-number">
+                            {{ account_number }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- CHỦ TÀI KHOẢN -->
+
+                    <div class="bank-info-row">
+
+                        <span>
+                            Chủ tài khoản
+                        </span>
+
+                        <strong>
+                            {{ account_name }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- SỐ TIỀN -->
+
+                    <div class="bank-info-row">
+
+                        <span>
+                            Số tiền
+                        </span>
+
+                        <strong class="bank-payment-amount">
+                            {{ order.total|floatformat:0 }}₫
+                        </strong>
+
+                    </div>
+
+
+                    <!-- NỘI DUNG CHUYỂN KHOẢN -->
+
+                    <div class="bank-info-row">
+
+                        <span>
+                            Nội dung chuyển khoản
+                        </span>
+
+                        <strong class="bank-transfer-content">
+                            {{ transfer_content }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     WARNING
+                ================================================== -->
+
+                <div class="bank-warning">
+
+                    <div class="bank-warning-icon">
+                        !
+                    </div>
+
+                    <div class="bank-warning-content">
+
+                        <strong>
+                            Lưu ý quan trọng
+                        </strong>
+
+                        <p>
+                            Vui lòng nhập chính xác
+                            <strong>{{ transfer_content }}</strong>
+                            ở phần nội dung chuyển khoản để MINOO
+                            có thể đối soát đơn hàng nhanh chóng.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             TOTAL
+        ====================================================== -->
+
+        <div class="bank-total-card">
+
+            <span>
+                Tổng thanh toán
+            </span>
+
+            <strong>
+                {{ order.total|floatformat:0 }}₫
+            </strong>
+
+        </div>
+
+
+        <!-- =====================================================
+             CONFIRM PAYMENT
+        ====================================================== -->
+
+        <div class="bank-confirm-section">
+
+            <p>
+                Sau khi hoàn tất chuyển khoản, hãy nhấn nút bên dưới
+                để thông báo cho MINOO.
+            </p>
+
+
+            <form
+                method="POST"
+                action="{% url 'confirm_bank_payment' order.id %}"
+            >
+
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="bank-confirm-button"
+                >
+
+                    <span>
+                        Tôi đã chuyển khoản
+                    </span>
+
+                    <span class="bank-confirm-arrow">
+                        →
+                    </span>
+
+                </button>
+
+            </form>
+
+
+            <a
+                href="{% url 'order_success' %}"
+                class="bank-back-button"
+            >
+                ← Quay lại trang đơn hàng
+            </a>
+
+        </div>
+
+
+        <!-- =====================================================
+             FOOTER
+        ====================================================== -->
+
+        <div class="bank-payment-footer">
+
+            <span>
+                MINOO EYEWEAR
+            </span>
+
+            <i></i>
+
+            <span>
+                Đúng gu · Đúng chất · Đúng bạn
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+/* =========================================================
+   MINOO EYEWEAR
+   BANK PAYMENT PAGE
+   ========================================================= */
+
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.bank-payment-page {
+
+    min-height: 80vh;
+
+    padding: 70px 20px 90px;
+
+    background: #f8f7f4;
+
+    font-family: "Be Vietnam Pro", sans-serif;
+}
+
+
+.bank-payment-container {
+
+    width: min(100%, 1050px);
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.bank-payment-header {
+
+    margin-bottom: 35px;
+
+    text-align: center;
+}
+
+
+.bank-payment-icon {
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 58px;
+    height: 58px;
+
+    margin: 0 auto 18px;
+
+    border-radius: 50%;
+
+    background: #111;
+
+    color: #fff;
+
+    font-size: 25px;
+
+    font-weight: 600;
+}
+
+
+.bank-payment-brand {
+
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: #777;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    letter-spacing: 3px;
+}
+
+
+.bank-payment-header h1 {
+
+    margin: 0;
+
+    color: #111;
+
+    font-size: clamp(28px, 4vw, 42px);
+
+    font-weight: 600;
+
+    letter-spacing: -0.8px;
+}
+
+
+.bank-payment-header p {
+
+    max-width: 620px;
+
+    margin: 14px auto 0;
+
+    color: #777;
+
+    font-size: 14px;
+
+    line-height: 1.8;
+}
+
+
+/* =========================================================
+   ORDER CODE
+   ========================================================= */
+
+.bank-order-code {
+
+    width: fit-content;
+
+    margin: 0 auto 30px;
+
+    padding: 12px 22px;
+
+    border: 1px solid #e7e4de;
+
+    border-radius: 8px;
+
+    background: #fff;
+
+    text-align: center;
+}
+
+
+.bank-order-code span {
+
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #999;
+
+    font-size: 10px;
+
+    letter-spacing: 2px;
+}
+
+
+.bank-order-code strong {
+
+    color: #111;
+
+    font-size: 16px;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   MAIN PAYMENT CARD
+   ========================================================= */
+
+.bank-payment-card {
+
+    display: grid;
+
+    grid-template-columns: 0.9fr 1.1fr;
+
+    overflow: hidden;
+
+    border: 1px solid #e7e4de;
+
+    border-radius: 14px;
+
+    background: #fff;
+
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.05);
+}
+
+
+/* =========================================================
+   QR SECTION
+   ========================================================= */
+
+.bank-qr-section {
+
+    padding: 45px 35px;
+
+    border-right: 1px solid #e7e4de;
+
+    text-align: center;
+}
+
+
+.bank-section-label {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #999;
+
+    font-size: 10px;
+
+    letter-spacing: 2px;
+}
+
+
+.bank-qr-section h2,
+.bank-info-section h2 {
+
+    margin: 0 0 25px;
+
+    color: #111;
+
+    font-size: 21px;
+
+    font-weight: 600;
+}
+
+
+.qr-wrapper {
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 285px;
+    height: 285px;
+
+    max-width: 100%;
+
+    margin: 0 auto;
+
+    padding: 14px;
+
+    border: 1px solid #e5e2dc;
+
+    border-radius: 10px;
+
+    background: #fff;
+}
+
+
+.qr-wrapper img {
+
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+}
+
+
+.qr-error {
+
+    color: #999;
+
+    font-size: 13px;
+}
+
+
+.qr-note {
+
+    margin: 18px 0 0;
+
+    color: #888;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   BANK INFORMATION
+   ========================================================= */
+
+.bank-info-section {
+
+    padding: 45px 40px;
+}
+
+
+.bank-info-list {
+
+    border-top: 1px solid #ece9e3;
+}
+
+
+.bank-info-row {
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 25px;
+
+    padding: 17px 0;
+
+    border-bottom: 1px solid #ece9e3;
+}
+
+
+.bank-info-row > span {
+
+    color: #888;
+
+    font-size: 13px;
+}
+
+
+.bank-info-row strong {
+
+    color: #111;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    text-align: right;
+
+    word-break: break-word;
+}
+
+
+.bank-account-number {
+
+    font-size: 17px !important;
+
+    letter-spacing: 1px;
+}
+
+
+.bank-payment-amount {
+
+    font-size: 18px !important;
+}
+
+
+.bank-transfer-content {
+
+    padding: 6px 10px;
+
+    border-radius: 5px;
+
+    background: #f3f1ec;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   WARNING
+   ========================================================= */
+
+.bank-warning {
+
+    display: flex;
+
+    gap: 12px;
+
+    margin-top: 25px;
+
+    padding: 15px;
+
+    border: 1px solid #eee7d8;
+
+    border-radius: 8px;
+
+    background: #faf8f2;
+}
+
+
+.bank-warning-icon {
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    width: 24px;
+    height: 24px;
+
+    border-radius: 50%;
+
+    background: #111;
+
+    color: #fff;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+.bank-warning-content {
+
+    min-width: 0;
+}
+
+
+.bank-warning strong {
+
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #222;
+
+    font-size: 12px;
+}
+
+
+.bank-warning p {
+
+    margin: 0;
+
+    color: #777;
+
+    font-size: 11px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   TOTAL
+   ========================================================= */
+
+.bank-total-card {
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-top: 18px;
+
+    padding: 20px 25px;
+
+    border-radius: 10px;
+
+    background: #111;
+
+    color: #fff;
+}
+
+
+.bank-total-card span {
+
+    color: #ccc;
+
+    font-size: 13px;
+}
+
+
+.bank-total-card strong {
+
+    color: #fff;
+
+    font-size: 23px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   CONFIRM
+   ========================================================= */
+
+.bank-confirm-section {
+
+    padding: 35px 20px 0;
+
+    text-align: center;
+}
+
+
+.bank-confirm-section p {
+
+    margin: 0 0 18px;
+
+    color: #777;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+
+.bank-confirm-button {
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    width: min(100%, 340px);
+
+    padding: 15px 22px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background: #111;
+
+    color: #fff;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background .25s ease,
+        transform .25s ease,
+        box-shadow .25s ease;
+}
+
+
+.bank-confirm-button:hover {
+
+    background: #333;
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 7px 18px rgba(0, 0, 0, .12);
+}
+
+
+.bank-confirm-arrow {
+
+    font-size: 18px;
+
+    line-height: 1;
+}
+
+
+.bank-back-button {
+
+    display: block;
+
+    margin-top: 16px;
+
+    color: #777;
+
+    font-size: 12px;
+
+    text-decoration: none;
+
+    transition: color .2s ease;
+}
+
+
+.bank-back-button:hover {
+
+    color: #111;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.bank-payment-footer {
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+
+    margin-top: 45px;
+
+    color: #aaa;
+
+    font-size: 10px;
+
+    letter-spacing: 1.5px;
+}
+
+
+.bank-payment-footer i {
+
+    width: 4px;
+    height: 4px;
+
+    border-radius: 50%;
+
+    background: #bbb;
+}
+
+
+/* =========================================================
+   RESPONSIVE - TABLET
+   ========================================================= */
+
+@media (max-width: 800px) {
+
+    .bank-payment-card {
+
+        grid-template-columns: 1fr;
+    }
+
+
+    .bank-qr-section {
+
+        border-right: none;
+
+        border-bottom: 1px solid #e7e4de;
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE - MOBILE
+   ========================================================= */
+
+@media (max-width: 500px) {
+
+    .bank-payment-page {
+
+        padding: 45px 15px 60px;
+    }
+
+
+    .bank-payment-header {
+
+        margin-bottom: 25px;
+    }
+
+
+    .bank-payment-header h1 {
+
+        font-size: 29px;
+    }
+
+
+    .bank-payment-header p {
+
+        font-size: 13px;
+    }
+
+
+    .bank-qr-section,
+    .bank-info-section {
+
+        padding: 30px 20px;
+    }
+
+
+    .qr-wrapper {
+
+        width: 250px;
+
+        height: 250px;
+    }
+
+
+    .bank-info-row {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 6px;
+    }
+
+
+    .bank-info-row strong {
+
+        width: 100%;
+
+        text-align: left;
+    }
+
+
+    .bank-transfer-content {
+
+        display: inline-block;
+
+        width: auto;
+    }
+
+
+    .bank-total-card {
+
+        padding: 18px;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 7px;
+    }
+
+
+    .bank-total-card strong {
+
+        font-size: 21px;
+    }
+
+
+    .bank-payment-footer {
+
+        flex-direction: column;
+
+        gap: 7px;
+    }
+
+}
+
+</style>
+<p id="payment-status" aria-live="polite">
+    Đang chờ xác nhận thanh toán từ ngân hàng...
+</p>
+
+<script>
+(function () {
+    const statusUrl = "{% url 'bank_payment_status' order.id %}";
+    const successUrl = "{% url 'order_success' %}";
+    const statusElement = document.getElementById("payment-status");
+
+    let checking = false;
+
+    async function checkPaymentStatus() {
+        if (checking) return;
+        checking = true;
+
+        try {
+            const response = await fetch(statusUrl, {
+                method: "GET",
+                credentials: "same-origin",
+                cache: "no-store",
+                headers: {
+                    "Accept": "application/json"
+                }
+            });
+
+            if (response.status === 403) {
+                statusElement.textContent =
+                    "Không thể kiểm tra đơn hàng này.";
+                return;
+            }
+
+            if (!response.ok) {
+                throw new Error("Không kiểm tra được trạng thái");
+            }
+
+            const data = await response.json();
+
+            if (data.paid === true) {
+                statusElement.textContent =
+                    "Đã xác nhận thanh toán. Đang chuyển trang...";
+
+                window.location.replace(successUrl);
+                return;
+            }
+
+            statusElement.textContent =
+                "Đang chờ xác nhận. Vui lòng chưa đóng trang này.";
+
+        } catch (error) {
+            statusElement.textContent =
+                "Chưa kiểm tra được trạng thái. Hệ thống sẽ thử lại.";
+
+        } finally {
+            checking = false;
+        }
+    }
+
+    checkPaymentStatus();
+    window.setInterval(checkPaymentStatus, 3000);
+})();
+</script>
+{% endblock %}

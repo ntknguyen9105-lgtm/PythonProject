@@ -1,0 +1,525 @@
+{% extends 'base.html' %}
+{% load minoo_filters %}
+
+{% block title %}
+Đặt hàng thành công | MINOO Eyewear
+{% endblock %}
+
+{% block content %}
+
+<section class="order-success-page">
+
+    <div class="order-success-container">
+
+
+        <!-- =====================================================
+             SUCCESS ICON
+             ===================================================== -->
+
+        <div class="success-icon-wrapper">
+
+            <div class="success-icon">
+                <span>✓</span>
+            </div>
+
+        </div>
+
+
+
+        <!-- =====================================================
+             HEADING
+             ===================================================== -->
+
+        <div class="success-heading">
+
+            <span class="success-brand">
+                MINOO EYEWEAR
+            </span>
+
+            <h1>
+                Đặt hàng thành công
+            </h1>
+
+            <p>
+                Cảm ơn bạn đã tin tưởng và lựa chọn MINOO.
+                Đơn hàng của bạn đã được ghi nhận.
+            </p>
+
+        </div>
+
+
+
+        <!-- =====================================================
+             ORDER CODE
+             ===================================================== -->
+
+        {% if order %}
+
+        <div class="success-order-code">
+
+            <div class="code-label">
+                MÃ ĐƠN HÀNG
+            </div>
+
+            <div class="code-value">
+                {{ order.order_code }}
+            </div>
+
+            <div class="code-status">
+
+                {% if order.status == "pending" %}
+                    Đơn hàng đang chờ MINOO xác nhận.
+
+                {% elif order.status == "confirmed" %}
+                    Đơn hàng đã được MINOO xác nhận.
+
+                {% elif order.status == "shipping" %}
+                    Đơn hàng đang được giao đến bạn.
+
+                {% elif order.status == "completed" %}
+                    Đơn hàng đã hoàn thành.
+
+                {% elif order.status == "cancelled" %}
+                    Đơn hàng đã được hủy.
+
+                {% else %}
+                    Đơn hàng đã được ghi nhận.
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+
+        <!-- =====================================================
+             ORDER INFORMATION
+             ===================================================== -->
+
+        {% if order %}
+
+        <div class="success-card">
+
+            <div class="success-card-header">
+
+                <div>
+
+                    <span class="card-eyebrow">
+                        ORDER INFORMATION
+                    </span>
+
+                    <h2>
+                        Thông tin đơn hàng
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="success-info-grid">
+
+
+                <!-- NGƯỜI NHẬN -->
+                <div class="success-info-item">
+
+                    <span class="info-label">
+                        Người nhận
+                    </span>
+
+                    <strong>
+                        {{ order.full_name }}
+                    </strong>
+
+                </div>
+
+
+                <!-- SỐ ĐIỆN THOẠI -->
+                <div class="success-info-item">
+
+                    <span class="info-label">
+                        Số điện thoại
+                    </span>
+
+                    <strong>
+                        {{ order.phone }}
+                    </strong>
+
+                </div>
+
+
+                <!-- EMAIL -->
+                {% if order.email %}
+
+                <div class="success-info-item">
+
+                    <span class="info-label">
+                        Email
+                    </span>
+
+                    <strong>
+                        {{ order.email }}
+                    </strong>
+
+                </div>
+
+                {% endif %}
+
+
+                <!-- ĐỊA CHỈ -->
+                <div class="success-info-item full-width">
+
+                    <span class="info-label">
+                        Địa chỉ nhận hàng
+                    </span>
+
+                    <strong>
+                        {{ order.address }}
+                    </strong>
+
+                </div>
+
+
+                <!-- THANH TOÁN -->
+                <div class="success-info-item">
+
+                    <span class="info-label">
+                        Thanh toán
+                    </span>
+
+                    <strong>
+                        {{ order.get_payment_method_display }}
+                    </strong>
+
+                </div>
+
+
+                <!-- TRẠNG THÁI -->
+                <div class="success-info-item">
+
+                    <span class="info-label">
+                        Trạng thái đơn
+                    </span>
+
+                    <strong class="status-text">
+                        {{ order.get_status_display }}
+                    </strong>
+
+                </div>
+
+
+                <!-- TRẠNG THÁI THANH TOÁN -->
+                <div class="success-info-item">
+
+                    <span class="info-label">
+                        Trạng thái thanh toán
+                    </span>
+
+                    <strong>
+                        {{ order.get_payment_status_display }}
+                    </strong>
+
+                </div>
+
+
+                <!-- NGÀY ĐẶT -->
+                <div class="success-info-item">
+
+                    <span class="info-label">
+                        Ngày đặt hàng
+                    </span>
+
+                    <strong>
+                        {{ order.created_at|date:"d/m/Y H:i" }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+
+        <!-- =====================================================
+             PRODUCTS
+             ===================================================== -->
+
+        {% if order %}
+
+        <div class="success-card">
+
+            <div class="success-card-header">
+
+                <div>
+
+                    <span class="card-eyebrow">
+                        ORDER ITEMS
+                    </span>
+
+                    <h2>
+                        Sản phẩm đã đặt
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="success-products">
+
+                {% for item in order.items.all %}
+
+                <div class="success-product">
+
+                    <div class="success-product-info">
+
+                        <strong>
+                            {{ item.product_name }}
+                        </strong>
+
+                        {% if item.variant_name %}
+
+                        <span>
+                            {{ item.variant_name }}
+                        </span>
+
+                        {% endif %}
+
+                        <small>
+                            Số lượng: {{ item.quantity }}
+                        </small>
+
+                    </div>
+
+
+                    <div class="success-product-price">
+
+                        {{ item.line_total|vnd }}đ
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+
+        <!-- =====================================================
+             PAYMENT SUMMARY
+             ===================================================== -->
+
+        {% if order %}
+
+        <div class="success-card payment-summary">
+
+            <div class="success-card-header">
+
+                <div>
+
+                    <span class="card-eyebrow">
+                        PAYMENT
+                    </span>
+
+                    <h2>
+                        Chi tiết thanh toán
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <!-- TẠM TÍNH -->
+            <div class="summary-row">
+
+                <span>
+                    Tạm tính
+                </span>
+
+                <strong>
+                    {{ order.subtotal|vnd }}đ
+                </strong>
+
+            </div>
+
+
+            <!-- PHÍ VẬN CHUYỂN -->
+            <div class="summary-row">
+
+                <span>
+                    Phí vận chuyển
+                </span>
+
+                <strong>
+
+                    {% if order.shipping_fee == 0 %}
+
+                        Miễn phí
+
+                    {% else %}
+
+                        {{ order.shipping_fee|vnd }}đ
+
+                    {% endif %}
+
+                </strong>
+
+            </div>
+
+
+            <div class="summary-divider"></div>
+
+
+            <!-- TỔNG -->
+            <div class="summary-total">
+
+                <span>
+                    Tổng thanh toán
+                </span>
+
+                <strong>
+                    {{ order.total|vnd }}đ
+                </strong>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+
+        <!-- =====================================================
+             PAYMENT NOTICE
+             ===================================================== -->
+
+        {% if order and order.payment_method == "bank" %}
+
+        <div class="success-note">
+
+            <div class="note-icon">
+                !
+            </div>
+
+            <div class="note-content">
+
+                <strong>
+                    Đơn hàng của bạn đang chờ thanh toán
+                </strong>
+
+                <p>
+                    Vui lòng hoàn tất chuyển khoản theo hướng dẫn
+                    trên trang thanh toán để MINOO xác nhận đơn hàng.
+                </p>
+
+            </div>
+
+        </div>
+
+        {% else %}
+
+        <div class="success-note">
+
+            <div class="note-icon">
+                ✓
+            </div>
+
+            <div class="note-content">
+
+                <strong>
+                    Cảm ơn bạn đã mua sắm tại MINOO
+                </strong>
+
+                <p>
+                    MINOO Eyewear sẽ liên hệ với bạn để xác nhận
+                    đơn hàng và hỗ trợ bạn trong quá trình giao hàng.
+                </p>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+
+        <!-- =====================================================
+             ACTIONS
+             ===================================================== -->
+
+        <div class="success-actions">
+
+
+            <!-- TIẾP TỤC MUA SẮM -->
+            <a
+                href="{% url 'home' %}"
+                class="success-btn success-btn-primary"
+            >
+
+                <span>
+                    Tiếp tục mua sắm
+                </span>
+
+                <span class="btn-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <!-- ĐƠN HÀNG CỦA TÔI -->
+            <a
+                href="{% url 'order_tracking' %}"
+                class="success-btn success-btn-secondary"
+            >
+
+                <span>
+                    Đơn hàng của tôi
+                </span>
+
+                <span class="btn-arrow">
+                    →
+                </span>
+
+            </a>
+
+        </div>
+
+
+
+        <!-- =====================================================
+             FOOTER MESSAGE
+             ===================================================== -->
+
+        <div class="success-footer">
+
+            <span>
+                MINOO EYEWEAR
+            </span>
+
+            <i></i>
+
+            <span>
+                Đúng gu · Đúng chất · Đúng bạn
+            </span>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+{% endblock %}

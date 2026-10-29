@@ -1,0 +1,910 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}Tìm kính bằng hình ảnh | MINOO{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+
+<style>
+    .recognition-page {
+        max-width: 1200px;
+        margin: 30px auto;
+        padding: 0 25px 60px;
+    }
+
+    .recognition-header {
+        margin-bottom: 28px;
+    }
+
+    .recognition-header h1 {
+        margin: 0 0 8px;
+        color: #3D1C0F;
+        font-size: 30px;
+        font-weight: 700;
+    }
+
+    .recognition-header p {
+        margin: 0;
+        color: #777;
+        font-size: 14px;
+    }
+
+    /* =========================
+       UPLOAD
+    ========================= */
+
+    .upload-box {
+        background: #fff;
+        border: 1px solid #eadfd6;
+        border-radius: 16px;
+        padding: 30px;
+        margin-bottom: 35px;
+        box-shadow: 0 3px 15px rgba(61, 28, 15, 0.04);
+    }
+
+    .upload-area {
+        border: 2px dashed #d9c4b4;
+        border-radius: 14px;
+        padding: 40px 25px;
+        text-align: center;
+        background: #fffdf9;
+        transition: .2s;
+    }
+
+    .upload-area:hover {
+        border-color: #BD875C;
+        background: #fdf7f1;
+    }
+
+    .upload-icon {
+        font-size: 42px;
+        margin-bottom: 12px;
+    }
+
+    .upload-area h2 {
+        margin: 0 0 8px;
+        color: #3D1C0F;
+        font-size: 20px;
+    }
+
+    .upload-area p {
+        margin: 0 0 20px;
+        color: #777;
+        font-size: 14px;
+    }
+
+    .upload-input {
+        display: none;
+    }
+
+    .upload-label {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 11px 22px;
+        background: #BD875C;
+        color: #fff;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .upload-label:hover {
+        background: #A36F48;
+    }
+
+    .file-name {
+        margin-top: 14px;
+        color: #777;
+        font-size: 13px;
+    }
+
+    .search-submit {
+        width: 100%;
+        margin-top: 18px;
+        border: none;
+        border-radius: 8px;
+        padding: 13px 20px;
+        background: #3D1C0F;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .search-submit:hover {
+        background: #5a2b18;
+    }
+
+    /* =========================
+       ẢNH ĐÃ QUÉT
+    ========================= */
+
+    .scan-preview {
+        margin-bottom: 35px;
+        background: #fff;
+        border: 1px solid #eadfd6;
+        border-radius: 16px;
+        padding: 25px;
+    }
+
+    .section-title {
+        margin: 0 0 18px;
+        color: #3D1C0F;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .scan-content {
+        display: flex;
+        align-items: flex-start;
+        gap: 25px;
+    }
+
+    .scan-image {
+        width: 220px;
+        height: 220px;
+        object-fit: cover;
+        border-radius: 12px;
+        border: 1px solid #eadfd6;
+        background: #f7f3ef;
+    }
+
+    .scan-info {
+        padding-top: 5px;
+    }
+
+    .scan-info p {
+        margin: 0 0 10px;
+        color: #666;
+        font-size: 14px;
+    }
+
+    /* =========================
+       MATCHED
+    ========================= */
+
+    .matched-box {
+        background: #f7fbf7;
+        border: 1px solid #cfe4d1;
+        border-radius: 14px;
+        padding: 20px;
+        margin-bottom: 35px;
+    }
+
+    .matched-title {
+        margin: 0 0 15px;
+        color: #286332;
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .matched-content {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+    }
+
+    .matched-image {
+        width: 130px;
+        height: 130px;
+        object-fit: cover;
+        border-radius: 10px;
+        background: #fff;
+        border: 1px solid #ddd;
+    }
+
+    .matched-info h3 {
+        margin: 0 0 7px;
+        color: #3D1C0F;
+        font-size: 17px;
+    }
+
+    .matched-info p {
+        margin: 5px 0;
+        color: #666;
+        font-size: 14px;
+    }
+
+    .matched-badge {
+        display: inline-block;
+        margin-top: 8px;
+        padding: 6px 10px;
+        border-radius: 20px;
+        background: #dff0df;
+        color: #286332;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    /* =========================
+       RESULTS
+    ========================= */
+
+    .results-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 18px;
+    }
+
+    .results-header h2 {
+        margin: 0;
+        color: #3D1C0F;
+        font-size: 22px;
+    }
+
+    .result-count {
+        color: #777;
+        font-size: 13px;
+    }
+
+    .similar-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .similar-card {
+        overflow: hidden;
+        background: #fff;
+        border: 1px solid #eadfd6;
+        border-radius: 14px;
+        box-shadow: 0 3px 12px rgba(61, 28, 15, 0.04);
+    }
+
+    .similar-image {
+        width: 100%;
+        height: 230px;
+        display: block;
+        object-fit: cover;
+        background: #f7f3ef;
+    }
+
+    .no-image {
+        height: 230px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f7f3ef;
+        color: #999;
+        font-size: 14px;
+    }
+
+    .similar-body {
+        padding: 18px;
+    }
+
+    .similar-body h3 {
+        margin: 0 0 7px;
+        color: #3D1C0F;
+        font-size: 17px;
+    }
+
+    .similar-sku {
+        margin-bottom: 12px;
+        color: #888;
+        font-size: 13px;
+    }
+
+    .similarity {
+        display: inline-block;
+        margin-bottom: 14px;
+        padding: 6px 10px;
+        border-radius: 20px;
+        background: #fdf1de;
+        color: #8a5b39;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .similar-source {
+        margin-bottom: 15px;
+        color: #777;
+        font-size: 12px;
+    }
+
+    .similar-source strong {
+        color: #555;
+    }
+
+    .stock-title {
+        margin-bottom: 7px;
+        color: #666;
+        font-size: 13px;
+    }
+
+    .stock-number {
+        color: #3D1C0F;
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .variant-list {
+        margin: 12px 0 15px;
+    }
+
+    .variant-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 8px;
+        padding: 9px 10px;
+        border: 1px solid #eee;
+        border-radius: 7px;
+        background: #fafafa;
+    }
+
+    .variant-color {
+        color: #555;
+        font-size: 13px;
+    }
+
+    .variant-stock {
+        color: #3D1C0F;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .stock-form {
+        display: flex;
+        gap: 8px;
+        margin-top: 12px;
+    }
+
+    .stock-input {
+        width: 75px;
+        box-sizing: border-box;
+        padding: 9px 8px;
+        border: 1px solid #ddd;
+        border-radius: 7px;
+        font-size: 13px;
+    }
+
+    .stock-button {
+        flex: 1;
+        border: none;
+        border-radius: 7px;
+        background: #BD875C;
+        color: #fff;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .stock-button:hover {
+        background: #A36F48;
+    }
+
+    .product-link {
+        display: block;
+        margin-top: 9px;
+        padding: 9px;
+        border: 1px solid #ddd;
+        border-radius: 7px;
+        color: #3D1C0F;
+        text-align: center;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .product-link:hover {
+        background: #faf6f2;
+    }
+
+    /* =========================
+       NO RESULT
+    ========================= */
+
+    .no-result {
+        padding: 45px 25px;
+        border: 1px solid #eadfd6;
+        border-radius: 14px;
+        background: #fff;
+        text-align: center;
+    }
+
+    .no-result-icon {
+        margin-bottom: 12px;
+        font-size: 40px;
+    }
+
+    .no-result h2 {
+        margin: 0 0 8px;
+        color: #3D1C0F;
+        font-size: 20px;
+    }
+
+    .no-result p {
+        margin: 0 0 20px;
+        color: #777;
+        font-size: 14px;
+    }
+
+    .add-product-button {
+        display: inline-block;
+        padding: 11px 22px;
+        border-radius: 8px;
+        background: #BD875C;
+        color: #fff;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .add-product-button:hover {
+        background: #A36F48;
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 1000px) {
+        .similar-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 700px) {
+        .recognition-page {
+            padding: 0 15px 40px;
+        }
+
+        .upload-box {
+            padding: 20px;
+        }
+
+        .scan-content,
+        .matched-content {
+            flex-direction: column;
+        }
+
+        .similar-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .scan-image {
+            width: 100%;
+            height: 260px;
+        }
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="recognition-page">
+
+    <!-- HEADER -->
+
+    <div class="recognition-header">
+
+        <h1>
+            🔍 Tìm kính bằng hình ảnh
+        </h1>
+
+        <p>
+            Chụp hoặc tải ảnh mẫu kính để kiểm tra
+            sản phẩm tương tự đang có trong hệ thống.
+        </p>
+
+    </div>
+
+
+    <!-- =========================
+         UPLOAD
+    ========================= -->
+
+    <div class="upload-box">
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+        >
+
+            {% csrf_token %}
+
+            <div class="upload-area">
+
+                <div class="upload-icon">
+                    📷
+                </div>
+
+                <h2>
+                    Chọn hoặc chụp ảnh mẫu kính
+                </h2>
+
+                <p>
+                    Hỗ trợ JPG, PNG, WEBP
+                </p>
+
+                <label
+                    for="recognition-image"
+                    class="upload-label"
+                >
+                    Chọn ảnh
+                </label>
+
+                <input
+                    id="recognition-image"
+                    name="image"
+                    type="file"
+                    class="upload-input"
+                    accept="image/jpeg,image/png,image/webp"
+                    capture="environment"
+                    required
+                >
+
+                <div
+                    id="file-name"
+                    class="file-name"
+                ></div>
+
+            </div>
+
+            <button
+                type="submit"
+                class="search-submit"
+            >
+                🔍 Kiểm tra mẫu kính
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- =========================
+         ẢNH ĐÃ QUÉT
+    ========================= -->
+
+    {% if scan_image_url %}
+
+        <div class="scan-preview">
+
+            <h2 class="section-title">
+                Ảnh mẫu đã kiểm tra
+            </h2>
+
+            <div class="scan-content">
+
+                <img
+                    src="{{ scan_image_url }}"
+                    class="scan-image"
+                    alt="Ảnh mẫu kính đã tải lên"
+                >
+
+                <div class="scan-info">
+
+                    <p>
+                        Hệ thống đã sử dụng ảnh này để
+                        tìm kiếm các mẫu kính tương đồng.
+                    </p>
+
+                    <p>
+                        Kết quả được sắp xếp từ
+                        <strong>tương đồng cao nhất</strong>
+                        đến thấp hơn.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- =========================
+         MATCHED PRODUCT
+    ========================= -->
+
+    {% if matched %}
+
+        <div class="matched-box">
+
+            <h2 class="matched-title">
+                ✓ Có khả năng đã có mẫu kính này
+            </h2>
+
+            <div class="matched-content">
+
+                {% if matched.image_url %}
+
+                    <img
+                        src="{{ matched.image_url }}"
+                        class="matched-image"
+                        alt="{{ matched.product.name }}"
+                    >
+
+                {% endif %}
+
+                <div class="matched-info">
+
+                    <h3>
+                        {{ matched.product.name }}
+                    </h3>
+
+                    <p>
+                        SKU:
+                        <strong>{{ matched.product.sku }}</strong>
+                    </p>
+
+                    <p>
+                        Độ tương đồng:
+                        <strong>{{ matched.similarity }}%</strong>
+                    </p>
+
+                    <span class="matched-badge">
+                        Có thể là cùng mẫu
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- =========================
+         RESULTS
+    ========================= -->
+
+    {% if results %}
+
+        <div class="results-header">
+
+            <h2>
+                Mẫu kính tương đồng
+            </h2>
+
+            <span class="result-count">
+                Top {{ results|length }} kết quả
+            </span>
+
+        </div>
+
+
+        <div class="similar-grid">
+
+            {% for result in results %}
+
+                <div class="similar-card">
+
+                    {% if result.image_url %}
+
+                        <img
+                            src="{{ result.image_url }}"
+                            class="similar-image"
+                            alt="{{ result.product.name }}"
+                        >
+
+                    {% else %}
+
+                        <div class="no-image">
+                            Chưa có hình ảnh
+                        </div>
+
+                    {% endif %}
+
+
+                    <div class="similar-body">
+
+                        <h3>
+                            {{ result.product.name }}
+                        </h3>
+
+                        <div class="similar-sku">
+                            SKU:
+                            {{ result.product.sku }}
+                        </div>
+
+
+                        <div class="similarity">
+
+                            Độ tương đồng:
+                            <strong>
+                                {{ result.similarity }}%
+                            </strong>
+
+                        </div>
+
+
+                        <div class="similar-source">
+
+                            Hình ảnh khớp:
+                            <strong>
+                                {{ result.source }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="stock-title">
+
+                            Tồn kho tổng:
+
+                            <span class="stock-number">
+                                {{ result.product.stock }}
+                            </span>
+
+                        </div>
+
+
+                        {% if result.variants %}
+
+                            <div class="variant-list">
+
+                                {% for variant in result.variants %}
+
+                                    <div class="variant-item">
+
+                                        <span class="variant-color">
+                                            {{ variant.color|default:"Màu mặc định" }}
+                                        </span>
+
+                                        <span class="variant-stock">
+                                            {{ variant.stock }} sản phẩm
+                                        </span>
+
+                                    </div>
+
+                                {% endfor %}
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <!-- NHẬP THÊM TỒN KHO -->
+
+                        <form
+                            method="POST"
+                            action="{% url 'admin:product_image_recognition_update' %}"
+                            class="stock-form"
+                        >
+
+                            {% csrf_token %}
+
+                            <input
+                                type="hidden"
+                                name="product_id"
+                                value="{{ result.product.id }}"
+                            >
+
+                            <input
+                                type="number"
+                                name="quantity"
+                                value="1"
+                                min="1"
+                                class="stock-input"
+                            >
+
+                            <button
+                                type="submit"
+                                class="stock-button"
+                            >
+                                + Nhập thêm
+                            </button>
+
+                        </form>
+
+
+                        <a
+                            href="{% url 'admin:store_product_change' result.product.id %}"
+                            class="product-link"
+                        >
+                            Xem / chỉnh sửa sản phẩm
+                        </a>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+        <!-- =========================
+             THÊM SẢN PHẨM MỚI
+        ========================= -->
+
+        <div class="new-product-action">
+
+            <div class="new-product-action-content">
+
+                <div>
+                    <h3>
+                        Đây là mẫu kính mới?
+                    </h3>
+
+                    <p>
+                        Nếu các mẫu trên không phải sản phẩm bạn đang kiểm tra,
+                        bạn có thể tạo sản phẩm mới.
+                    </p>
+                </div>
+
+                <a
+                    href="{% url 'admin:store_product_add' %}"
+                    class="add-product-button"
+                >
+                    + Thêm sản phẩm mới
+                </a>
+
+            </div>
+
+        </div>
+
+    {% elif scan_image_url %}
+
+        <div class="no-result">
+
+            <div class="no-result-icon">
+                ✨
+            </div>
+
+            <h2>
+                Chưa tìm thấy mẫu kính tương đồng
+            </h2>
+
+            <p>
+                Có thể đây là một mẫu kính mới.
+                Bạn có thể thêm sản phẩm này vào hệ thống.
+            </p>
+
+            <a
+                href="{% url 'admin:store_product_add' %}"
+                class="add-product-button"
+            >
+                + Thêm sản phẩm mới
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+
+<script>
+
+const imageInput =
+    document.getElementById("recognition-image");
+
+const fileName =
+    document.getElementById("file-name");
+
+if (imageInput) {
+
+    imageInput.addEventListener(
+        "change",
+        function () {
+
+            if (this.files.length > 0) {
+
+                fileName.textContent =
+                    "Ảnh đã chọn: "
+                    + this.files[0].name;
+
+            } else {
+
+                fileName.textContent = "";
+
+            }
+
+        }
+    );
+
+}
+
+</script>
+
+{% endblock %}

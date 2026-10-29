@@ -1,0 +1,1514 @@
+{% extends 'base.html' %}
+{% load minoo_filters %}
+{% block title %}Theo dõi đơn hàng | Minoo Eyewear{% endblock %}
+
+{% block content %}
+
+<div class="tracking-detail-page">
+
+    <div class="tracking-detail-container">
+
+        <!-- ================================================= -->
+        <!-- BACK -->
+        <!-- ================================================= -->
+
+        <a
+            href="{% url 'order_tracking' %}"
+            class="tracking-back"
+        >
+            ← Quay lại đơn hàng của tôi
+        </a>
+
+
+        <!-- ================================================= -->
+        <!-- HEADER -->
+        <!-- ================================================= -->
+
+        <div class="tracking-header">
+
+            <p class="tracking-eyebrow">
+                MINOO EYEWEAR
+            </p>
+
+            <h1>
+                Theo dõi đơn hàng
+            </h1>
+
+            <p>
+                Kiểm tra thông tin và trạng thái đơn hàng của bạn.
+            </p>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- ORDER HEADER -->
+        <!-- ================================================= -->
+
+        <div class="tracking-order-card">
+
+            <div class="tracking-order-top">
+
+                <div>
+
+                    <span class="tracking-label">
+                        MÃ ĐƠN HÀNG
+                    </span>
+
+                    <h2>
+                        {{ order.order_code }}
+                    </h2>
+
+                </div>
+
+
+                <div class="tracking-status status-{{ order.status }}">
+
+                    {{ order.get_status_display }}
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- ORDER STATUS -->
+            <!-- ================================================= -->
+
+            {% if order.status == "cancelled" %}
+
+                <!-- ============================================= -->
+                <!-- TRẠNG THÁI ĐÃ HỦY -->
+                <!-- ============================================= -->
+
+                <div class="tracking-cancelled-progress">
+
+                    <div class="cancelled-progress-icon">
+                        ×
+                    </div>
+
+                    <div class="cancelled-progress-content">
+
+                        <strong>
+                            Đơn hàng đã được hủy
+                        </strong>
+
+                        <span>
+                            Đơn hàng này đã được hủy và số lượng sản phẩm
+                            đã được hoàn lại vào kho.
+                        </span>
+
+                    </div>
+
+                </div>
+
+            {% else %}
+
+                <div class="tracking-progress">
+
+                    <div class="progress-step
+                        {% if order.status == 'pending' or order.status == 'confirmed' or order.status == 'shipping' or order.status == 'completed' %}
+                            active
+                        {% endif %}
+                    ">
+
+                        <div class="progress-dot">
+                            1
+                        </div>
+
+                        <span>
+                            Chờ xác nhận
+                        </span>
+
+                    </div>
+
+
+                    <div class="progress-line
+                        {% if order.status == 'confirmed' or order.status == 'shipping' or order.status == 'completed' %}
+                            active
+                        {% endif %}
+                    "></div>
+
+
+                    <div class="progress-step
+                        {% if order.status == 'confirmed' or order.status == 'shipping' or order.status == 'completed' %}
+                            active
+                        {% endif %}
+                    ">
+
+                        <div class="progress-dot">
+                            2
+                        </div>
+
+                        <span>
+                            Đã xác nhận
+                        </span>
+
+                    </div>
+
+
+                    <div class="progress-line
+                        {% if order.status == 'shipping' or order.status == 'completed' %}
+                            active
+                        {% endif %}
+                    "></div>
+
+
+                    <div class="progress-step
+                        {% if order.status == 'shipping' or order.status == 'completed' %}
+                            active
+                        {% endif %}
+                    ">
+
+                        <div class="progress-dot">
+                            3
+                        </div>
+
+                        <span>
+                            Đang giao hàng
+                        </span>
+
+                    </div>
+
+
+                    <div class="progress-line
+                        {% if order.status == 'completed' %}
+                            active
+                        {% endif %}
+                    "></div>
+
+
+                    <div class="progress-step
+                        {% if order.status == 'completed' %}
+                            active
+                        {% endif %}
+                    ">
+
+                        <div class="progress-dot">
+                            4
+                        </div>
+
+                        <span>
+                            Đã hoàn thành
+                        </span>
+
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- ================================================= -->
+            <!-- CANCELLED MESSAGE -->
+            <!-- ================================================= -->
+
+            {% if order.status == "cancelled" %}
+
+                <div class="cancelled-message">
+
+                    Đơn hàng này đã được hủy.
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- ================================================= -->
+            <!-- CANCEL ORDER -->
+            <!-- ================================================= -->
+
+            {% if order.status == "pending" and order.payment_status != "paid" %}
+
+                <div class="cancel-order-section">
+
+                    <div class="cancel-order-info">
+
+                        <strong>
+                            Bạn muốn hủy đơn hàng?
+                        </strong>
+
+                        <span>
+                            Bạn chỉ có thể hủy đơn hàng khi đơn đang chờ xác nhận.
+                        </span>
+
+                    </div>
+
+
+                    <form
+                        method="POST"
+                        action="{% url 'cancel_order' order.id %}"
+                        class="cancel-order-form"
+                        onsubmit="return confirm('Bạn có chắc chắn muốn hủy đơn hàng này không?');"
+                    >
+
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="cancel-order-btn"
+                        >
+                            Hủy đơn hàng
+                        </button>
+
+                    </form>
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- ================================================= -->
+            <!-- PAYMENT WARNING -->
+            <!-- ================================================= -->
+
+            {% if order.status == "pending" and order.payment_status == "paid" %}
+
+                <div class="payment-cancel-warning">
+
+                    <strong>
+                        Đơn hàng đã thanh toán
+                    </strong>
+
+                    <span>
+                        Đơn hàng đã được thanh toán và hiện không thể
+                        hủy trực tiếp trên website.
+                    </span>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- THÔNG TIN ĐƠN HÀNG -->
+        <!-- ================================================= -->
+
+        <div class="tracking-grid">
+
+
+            <!-- ================================================= -->
+            <!-- THÔNG TIN KHÁCH HÀNG -->
+            <!-- ================================================= -->
+
+            <div class="tracking-card">
+
+                <h3>
+                    Thông tin nhận hàng
+                </h3>
+
+
+                <div class="detail-row">
+
+                    <span>
+                        Họ và tên
+                    </span>
+
+                    <strong>
+                        {{ order.full_name }}
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <span>
+                        Số điện thoại
+                    </span>
+
+                    <strong>
+                        {{ order.phone }}
+                    </strong>
+
+                </div>
+
+
+                {% if order.email %}
+
+                    <div class="detail-row">
+
+                        <span>
+                            Email
+                        </span>
+
+                        <strong>
+                            {{ order.email }}
+                        </strong>
+
+                    </div>
+
+                {% endif %}
+
+
+                <div class="detail-row">
+
+                    <span>
+                        Địa chỉ
+                    </span>
+
+                    <strong>
+                        {{ order.address }}
+                    </strong>
+
+                </div>
+
+
+                {% if order.note %}
+
+                    <div class="detail-row">
+
+                        <span>
+                            Ghi chú
+                        </span>
+
+                        <strong>
+                            {{ order.note }}
+                        </strong>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- THÔNG TIN THANH TOÁN -->
+            <!-- ================================================= -->
+
+            <div class="tracking-card">
+
+                <h3>
+                    Thông tin đơn hàng
+                </h3>
+
+
+                <div class="detail-row">
+
+                    <span>
+                        Ngày đặt
+                    </span>
+
+                    <strong>
+                        {{ order.created_at|date:"d/m/Y H:i" }}
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <span>
+                        Phương thức thanh toán
+                    </span>
+
+                    <strong>
+                        {{ order.get_payment_method_display }}
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <span>
+                        Trạng thái thanh toán
+                    </span>
+
+                    <strong>
+                        {{ order.get_payment_status_display }}
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <span>
+                        Trạng thái đơn hàng
+                    </span>
+
+                    <strong>
+                        {{ order.get_status_display }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- SẢN PHẨM -->
+        <!-- ================================================= -->
+
+        <div class="tracking-card products-card">
+
+            <h3>
+                Sản phẩm trong đơn hàng
+            </h3>
+
+
+            <div class="tracking-products">
+
+                {% for item in order.items.all %}
+
+                    <div class="tracking-product">
+
+                        <div class="tracking-product-info">
+
+                            <div class="tracking-product-image">
+
+                                {% if item.product %}
+
+                                    {% if item.product.image %}
+
+                                        <img
+                                            src="{{ item.product.image.url }}"
+                                            alt="{{ item.product_name }}"
+                                        >
+
+                                    {% else %}
+
+                                        <div class="no-image">
+                                            Minoo
+                                        </div>
+
+                                    {% endif %}
+
+                                {% else %}
+
+                                    <div class="no-image">
+                                        Minoo
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <div class="tracking-product-name">
+
+                                <strong>
+                                    {{ item.product_name }}
+                                </strong>
+
+
+                                {% if item.variant_name %}
+
+                                    <span>
+                                        {{ item.variant_name }}
+                                    </span>
+
+                                {% endif %}
+
+
+                                <small>
+                                    Số lượng: {{ item.quantity }}
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="tracking-product-price">
+
+                            {{ item.line_total|vnd }} ₫
+
+                        </div>
+                        {% if order.status == "completed" and item.product_id %}
+
+    {% if item.id in reviewed_item_ids %}
+
+        <p class="review-completed">
+            ✓ Bạn đã đánh giá sản phẩm này
+        </p>
+
+    {% else %}
+
+
+<form
+    method="post"
+    action="{% url 'submit_product_review' order.id item.id %}"
+    class="product-review-form"
+>
+    {% csrf_token %}
+
+    <div class="review-form-heading">
+        <span class="review-form-eyebrow">MINOO EYEWEAR</span>
+        <h4>Chia sẻ trải nghiệm của bạn</h4>
+        <p>Đánh giá chân thực của bạn giúp MINOO phục vụ tốt hơn.</p>
+    </div>
+
+    <fieldset class="review-rating-field">
+        <legend>Mức độ hài lòng của bạn</legend>
+
+        <div class="star-rating">
+            <input type="radio" name="rating" id="rating-5-{{ item.id }}" value="5" required>
+            <label for="rating-5-{{ item.id }}" title="5 sao">★</label>
+
+            <input type="radio" name="rating" id="rating-4-{{ item.id }}" value="4">
+            <label for="rating-4-{{ item.id }}" title="4 sao">★</label>
+
+            <input type="radio" name="rating" id="rating-3-{{ item.id }}" value="3">
+            <label for="rating-3-{{ item.id }}" title="3 sao">★</label>
+
+            <input type="radio" name="rating" id="rating-2-{{ item.id }}" value="2">
+            <label for="rating-2-{{ item.id }}" title="2 sao">★</label>
+
+            <input type="radio" name="rating" id="rating-1-{{ item.id }}" value="1">
+            <label for="rating-1-{{ item.id }}" title="1 sao">★</label>
+        </div>
+
+        <p class="review-rating-hint">
+            Chọn từ 1 đến 5 sao
+        </p>
+    </fieldset>
+
+    <div class="review-comment-field">
+        <label for="comment-{{ item.id }}">Nhận xét của bạn</label>
+
+        <textarea
+            name="comment"
+            id="comment-{{ item.id }}"
+            rows="4"
+            maxlength="2000"
+            placeholder="Chất lượng sản phẩm, kiểu dáng, trải nghiệm sử dụng..."
+            required
+        ></textarea>
+
+        <span class="review-privacy-note">
+            Cảm ơn bạn đã tin tưởng và lựa chọn MINOO.
+        </span>
+    </div>
+
+    <button type="submit" class="review-submit-btn">
+        Gửi đánh giá <span aria-hidden="true">→</span>
+    </button>
+</form>
+
+
+    {% endif %}
+{% endif %}
+
+
+                    </div>
+
+                {% empty %}
+
+                    <p class="no-products">
+                        Không có sản phẩm trong đơn hàng.
+                    </p>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- TỔNG TIỀN -->
+        <!-- ================================================= -->
+
+        <div class="tracking-total-card">
+
+            <div class="total-row">
+
+                <span>
+                    Tạm tính
+                </span>
+
+                <strong>
+                    {{ order.subtotal|vnd }} ₫
+                </strong>
+
+            </div>
+
+
+            <div class="total-row">
+
+                <span>
+                    Phí vận chuyển
+                </span>
+
+                <strong>
+
+                    {% if order.shipping_fee %}
+                        {{ order.shipping_fee|vnd }} ₫
+                    {% else %}
+                        Miễn phí
+                    {% endif %}
+
+                </strong>
+
+            </div>
+
+
+            <div class="total-row total-final">
+
+                <span>
+                    Tổng thanh toán
+                </span>
+
+                <strong>
+                    {{ order.total|vnd }} ₫
+                </strong>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<style>
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.tracking-detail-page {
+    background: #f8f7f4;
+    min-height: 70vh;
+    padding: 60px 20px 100px;
+}
+
+.tracking-detail-container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   BACK
+========================================================= */
+
+.tracking-back {
+    display: inline-block;
+    margin-bottom: 35px;
+    color: #555;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.tracking-back:hover {
+    color: #111;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.tracking-header {
+    margin-bottom: 35px;
+}
+
+.tracking-eyebrow {
+    margin: 0 0 10px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    font-weight: 600;
+}
+
+.tracking-header h1 {
+    margin: 0 0 12px;
+    font-size: 42px;
+    font-weight: 500;
+    letter-spacing: -1px;
+}
+
+.tracking-header p:last-child {
+    margin: 0;
+    color: #777;
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   ORDER CARD
+========================================================= */
+
+.tracking-order-card,
+.tracking-card,
+.tracking-total-card {
+    background: #fff;
+    border: 1px solid #e8e5df;
+}
+
+.tracking-order-card {
+    padding: 30px;
+    margin-bottom: 20px;
+}
+
+.tracking-order-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid #eee;
+}
+
+.tracking-label {
+    display: block;
+    margin-bottom: 7px;
+    color: #999;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+}
+
+.tracking-order-top h2 {
+    margin: 0;
+    font-size: 21px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.tracking-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 9px 16px;
+    border-radius: 30px;
+    background: #f3f1ed;
+    font-size: 13px;
+}
+
+.status-cancelled {
+    background: #f5e7e7;
+    color: #a33;
+}
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+.tracking-progress {
+    display: flex;
+    align-items: flex-start;
+    margin-top: 35px;
+}
+
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    min-width: 100px;
+    color: #aaa;
+    text-align: center;
+    font-size: 12px;
+}
+
+.progress-step.active {
+    color: #222;
+}
+
+.progress-dot {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    background: #fff;
+    font-size: 12px;
+}
+
+.progress-step.active .progress-dot {
+    background: #111;
+    border-color: #111;
+    color: #fff;
+}
+
+.progress-line {
+    flex: 1;
+    height: 1px;
+    margin-top: 17px;
+    background: #ddd;
+}
+
+.progress-line.active {
+    background: #111;
+}
+
+
+/* =========================================================
+   CANCELLED PROGRESS
+========================================================= */
+
+.tracking-cancelled-progress {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 30px;
+    padding: 20px;
+    background: #f8eaea;
+    border: 1px solid #efd4d4;
+}
+
+.cancelled-progress-icon {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #a33;
+    color: #fff;
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.cancelled-progress-content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.cancelled-progress-content strong {
+    color: #8f2f2f;
+    font-size: 14px;
+}
+
+.cancelled-progress-content span {
+    color: #a33;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   CANCELLED MESSAGE
+========================================================= */
+
+.cancelled-message {
+    margin-top: 25px;
+    padding: 15px;
+    background: #f8eaea;
+    color: #a33;
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   CANCEL ORDER
+========================================================= */
+
+.cancel-order-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 25px;
+    padding-top: 25px;
+    border-top: 1px solid #eee;
+}
+
+.cancel-order-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.cancel-order-info strong {
+    color: #222;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.cancel-order-info span {
+    color: #999;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.cancel-order-form {
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.cancel-order-btn {
+    border: 1px solid #c94a4a;
+    background: #fff;
+    color: #b33;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.cancel-order-btn:hover {
+    background: #b33;
+    border-color: #b33;
+    color: #fff;
+}
+
+
+/* =========================================================
+   PAYMENT WARNING
+========================================================= */
+
+.payment-cancel-warning {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 25px;
+    padding: 15px;
+    background: #faf6eb;
+    border: 1px solid #eee2c6;
+}
+
+.payment-cancel-warning strong {
+    color: #8a651b;
+    font-size: 14px;
+}
+
+.payment-cancel-warning span {
+    color: #967a3c;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.tracking-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.tracking-card {
+    padding: 28px;
+}
+
+.tracking-card h3 {
+    margin: 0 0 25px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   DETAIL ROW
+========================================================= */
+
+.detail-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 13px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-row span {
+    color: #999;
+    font-size: 12px;
+}
+
+.detail-row strong {
+    color: #222;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   PRODUCTS
+========================================================= */
+
+.products-card {
+    margin-bottom: 20px;
+}
+
+.tracking-products {
+    border-top: 1px solid #eee;
+}
+
+.tracking-product {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.tracking-product:last-child {
+    border-bottom: none;
+}
+
+.tracking-product-info {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.tracking-product-image {
+    width: 80px;
+    height: 80px;
+    background: #f5f4f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.tracking-product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.no-image {
+    color: #999;
+    font-size: 12px;
+}
+
+.tracking-product-name {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.tracking-product-name strong {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.tracking-product-name span {
+    color: #777;
+    font-size: 12px;
+}
+
+.tracking-product-name small {
+    color: #999;
+    font-size: 12px;
+}
+
+.tracking-product-price {
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.no-products {
+    padding: 20px 0;
+    color: #999;
+}
+
+
+/* =========================================================
+   TOTAL
+========================================================= */
+
+.tracking-total-card {
+    padding: 25px 30px;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    color: #777;
+    font-size: 14px;
+}
+
+.total-row strong {
+    color: #222;
+    font-weight: 500;
+}
+
+.total-final {
+    margin-top: 10px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+    color: #222;
+    font-size: 16px;
+}
+
+.total-final strong {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .tracking-detail-page {
+        padding: 45px 15px 70px;
+    }
+
+    .tracking-header h1 {
+        font-size: 32px;
+    }
+
+    .tracking-order-card {
+        padding: 20px;
+    }
+
+    .tracking-order-top {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .tracking-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tracking-progress {
+        overflow-x: auto;
+        padding-bottom: 10px;
+    }
+
+    .progress-step {
+        min-width: 85px;
+    }
+
+    .cancel-order-section {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .cancel-order-form {
+        width: 100%;
+    }
+
+    .cancel-order-btn {
+        width: 100%;
+    }
+
+    .tracking-cancelled-progress {
+        align-items: flex-start;
+    }
+
+    .tracking-product {
+        align-items: flex-start;
+    }
+
+    .tracking-product-info {
+        min-width: 0;
+    }
+
+    .tracking-product-image {
+        width: 65px;
+        height: 65px;
+        flex-shrink: 0;
+    }
+
+    .tracking-total-card {
+        padding: 20px;
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .tracking-product {
+        flex-direction: column;
+    }
+
+    .tracking-product-price {
+        align-self: flex-end;
+    }
+
+    .tracking-cancelled-progress {
+        padding: 15px;
+    }
+
+    .cancelled-progress-icon {
+        width: 34px;
+        height: 34px;
+        font-size: 19px;
+    }
+
+}
+
+/* =========================================================
+   MINOO - PRODUCT REVIEW FORM
+========================================================= */
+
+.product-review-form {
+    width: 100%;
+    margin-top: 22px;
+    padding: 25px;
+    background: #fffdf9;
+    border: 1px solid #eadfd3;
+    border-radius: 12px;
+    box-sizing: border-box;
+}
+
+.review-form-heading {
+    margin-bottom: 22px;
+}
+
+.review-form-eyebrow {
+    display: block;
+    margin-bottom: 8px;
+    color: #a36f48;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.review-form-heading h4 {
+    margin: 0 0 8px;
+    color: #3d1c0f;
+    font-size: 19px;
+    font-weight: 600;
+}
+
+.review-form-heading p {
+    margin: 0;
+    color: #8b8179;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+/* STAR RATING */
+
+.review-rating-field {
+    margin: 0 0 23px;
+    padding: 0;
+    border: 0;
+}
+
+.review-rating-field legend {
+    margin-bottom: 12px;
+    color: #3d1c0f;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 5px;
+    width: fit-content;
+}
+
+.star-rating input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+.star-rating label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    color: #d8cec3;
+    background: #fff;
+    border: 1px solid #eadfd3;
+    border-radius: 9px;
+    font-size: 27px;
+    line-height: 1;
+    cursor: pointer;
+    transition:
+        color 0.18s ease,
+        background 0.18s ease,
+        border-color 0.18s ease,
+        transform 0.18s ease;
+}
+
+/* Sao được chọn và các sao thấp hơn */
+
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #bd875c;
+    background: #fdf1de;
+    border-color: #bd875c;
+}
+
+/* Hiệu ứng nhẹ khi rê chuột */
+
+.star-rating label:hover {
+    transform: translateY(-2px);
+}
+
+/* Hỗ trợ điều khiển bằng bàn phím */
+
+.star-rating input:focus-visible + label {
+    outline: 2px solid #3d1c0f;
+    outline-offset: 3px;
+}
+
+.review-rating-hint {
+    margin: 10px 0 0;
+    color: #9a8d82;
+    font-size: 12px;
+}
+
+/* COMMENT */
+
+.review-comment-field {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.review-comment-field > label {
+    color: #3d1c0f;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.review-comment-field textarea {
+    display: block;
+    width: 100%;
+    min-height: 115px;
+    padding: 14px 15px;
+    box-sizing: border-box;
+    border: 1px solid #e4d8cc;
+    border-radius: 9px;
+    outline: none;
+    background: #fff;
+    color: #3d1c0f;
+    font: inherit;
+    font-size: 13px;
+    line-height: 1.7;
+    resize: vertical;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.review-comment-field textarea::placeholder {
+    color: #b2a69b;
+}
+
+.review-comment-field textarea:focus {
+    border-color: #bd875c;
+    box-shadow: 0 0 0 3px rgba(189, 135, 92, 0.12);
+}
+
+.review-privacy-note {
+    color: #9a8d82;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+/* SUBMIT BUTTON */
+
+.review-submit-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 44px;
+    margin-top: 20px;
+    padding: 0 22px;
+    border: 1px solid #3d1c0f;
+    border-radius: 7px;
+    background: #3d1c0f;
+    color: #fffdf9;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.review-submit-btn:hover {
+    background: #a36f48;
+    border-color: #a36f48;
+}
+
+.review-submit-btn span {
+    font-size: 17px;
+    transition: transform 0.2s ease;
+}
+
+.review-submit-btn:hover span {
+    transform: translateX(3px);
+}
+
+/* REVIEW ALREADY SUBMITTED */
+
+.review-completed {
+    margin: 18px 0 0;
+    padding: 12px 15px;
+    border: 1px solid #e6d8c7;
+    border-radius: 8px;
+    background: #fffdf9;
+    color: #6d573e;
+    font-size: 13px;
+}
+
+/* MOBILE */
+
+@media (max-width: 480px) {
+    .product-review-form {
+        padding: 18px;
+        margin-top: 18px;
+    }
+
+    .review-form-heading h4 {
+        font-size: 17px;
+    }
+
+    .star-rating {
+        gap: 4px;
+    }
+
+    .star-rating label {
+        width: 38px;
+        height: 38px;
+        font-size: 24px;
+    }
+
+    .review-submit-btn {
+        width: 100%;
+    }
+}
+
+</style>
+
+{% endblock %}

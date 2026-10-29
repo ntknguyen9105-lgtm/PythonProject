@@ -1,0 +1,4581 @@
+{% extends "base.html" %}
+{% load minoo_filters %}
+{% load static %}
+{% load l10n %}
+
+
+{% block title %}Gọng kính | Minoo Eyewear{% endblock %}
+
+
+
+{% block content %}
+
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap');
+
+
+   /* =====================================================
+      PRODUCTS PAGE
+   ===================================================== */
+
+
+   .products-page {
+       max-width: 1400px;
+       margin: 0 auto;
+       padding: 40px 30px 80px;
+   }
+
+
+   .products-header {
+       text-align: center;
+       margin-bottom: 35px;
+   }
+
+
+   .products-header h1 {
+       margin: 0 0 10px;
+       font-size: 34px;
+       font-weight: 700;
+       color: var(--brown);
+   }
+
+
+   .products-header p {
+       margin: 0;
+       color: var(--brown-light);
+   }
+
+
+
+
+   /* =====================================================
+      FILTER
+   ===================================================== */
+
+
+   .products-filter {
+       display: flex;
+       justify-content: center;
+       gap: 10px;
+       margin-bottom: 40px;
+       flex-wrap: wrap;
+   }
+
+
+   .products-filter a {
+       display: inline-flex;
+       align-items: center;
+       justify-content: center;
+
+
+       padding: 10px 22px;
+
+
+       border: 1px solid var(--border);
+       border-radius: 30px;
+
+
+       text-decoration: none;
+
+
+       color: var(--brown);
+       background: var(--white);
+
+
+       transition: all .2s ease;
+   }
+
+
+   .products-filter a:hover,
+   .products-filter a.filter-active {
+       background: var(--primary);
+       color: var(--white);
+       border-color: var(--primary);
+   }
+
+
+
+
+
+/* =====================================================
+   MINOO PRICE RANGE FILTER
+===================================================== */
+
+.minoo-price-range {
+    box-sizing: border-box;
+    min-width: 0;
+    margin: 0;
+    padding: 16px 20px;
+    border: 1px solid #E8D9CA;
+    border-radius: 16px;
+    background: #FFFDF9;
+    box-shadow: 0 4px 16px rgba(61, 28, 15, .05);
+    color: #3D1C0F;
+}
+
+.minoo-price-range__heading {
+    margin: 0;
+    color: #3D1C0F;
+    font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.minoo-price-range__values {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 0;
+}
+
+.minoo-price-range__value {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.minoo-price-range__value:last-child {
+    text-align: right;
+}
+
+.minoo-price-range__label {
+    color: #8B7667;
+    font-size: 11px;
+}
+
+.minoo-price-range__number {
+    color: #3D1C0F;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* Hai thanh trượt */
+.minoo-price-range__slider {
+    position: relative;
+    min-width: 100px;
+    height: 28px;
+    margin: 0;
+}
+
+.minoo-price-range__track,
+.minoo-price-range__selected {
+    position: absolute;
+    top: 12px;
+    height: 4px;
+    border-radius: 99px;
+}
+
+.minoo-price-range__track {
+    left: 0;
+    right: 0;
+    background: #E8D9CA;
+}
+
+.minoo-price-range__selected {
+    left: 0;
+    right: 100%;
+    background: #BD875C;
+}
+
+.minoo-price-range__slider input[type="range"] {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 28px;
+    margin: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    pointer-events: none;
+    cursor: pointer;
+}
+
+.minoo-price-range__slider input[type="range"]::-webkit-slider-runnable-track {
+    height: 4px;
+    background: transparent;
+}
+
+.minoo-price-range__slider input[type="range"]::-moz-range-track {
+    height: 4px;
+    background: transparent;
+}
+
+.minoo-price-range__slider input[type="range"]::-webkit-slider-thumb {
+    width: 18px;
+    height: 18px;
+    margin-top: -7px;
+    appearance: none;
+    -webkit-appearance: none;
+    border: 3px solid #FFFDF9;
+    border-radius: 50%;
+    background: #BD875C;
+    box-shadow: 0 0 0 1px #BD875C,
+                0 2px 5px rgba(61, 28, 15, .16);
+    pointer-events: auto;
+    cursor: grab;
+}
+
+.minoo-price-range__slider input[type="range"]::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    border: 3px solid #FFFDF9;
+    border-radius: 50%;
+    background: #BD875C;
+    box-shadow: 0 0 0 1px #BD875C,
+                0 2px 5px rgba(61, 28, 15, .16);
+    pointer-events: auto;
+    cursor: grab;
+}
+
+.minoo-price-range__slider input[type="range"]:focus-visible {
+    outline: 2px solid #BD875C;
+    outline-offset: 5px;
+}
+
+/* Nút thao tác */
+.minoo-price-range__buttons {
+    display: flex;
+    gap: 8px;
+    margin: 0;
+}
+
+.minoo-price-range__button {
+    min-height: 38px;
+    padding: 0 14px;
+    border: 1px solid #3D1C0F;
+    border-radius: 10px;
+    background: #3D1C0F;
+    color: #FFFDF9;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background .2s ease, border-color .2s ease;
+}
+
+.minoo-price-range__button:hover {
+    background: #68432F;
+    border-color: #68432F;
+}
+
+.minoo-price-range__button--reset {
+    border-color: #E8D9CA;
+    background: #FDF1DE;
+    color: #3D1C0F;
+}
+
+.minoo-price-range__button--reset:hover {
+    background: #F5E5D0;
+    border-color: #D9B99B;
+}
+
+.minoo-price-range__status {
+    grid-column: 1 / -1;
+    margin: 0;
+    color: #8B7667;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.minoo-price-range__empty {
+    display: none;
+    padding: 30px 15px;
+    color: #6E5345;
+    text-align: center;
+}
+
+.minoo-price-range__empty.show {
+    display: block;
+}
+
+
+
+/* =========================================
+   MINOO FILTER - LAYOUT THEO ẢNH MẪU
+========================================= */
+
+.products-filter-row {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 18px;
+    margin-bottom: 35px;
+}
+
+/* 4 nút giới tính nằm giữa */
+.products-filter-row .products-filter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 0;
+}
+
+.products-filter-row .products-filter a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 10px 26px;
+    box-sizing: border-box;
+    border: 1px solid #E8D9CA;
+    border-radius: 999px;
+    background: #FFFDF9;
+    color: #3D1C0F;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all .2s ease;
+}
+
+.products-filter-row .products-filter a:hover,
+.products-filter-row .products-filter a.filter-active {
+    background: #3D1C0F;
+    border-color: #3D1C0F;
+    color: #FFFDF9;
+}
+
+/* Khung lọc giá giống ảnh mẫu */
+.products-filter-row .minoo-price-range {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 20px 14px 15px;
+    box-sizing: border-box;
+    border: 1px solid #F0DFC9;
+    border-radius: 16px;
+    background: #FDF1DE;
+    box-shadow: none;
+    color: #3D1C0F;
+}
+
+/* Tiêu đề và khoảng giá đang chọn */
+.products-filter-row .minoo-price-range__heading {
+    display: inline-block;
+    margin: 0;
+    color: #3D1C0F;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.products-filter-row .minoo-price-range__heading::after {
+    content: "";
+}
+
+/* Hai ô giá thấp nhất / cao nhất */
+.products-filter-row .minoo-price-range__values {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin: 16px 0;
+}
+
+.products-filter-row .minoo-price-range__value {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+    padding: 11px 10px;
+    box-sizing: border-box;
+    border: 1px solid #E8CDB2;
+    border-radius: 11px;
+    background: #FFFCF9;
+}
+
+.products-filter-row .minoo-price-range__value:last-child {
+    text-align: left;
+}
+
+.products-filter-row .minoo-price-range__label {
+    color: #8B7667;
+    font-size: 13px;
+}
+
+.products-filter-row .minoo-price-range__number {
+    color: #3D1C0F;
+    font-size: 19px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* Thanh trượt */
+.products-filter-row .minoo-price-range__slider {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    height: 28px;
+    margin: 0 0 10px;
+}
+
+/* Hai nút thao tác nằm cạnh nhau */
+.products-filter-row .minoo-price-range__buttons {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin: 0;
+}
+
+.products-filter-row .minoo-price-range__button {
+    width: 100%;
+    min-width: 0;
+    min-height: 54px;
+    padding: 10px 12px;
+    box-sizing: border-box;
+    border: 1px solid #3D1C0F;
+    border-radius: 11px;
+    background: #3D1C0F;
+    color: #FFFDF9;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all .2s ease;
+}
+
+.products-filter-row .minoo-price-range__button:hover {
+    background: #68432F;
+    border-color: #68432F;
+}
+
+.products-filter-row .minoo-price-range__button--reset {
+    border-color: #E8CDB2;
+    background: #FFFCF9;
+    color: #3D1C0F;
+    font-weight: 500;
+}
+
+.products-filter-row .minoo-price-range__button--reset:hover {
+    background: #F8E5D0;
+    border-color: #D9B99B;
+}
+
+.products-filter-row .minoo-price-range__status {
+    margin: 10px 0 0;
+    color: #8B7667;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+/* Thông báo không có sản phẩm phù hợp */
+.minoo-price-range__empty {
+    display: none;
+    padding: 30px 15px;
+    color: #6E5345;
+    text-align: center;
+}
+
+.minoo-price-range__empty.show {
+    display: block;
+}
+
+/* Tablet và điện thoại */
+@media (max-width: 560px) {
+    .products-filter-row {
+        gap: 14px;
+    }
+
+    .products-filter-row .products-filter {
+        gap: 8px;
+    }
+
+    .products-filter-row .products-filter a {
+        min-height: 40px;
+        padding: 9px 17px;
+        font-size: 13px;
+    }
+
+    .products-filter-row .minoo-price-range {
+        padding: 17px 12px 13px;
+    }
+
+    .products-filter-row .minoo-price-range__heading {
+        font-size: 16px;
+    }
+
+    .products-filter-row .minoo-price-range__number {
+        font-size: 16px;
+    }
+
+    .products-filter-row .minoo-price-range__label {
+        font-size: 11px;
+    }
+
+    .products-filter-row .minoo-price-range__button {
+        min-height: 48px;
+        padding: 8px 6px;
+        font-size: 14px;
+    }
+}
+
+
+
+
+   /* =====================================================
+      PRODUCT GRID
+   ===================================================== */
+
+
+   .products-grid {
+       display: grid;
+       grid-template-columns: repeat(4, minmax(0, 1fr));
+       gap: 25px;
+   }
+
+
+       .product-card {
+       background: var(--white);
+       border-radius: 14px;
+       overflow: hidden;
+       border: 1px solid var(--border);
+       display: flex;
+       flex-direction: column;
+       height: 100%;
+       transition:
+           transform .2s ease,
+           box-shadow .2s ease;
+   }
+
+
+   /* Phải đặt bên ngoài .product-card */
+   .product-card[hidden] {
+       display: none !important;
+   }
+
+
+   .product-card:hover {
+       transform: translateY(-3px);
+
+
+       box-shadow:
+           0 10px 30px rgba(61, 28, 15, .08);
+   }
+
+
+   .product-image {
+       display: block;
+
+
+       aspect-ratio: 1 / 1;
+
+
+       background: var(--cream-soft);
+
+
+       overflow: hidden;
+   }
+
+
+   .product-image img {
+       width: 100%;
+       height: 100%;
+
+
+       object-fit: cover;
+
+
+       display: block;
+   }
+
+
+   .product-image-placeholder {
+       width: 100%;
+       height: 100%;
+
+
+       display: flex;
+       align-items: center;
+       justify-content: center;
+
+
+       color: var(--brown-light);
+   }
+
+
+
+
+   /* =====================================================
+      PRODUCT INFO
+   ===================================================== */
+
+
+   .product-info {
+   padding: 18px;
+
+
+   /* MỚI: Sắp xếp nội dung theo chiều dọc */
+   display: flex;
+   flex-direction: column;
+
+
+   /* Chiếm toàn bộ phần chiều cao còn lại */
+   flex: 1;
+   min-height: 0;
+}
+
+
+   .product-name {
+       margin: 0 0 8px;
+
+
+       font-size: 17px;
+       font-weight: 600;
+   }
+
+
+   .product-name a {
+       color: var(--brown);
+       text-decoration: none;
+   }
+
+
+   .product-name a:hover {
+       color: var(--primary-dark);
+   }
+
+
+   .product-price {
+   /* MỚI: Đẩy phần giá xuống cuối khu vực thông tin */
+   margin-top: auto;
+
+
+   /* Giữ khoảng cách với các nút bên dưới */
+   margin-bottom: 15px;
+}
+
+
+   .product-price .sale-price {
+       font-size: 18px;
+       font-weight: 700;
+
+
+       color: var(--primary-dark);
+   }
+
+
+   .product-price .original-price {
+       margin-left: 8px;
+
+
+       color: var(--brown-light);
+
+
+       text-decoration: line-through;
+
+
+       font-size: 14px;
+   }
+
+
+
+
+   /* =====================================================
+      PRODUCT ACTIONS
+   ===================================================== */
+
+
+   .product-actions {
+       display: grid;
+
+
+       grid-template-columns: 1fr 1fr;
+
+
+       gap: 8px;
+
+
+       align-items: stretch;
+   }
+
+
+
+
+   /* =====================================================
+      XEM CHI TIẾT + THÊM VÀO GIỎ
+   ===================================================== */
+
+
+   .product-detail-btn,
+   .add-cart-btn {
+
+
+       min-height: 44px;
+
+
+       padding: 10px 14px;
+
+
+       border-radius: 30px;
+
+
+       font-size: 13px;
+       font-weight: 600;
+
+
+       text-decoration: none;
+
+
+       cursor: pointer;
+
+
+       display: flex;
+       align-items: center;
+       justify-content: center;
+
+
+       box-sizing: border-box;
+
+
+       transition:
+           background-color .25s ease,
+           border-color .25s ease,
+           color .25s ease,
+           transform .2s ease;
+   }
+
+
+
+
+   /* =====================================================
+      NÚT XEM CHI TIẾT
+   ===================================================== */
+
+
+   .product-detail-btn {
+
+
+       border: 1px solid var(--border);
+
+
+       background: var(--white);
+
+
+       color: var(--brown);
+   }
+
+
+   .product-detail-btn:hover {
+
+
+       border-color: var(--primary);
+
+
+       background: var(--cream-soft);
+
+
+       color: var(--primary-dark);
+
+
+       transform: translateY(-1px);
+   }
+
+
+
+
+   /* =====================================================
+      NÚT THÊM VÀO GIỎ
+   ===================================================== */
+
+
+   .add-cart-btn {
+
+
+       border: 1px solid var(--primary);
+
+
+       background: var(--primary);
+
+
+       color: var(--white);
+   }
+
+
+   .add-cart-btn:hover {
+
+
+       background: var(--primary-dark);
+
+
+       border-color: var(--primary-dark);
+
+
+       color: var(--white);
+
+
+       transform: translateY(-1px);
+   }
+
+
+
+
+   /* FORM THÊM GIỎ */
+
+
+   .add-cart-form {
+       margin: 0;
+   }
+
+
+   .add-cart-form .add-cart-btn {
+       width: 100%;
+   }
+
+
+
+
+   /* =====================================================
+      HẾT HÀNG
+   ===================================================== */
+
+
+   .add-cart-btn.disabled {
+
+
+       opacity: .45;
+
+
+       cursor: not-allowed;
+
+
+       transform: none;
+   }
+
+
+   .add-cart-btn.disabled:hover {
+
+
+       background: var(--primary);
+
+
+       border-color: var(--primary);
+
+
+       transform: none;
+   }
+
+
+
+
+   /* =====================================================
+      VARIANT MODAL
+   ===================================================== */
+
+
+   .variant-modal {
+
+
+       position: fixed;
+
+
+       inset: 0;
+
+
+       z-index: 9999;
+
+
+       display: none;
+
+
+       align-items: center;
+       justify-content: center;
+
+
+       padding: 20px;
+
+
+       background: rgba(61, 28, 15, .55);
+   }
+
+
+   .variant-modal.show {
+       display: flex;
+   }
+
+
+   .variant-modal-box {
+
+
+       width: 100%;
+
+
+       max-width: 500px;
+
+
+       max-height: 90vh;
+
+
+       overflow-y: auto;
+
+
+       background: var(--white);
+
+
+       border-radius: 18px;
+
+
+       padding: 28px;
+
+
+       position: relative;
+
+
+       box-shadow:
+           0 20px 60px rgba(61, 28, 15, .2);
+   }
+
+
+   .variant-modal-close {
+
+
+       position: absolute;
+
+
+       top: 14px;
+       right: 16px;
+
+
+       width: 36px;
+       height: 36px;
+
+
+       border: none;
+
+
+       background: var(--cream-soft);
+
+
+       color: var(--brown);
+
+
+       border-radius: 50%;
+
+
+       font-size: 22px;
+
+
+       line-height: 1;
+
+
+       cursor: pointer;
+   }
+
+
+   .variant-modal-close:hover {
+
+
+       background: var(--beige);
+
+
+       color: var(--primary-dark);
+   }
+
+
+   .variant-modal-title {
+
+
+       margin: 0 45px 5px 0;
+
+
+       font-size: 22px;
+
+
+       font-weight: 700;
+
+
+       color: var(--brown);
+   }
+
+
+   .variant-modal-product {
+
+
+       margin: 0 0 25px;
+
+
+       color: var(--brown-light);
+
+
+       font-size: 14px;
+   }
+
+
+
+
+   /* =====================================================
+      VARIANT GROUP
+   ===================================================== */
+
+
+   .variant-group {
+       margin-bottom: 22px;
+   }
+
+
+   .variant-group-title {
+
+
+       display: block;
+
+
+       margin-bottom: 10px;
+
+
+       font-weight: 600;
+
+
+       color: var(--brown);
+   }
+
+
+   .variant-options {
+
+
+       display: flex;
+
+
+       flex-wrap: wrap;
+
+
+       gap: 8px;
+   }
+
+
+   .variant-option {
+       position: relative;
+   }
+
+
+   .variant-option input {
+
+
+       position: absolute;
+
+
+       opacity: 0;
+
+
+       pointer-events: none;
+   }
+
+
+   .variant-option label {
+
+
+       display: inline-flex;
+
+
+       align-items: center;
+
+
+       justify-content: center;
+
+
+       min-width: 75px;
+
+
+       min-height: 40px;
+
+
+       padding: 8px 14px;
+
+
+       border: 1px solid var(--border);
+
+
+       border-radius: 20px;
+
+
+       cursor: pointer;
+
+
+       font-size: 14px;
+
+
+       background: var(--white);
+
+
+       color: var(--brown);
+
+
+       transition: all .2s ease;
+   }
+
+
+   .variant-option label:hover {
+
+
+       border-color: var(--primary);
+
+
+       color: var(--primary-dark);
+   }
+
+
+   .variant-option input:checked + label {
+
+
+       border-color: var(--primary);
+
+
+       background: var(--primary);
+
+
+       color: var(--white);
+   }
+
+
+   .variant-option input:disabled + label {
+
+
+       opacity: .4;
+
+
+       text-decoration: line-through;
+
+
+       cursor: not-allowed;
+   }
+
+
+   .variant-stock {
+
+
+       display: block;
+
+
+       margin-top: 4px;
+
+
+       font-size: 11px;
+
+
+       color: var(--brown-light);
+   }
+
+
+   .variant-option input:checked + label .variant-stock {
+
+
+       color: rgba(255, 255, 255, .8);
+   }
+
+
+
+
+   /* =====================================================
+      MODAL PRODUCT PREVIEW
+   ===================================================== */
+
+
+   .variant-product-preview {
+
+
+       display: flex;
+
+
+       align-items: center;
+
+
+       gap: 14px;
+
+
+       margin-bottom: 22px;
+
+
+       padding-bottom: 18px;
+
+
+       border-bottom: 1px solid var(--border);
+   }
+
+
+   .variant-product-preview-image {
+
+
+       width: 75px;
+       height: 75px;
+
+
+       border-radius: 10px;
+
+
+       background: var(--cream-soft);
+
+
+       object-fit: cover;
+   }
+
+
+   .variant-product-preview-name {
+
+
+       font-weight: 600;
+
+
+       margin-bottom: 5px;
+
+
+       color: var(--brown);
+   }
+
+
+   .variant-product-preview-price {
+
+
+       font-weight: 700;
+
+
+       color: var(--primary-dark);
+   }
+
+
+
+
+   /* =====================================================
+      QUANTITY
+   ===================================================== */
+
+
+   .variant-quantity {
+       margin-bottom: 20px;
+   }
+
+
+   .variant-quantity label {
+
+
+       display: block;
+
+
+       margin-bottom: 8px;
+
+
+       font-weight: 600;
+
+
+       color: var(--brown);
+   }
+
+
+   .variant-quantity input {
+
+
+       width: 100%;
+
+
+       height: 42px;
+
+
+       padding: 0 12px;
+
+
+       border: 1px solid var(--border);
+
+
+       border-radius: 20px;
+
+
+       box-sizing: border-box;
+
+
+       color: var(--brown);
+
+
+       background: var(--white);
+   }
+
+
+   .variant-quantity input:focus {
+
+
+       outline: none;
+
+
+       border-color: var(--primary);
+
+
+       box-shadow: 0 0 0 3px rgba(189, 135, 92, .12);
+   }
+
+
+
+
+   /* =====================================================
+      MODAL SUBMIT
+   ===================================================== */
+
+
+   .variant-submit {
+
+
+       width: 100%;
+
+
+       height: 48px;
+
+
+       border: none;
+
+
+       border-radius: 30px;
+
+
+       background: var(--primary);
+
+
+       color: var(--white);
+
+
+       font-size: 15px;
+
+
+       font-weight: 600;
+
+
+       cursor: pointer;
+
+
+       transition:
+           background-color .25s ease,
+           transform .2s ease;
+   }
+
+
+   .variant-submit:hover {
+
+
+       background: var(--primary-dark);
+
+
+       transform: translateY(-1px);
+   }
+
+
+   .variant-submit:disabled {
+
+
+       opacity: .45;
+
+
+       cursor: not-allowed;
+
+
+       transform: none;
+   }
+
+
+
+
+   /* =====================================================
+      EMPTY
+   ===================================================== */
+
+
+   .products-empty {
+
+
+       text-align: center;
+
+
+       padding: 70px 20px;
+
+
+       color: var(--brown-light);
+   }
+
+
+
+
+   /* =====================================================
+      RESPONSIVE
+   ===================================================== */
+
+
+   @media (max-width: 1100px) {
+
+
+       .products-grid {
+
+
+           grid-template-columns:
+               repeat(3, minmax(0, 1fr));
+       }
+   }
+
+
+   @media (max-width: 800px) {
+
+
+       .products-page {
+
+
+           padding-left: 18px;
+
+
+           padding-right: 18px;
+       }
+
+
+       .products-grid {
+
+
+           grid-template-columns:
+               repeat(2, minmax(0, 1fr));
+
+
+           gap: 15px;
+       }
+   }
+
+
+   @media (max-width: 550px) {
+
+
+       .products-grid {
+
+
+           grid-template-columns: 1fr;
+       }
+
+
+       .product-actions {
+
+
+           grid-template-columns: 1fr;
+       }
+
+
+       .variant-modal-box {
+
+
+           padding: 22px;
+       }
+
+
+   }
+
+
+
+
+
+
+   /* =====================================================
+      MINOO PRODUCT HERO - CHỈ DÀNH CHO BANNER
+      Không tác động tới filter, product-card, modal, JS.
+   ===================================================== */
+
+
+   .minoo-product-hero {
+       position: relative;
+       overflow: hidden;
+
+
+       width: 100vw;
+       min-height: 560px;
+
+
+       margin-left: calc(50% - 50vw);
+       margin-right: calc(50% - 50vw);
+       margin-top: -40px;
+       margin-bottom: 54px;
+
+
+       background-image:
+           linear-gradient(
+               90deg,
+               rgba(255, 248, 239, .98) 0%,
+               rgba(255, 248, 239, .93) 34%,
+               rgba(255, 248, 239, .58) 54%,
+               rgba(255, 248, 239, .08) 78%
+           ),
+           url("{% static 'images/products/product-banner-bg.png' %}");
+
+
+       background-size: cover;
+       background-position: center center;
+       background-repeat: no-repeat;
+
+
+       border-bottom: 1px solid #EAD7C4;
+
+
+       box-shadow:
+           0 20px 55px
+           rgba(61, 28, 15, .08);
+
+
+       font-family:
+           'Be Vietnam Pro',
+           sans-serif;
+   }
+
+
+
+
+   .minoo-product-hero::after {
+       content: "";
+
+
+       position: absolute;
+
+
+       inset: 0;
+
+
+       pointer-events: none;
+
+
+       background:
+           radial-gradient(
+               circle at 13% 18%,
+               rgba(255,255,255,.40),
+               transparent 24%
+           );
+   }
+
+
+
+
+   .minoo-product-hero__inner {
+       position: relative;
+       z-index: 2;
+
+
+       width: min(
+           1320px,
+           calc(100% - 96px)
+       );
+
+
+       min-height: 560px;
+
+
+       margin: 0 auto;
+
+
+       display: grid;
+
+
+       grid-template-columns:
+           minmax(0, 1.1fr)
+           minmax(340px, .9fr);
+
+
+       align-items: center;
+
+
+       gap: 76px;
+   }
+
+
+
+
+   /* =========================
+      TEXT BÊN TRÁI
+   ========================= */
+
+
+   .minoo-product-hero__content {
+       max-width: 700px;
+   }
+
+
+
+
+   .minoo-product-hero__label {
+       display: inline-flex;
+
+
+       align-items: center;
+
+
+       gap: 12px;
+
+
+       margin-bottom: 20px;
+
+
+       color: #A56E45;
+
+
+       font-size: 14px;
+       font-weight: 700;
+
+
+       letter-spacing: 2.8px;
+
+
+       text-transform: uppercase;
+   }
+
+
+
+
+   .minoo-product-hero__label::before {
+       content: "";
+
+
+       width: 42px;
+       height: 1px;
+
+
+       background: currentColor;
+   }
+
+
+
+
+   .minoo-product-hero__title {
+       margin: 0 0 22px;
+
+
+       color: #3D1C0F;
+
+
+       font-family:
+           'Playfair Display',
+           Georgia,
+           serif;
+
+
+       font-size: clamp(
+           70px,
+           6vw,
+           94px
+       );
+
+
+       font-weight: 700;
+
+
+       line-height: .98;
+
+
+       letter-spacing: -2.4px;
+   }
+
+
+
+
+   .minoo-product-hero__description {
+       max-width: 650px;
+
+
+       margin: 0 0 32px;
+
+
+       color: #6E5345;
+
+
+       font-size: 18px;
+
+
+       line-height: 1.8;
+   }
+
+
+
+
+   .minoo-product-hero__actions {
+       display: flex;
+
+
+       flex-wrap: wrap;
+
+
+       gap: 14px;
+   }
+
+
+
+
+   .minoo-product-hero__btn {
+       min-width: 168px;
+       min-height: 56px;
+
+
+       padding: 0 25px;
+
+
+       display: inline-flex;
+
+
+       align-items: center;
+       justify-content: center;
+
+
+       gap: 13px;
+
+
+       border-radius: 999px;
+
+
+       text-decoration: none;
+
+
+       font-size: 15px;
+       font-weight: 700;
+
+
+       transition:
+           transform .25s ease,
+           box-shadow .25s ease,
+           background-color .25s ease,
+           border-color .25s ease;
+   }
+
+
+
+
+   .minoo-product-hero__btn.primary {
+       border: 1px solid #BD875C;
+
+
+       background: #BD875C;
+
+
+       color: #FFFFFF;
+
+
+       box-shadow:
+           0 12px 28px
+           rgba(189, 135, 92, .27);
+   }
+
+
+
+
+   .minoo-product-hero__btn.primary:hover {
+       transform: translateY(-3px);
+
+
+       background: #A97149;
+
+
+       border-color: #A97149;
+
+
+       box-shadow:
+           0 17px 36px
+           rgba(189, 135, 92, .34);
+   }
+
+
+
+
+   .minoo-product-hero__btn.secondary {
+       border:
+           1px solid
+           rgba(61, 28, 15, .16);
+
+
+       background:
+           rgba(255, 255, 255, .78);
+
+
+       color: #3D1C0F;
+
+
+       backdrop-filter: blur(7px);
+   }
+
+
+
+
+   .minoo-product-hero__btn.secondary:hover {
+       transform: translateY(-3px);
+
+
+       background: #FFFFFF;
+
+
+       border-color:
+           rgba(61, 28, 15, .28);
+   }
+
+
+
+
+   /* =========================
+      CARD NỔI BÊN PHẢI
+   ========================= */
+
+
+   .minoo-product-hero__side {
+       display: flex;
+
+
+       justify-content: flex-end;
+
+
+       align-items: center;
+   }
+
+
+
+
+   .minoo-product-hero__card {
+       position: relative;
+       overflow: hidden;
+
+
+       width: 390px;
+
+
+       padding: 34px 32px;
+
+
+       border:
+           1px solid
+           rgba(189, 135, 92, .34);
+
+
+       border-radius: 27px;
+
+
+       background:
+           linear-gradient(
+               145deg,
+               rgba(255, 255, 255, .94),
+               rgba(255, 250, 245, .87)
+           );
+
+
+       box-shadow:
+           0 28px 70px
+           rgba(61, 28, 15, .16);
+
+
+       backdrop-filter: blur(11px);
+
+
+       animation:
+           minooProductCardFloat
+           4.3s
+           ease-in-out
+           infinite;
+
+
+       transition:
+           transform .35s ease,
+           box-shadow .35s ease,
+           border-color .35s ease;
+   }
+
+
+
+
+   .minoo-product-hero__card::before {
+       content: "";
+
+
+       position: absolute;
+
+
+       width: 145px;
+       height: 160%;
+
+
+       top: -30%;
+       left: -190px;
+
+
+       transform: rotate(18deg);
+
+
+       background:
+           linear-gradient(
+               90deg,
+               transparent,
+               rgba(255, 255, 255, .72),
+               transparent
+           );
+
+
+       pointer-events: none;
+
+
+       animation:
+           minooProductCardShine
+           5.4s
+           ease-in-out
+           infinite;
+   }
+
+
+
+
+   .minoo-product-hero__card:hover {
+       transform:
+           translateY(-8px)
+           scale(1.016);
+
+
+       border-color:
+           rgba(189, 135, 92, .62);
+
+
+       box-shadow:
+           0 36px 84px
+           rgba(61, 28, 15, .22);
+   }
+
+
+
+
+   .minoo-product-hero__card-label {
+       position: relative;
+       z-index: 2;
+
+
+       display: block;
+
+
+       margin-bottom: 15px;
+
+
+       color: #BD875C;
+
+
+       font-size: 13px;
+       font-weight: 700;
+
+
+       letter-spacing: 2px;
+
+
+       text-transform: uppercase;
+   }
+
+
+
+
+   .minoo-product-hero__card h2 {
+       position: relative;
+       z-index: 2;
+
+
+       margin: 0 0 14px;
+
+
+       color: #3D1C0F;
+
+
+       font-family:
+           'Playfair Display',
+           Georgia,
+           serif;
+
+
+       font-size: 39px;
+
+
+       font-weight: 700;
+
+
+       line-height: 1.12;
+
+
+       letter-spacing: -1px;
+   }
+
+
+
+
+   .minoo-product-hero__card > p {
+       position: relative;
+       z-index: 2;
+
+
+       margin: 0;
+
+
+       color: #6E5345;
+
+
+       font-size: 15px;
+
+
+       line-height: 1.7;
+   }
+
+
+
+
+   .minoo-product-hero__features {
+       position: relative;
+       z-index: 2;
+
+
+       display: grid;
+
+
+       grid-template-columns:
+           repeat(2, 1fr);
+
+
+       gap: 11px;
+
+
+       margin-top: 22px;
+   }
+
+
+
+
+   .minoo-product-hero__feature {
+       padding: 14px 13px;
+
+
+       border:
+           1px solid
+           #EAD7C4;
+
+
+       border-radius: 14px;
+
+
+       background:
+           rgba(255, 255, 255, .92);
+
+
+       transition:
+           transform .25s ease,
+           border-color .25s ease,
+           background-color .25s ease;
+   }
+
+
+
+
+   .minoo-product-hero__feature:hover {
+       transform: translateY(-3px);
+
+
+       border-color: #BD875C;
+
+
+       background: #FFFFFF;
+   }
+
+
+
+
+   .minoo-product-hero__feature span {
+       display: block;
+
+
+       margin-bottom: 7px;
+
+
+       color: #BD875C;
+
+
+       font-size: 11px;
+       font-weight: 700;
+
+
+       letter-spacing: 1px;
+
+
+       text-transform: uppercase;
+   }
+
+
+
+
+   .minoo-product-hero__feature strong {
+       display: block;
+
+
+       color: #3D1C0F;
+
+
+       font-size: 12px;
+
+
+       line-height: 1.5;
+   }
+
+
+
+
+   #product-list {
+       scroll-margin-top: 120px;
+   }
+
+
+
+
+   /* =========================
+      ANIMATION CHỈ BANNER
+   ========================= */
+
+
+   @keyframes minooProductCardFloat {
+
+
+       0%,
+       100% {
+           transform: translateY(0);
+       }
+
+
+       50% {
+           transform: translateY(-8px);
+       }
+
+
+   }
+
+
+
+
+   @keyframes minooProductCardShine {
+
+
+       0%,
+       72% {
+           left: -190px;
+           opacity: 0;
+       }
+
+
+       78% {
+           opacity: 1;
+       }
+
+
+       92% {
+           left: 500px;
+           opacity: .8;
+       }
+
+
+       100% {
+           left: 500px;
+           opacity: 0;
+       }
+
+
+   }
+
+
+
+
+   /* =========================
+      RESPONSIVE CHỈ BANNER
+   ========================= */
+
+
+   @media (max-width: 1050px) {
+
+
+       .minoo-product-hero__inner {
+           width: min(
+               100% - 56px,
+               1320px
+           );
+
+
+           grid-template-columns:
+               minmax(0, 1fr)
+               minmax(310px, .75fr);
+
+
+           gap: 36px;
+       }
+
+
+
+
+       .minoo-product-hero__title {
+           font-size: 64px;
+       }
+
+
+
+
+       .minoo-product-hero__description {
+           font-size: 17px;
+       }
+
+
+
+
+       .minoo-product-hero__card {
+           width: 330px;
+
+
+           padding:
+               29px 26px;
+       }
+
+
+
+
+       .minoo-product-hero__card h2 {
+           font-size: 33px;
+       }
+
+
+   }
+
+
+
+
+   @media (max-width: 850px) {
+
+
+       .minoo-product-hero {
+           min-height: auto;
+
+
+           background-position:
+               65% center;
+       }
+
+
+
+
+       .minoo-product-hero__inner {
+           min-height: auto;
+
+
+           padding:
+               60px 0;
+
+
+           grid-template-columns:
+               1fr;
+
+
+           gap: 34px;
+       }
+
+
+
+
+       .minoo-product-hero__content {
+           max-width:
+               680px;
+       }
+
+
+
+
+       .minoo-product-hero__side {
+           justify-content:
+               flex-start;
+       }
+
+
+
+
+       .minoo-product-hero__card {
+           width:
+               min(
+                   390px,
+                   100%
+               );
+       }
+
+
+   }
+
+
+
+
+   @media (max-width: 600px) {
+
+
+       .minoo-product-hero {
+           margin-bottom:
+               38px;
+
+
+           background-position:
+               70% center;
+       }
+
+
+
+
+       .minoo-product-hero__inner {
+           width:
+               calc(100% - 36px);
+
+
+           padding:
+               44px 0;
+       }
+
+
+
+
+       .minoo-product-hero__label {
+           font-size:
+               12px;
+       }
+
+
+
+
+       .minoo-product-hero__title {
+           font-size:
+               48px;
+
+
+           letter-spacing:
+               -1.3px;
+       }
+
+
+
+
+       .minoo-product-hero__description {
+           font-size:
+               15px;
+       }
+
+
+
+
+       .minoo-product-hero__actions {
+           flex-direction:
+               column;
+       }
+
+
+
+
+       .minoo-product-hero__btn {
+           width:
+               100%;
+       }
+
+
+
+
+       .minoo-product-hero__card {
+           padding:
+               26px 22px;
+       }
+
+
+
+
+       .minoo-product-hero__card h2 {
+           font-size:
+               30px;
+       }
+
+
+
+
+       .minoo-product-hero__features {
+           grid-template-columns:
+               1fr;
+       }
+
+
+   }
+
+
+
+
+   @media (
+       prefers-reduced-motion:
+       reduce
+   ) {
+
+
+       .minoo-product-hero__card,
+       .minoo-product-hero__card::before {
+           animation:
+               none !important;
+       }
+
+
+   }
+
+
+
+
+
+
+   /* =====================================================
+      VIỀN ÁNH SÁNG CHẠY QUANH BANNER
+      CHỈ tác động .minoo-product-hero
+   ===================================================== */
+
+
+   @property --minoo-banner-border-angle {
+       syntax: "<angle>";
+       initial-value: 0deg;
+       inherits: false;
+   }
+
+
+
+
+   .minoo-product-hero {
+       isolation: isolate;
+   }
+
+
+
+
+   /* Viền nền mảnh giúp banner luôn có khung kể cả lúc
+      vệt sáng đang chạy ở cạnh khác */
+   .minoo-product-hero::before {
+       content: "";
+
+
+       position: absolute;
+
+
+       inset: 0;
+
+
+       z-index: 5;
+
+
+       pointer-events: none;
+
+
+       border:
+           1px solid
+           rgba(189, 135, 92, .34);
+
+
+       box-shadow:
+           inset 0 0 0 1px
+           rgba(255, 255, 255, .24);
+   }
+
+
+
+
+   /* Lớp viền động */
+   .minoo-product-hero__animated-border {
+       position: absolute;
+
+
+       inset: 0;
+
+
+       z-index: 6;
+
+
+       padding: 2.5px;
+
+
+       pointer-events: none;
+
+
+       background:
+           conic-gradient(
+               from var(--minoo-banner-border-angle),
+
+
+               transparent 0deg,
+               transparent 275deg,
+
+
+               rgba(246, 225, 200, .30) 292deg,
+
+
+               #D7A97F 309deg,
+
+
+               #FFFFFF 321deg,
+
+
+               #BD875C 334deg,
+
+
+               rgba(215, 169, 127, .45) 346deg,
+
+
+               transparent 360deg
+           );
+
+
+       -webkit-mask:
+           linear-gradient(#fff 0 0)
+           content-box,
+           linear-gradient(#fff 0 0);
+
+
+       -webkit-mask-composite:
+           xor;
+
+
+       mask-composite:
+           exclude;
+
+
+       animation:
+           minooBannerBorderRun
+           5.8s
+           linear
+           infinite;
+   }
+
+
+
+
+   /* Glow mềm đi cùng viền để có điểm nhấn hiện đại */
+   .minoo-product-hero__animated-border::after {
+       content: "";
+
+
+       position: absolute;
+
+
+       inset: -5px;
+
+
+       pointer-events: none;
+
+
+       background:
+           conic-gradient(
+               from var(--minoo-banner-border-angle),
+
+
+               transparent 0deg,
+               transparent 287deg,
+
+
+               rgba(215, 169, 127, .05) 300deg,
+
+
+               rgba(189, 135, 92, .28) 320deg,
+
+
+               rgba(255, 255, 255, .30) 331deg,
+
+
+               rgba(189, 135, 92, .18) 343deg,
+
+
+               transparent 360deg
+           );
+
+
+       filter:
+           blur(13px);
+
+
+       opacity:
+           .72;
+
+
+       -webkit-mask:
+           linear-gradient(#fff 0 0)
+           content-box,
+           linear-gradient(#fff 0 0);
+
+
+       -webkit-mask-composite:
+           xor;
+
+
+       mask-composite:
+           exclude;
+   }
+
+
+
+
+   @keyframes minooBannerBorderRun {
+
+
+       from {
+           --minoo-banner-border-angle:
+               0deg;
+       }
+
+
+       to {
+           --minoo-banner-border-angle:
+               360deg;
+       }
+
+
+   }
+
+
+
+
+   /* Khi rê chuột vào banner: viền sáng rõ hơn một chút */
+   .minoo-product-hero:hover
+   .minoo-product-hero__animated-border {
+       padding:
+           3px;
+
+
+       filter:
+           drop-shadow(
+               0 0 7px
+               rgba(189, 135, 92, .35)
+           );
+   }
+
+
+
+
+   @media (
+       prefers-reduced-motion:
+       reduce
+   ) {
+
+
+       .minoo-product-hero__animated-border {
+           animation:
+               none;
+       }
+
+
+   }
+
+
+
+
+
+
+   /* =====================================================
+      CUSTOMER PRODUCT SEARCH - NEW
+      Tìm bằng từ khóa + lối vào tìm bằng hình ảnh.
+   ===================================================== */
+
+
+   .minoo-product-search-panel {
+       scroll-margin-top: 125px;
+       margin: 0 0 30px;
+       padding: 20px;
+       border: 1px solid #EAD7C4;
+       border-radius: 20px;
+       background: #FFFDF9;
+       box-shadow: 0 12px 32px rgba(61, 28, 15, .05);
+   }
+
+
+   .minoo-product-search-form {
+       display: grid;
+       grid-template-columns: minmax(0, 1fr) auto auto;
+       gap: 10px;
+       align-items: stretch;
+   }
+
+
+   .minoo-product-search-input-wrap {
+       min-height: 52px;
+       display: flex;
+       align-items: center;
+       gap: 11px;
+       padding: 0 16px;
+       border: 1px solid #EAD7C4;
+       border-radius: 999px;
+       background: #FFFFFF;
+       transition:
+           border-color .2s ease,
+           box-shadow .2s ease;
+   }
+
+
+   .minoo-product-search-input-wrap:focus-within {
+       border-color: #BD875C;
+       box-shadow: 0 0 0 3px rgba(189, 135, 92, .11);
+   }
+
+
+   .minoo-product-search-input-wrap svg {
+       width: 20px;
+       height: 20px;
+       flex: 0 0 20px;
+       fill: none;
+       stroke: #BD875C;
+       stroke-width: 1.8;
+       stroke-linecap: round;
+       stroke-linejoin: round;
+   }
+
+
+   .minoo-product-search-input {
+       width: 100%;
+       min-width: 0;
+       height: 50px;
+       border: 0;
+       outline: 0;
+       background: transparent;
+       color: #3D1C0F;
+       font-family: 'Be Vietnam Pro', sans-serif;
+       font-size: 14px;
+   }
+
+
+   .minoo-product-search-input::placeholder {
+       color: #9B8579;
+   }
+
+
+   .minoo-product-search-submit,
+   .minoo-product-visual-link {
+       min-height: 52px;
+       display: inline-flex;
+       align-items: center;
+       justify-content: center;
+       gap: 9px;
+       padding: 0 21px;
+       border-radius: 999px;
+       font-family: 'Be Vietnam Pro', sans-serif;
+       font-size: 13px;
+       font-weight: 700;
+       text-decoration: none;
+       cursor: pointer;
+       transition:
+           transform .2s ease,
+           background .2s ease,
+           border-color .2s ease;
+   }
+
+
+   .minoo-product-search-submit {
+       border: 1px solid #3D1C0F;
+       background: #3D1C0F;
+       color: #FFFFFF;
+   }
+
+
+   .minoo-product-visual-link {
+       border: 1px solid #BD875C;
+       background: #FDF1DE;
+       color: #3D1C0F;
+   }
+
+
+   .minoo-product-search-submit:hover,
+   .minoo-product-visual-link:hover {
+       transform: translateY(-2px);
+   }
+
+
+   .minoo-product-search-submit:hover {
+       background: #BD875C;
+       border-color: #BD875C;
+   }
+
+
+   .minoo-product-visual-link:hover {
+       background: #F6E1C8;
+   }
+
+
+   .minoo-product-visual-link svg {
+       width: 19px;
+       height: 19px;
+       fill: none;
+       stroke: currentColor;
+       stroke-width: 1.7;
+       stroke-linecap: round;
+       stroke-linejoin: round;
+   }
+
+
+   .minoo-product-search-summary {
+       margin-top: 13px;
+       display: flex;
+       align-items: center;
+       justify-content: space-between;
+       gap: 16px;
+       padding: 0 5px;
+       color: #6E5345;
+       font-size: 13px;
+   }
+
+
+   .minoo-product-search-summary strong {
+       color: #3D1C0F;
+   }
+
+
+   .minoo-product-search-clear {
+       color: #BD875C;
+       font-weight: 700;
+       text-decoration: none;
+   }
+
+
+   .minoo-product-search-clear:hover {
+       text-decoration: underline;
+   }
+
+
+   .products-empty-search-link {
+       display: inline-flex;
+       margin-top: 16px;
+       padding: 10px 18px;
+       border-radius: 999px;
+       background: #BD875C;
+       color: #FFFFFF;
+       font-size: 13px;
+       font-weight: 700;
+       text-decoration: none;
+   }
+
+
+   @media (max-width: 850px) {
+       .minoo-product-search-form {
+           grid-template-columns: 1fr 1fr;
+       }
+
+
+       .minoo-product-search-input-wrap {
+           grid-column: 1 / -1;
+       }
+   }
+
+
+   @media (max-width: 560px) {
+       .minoo-product-search-panel {
+           padding: 14px;
+           border-radius: 16px;
+       }
+
+
+       .minoo-product-search-form {
+           grid-template-columns: 1fr;
+       }
+
+
+       .minoo-product-search-input-wrap {
+           grid-column: auto;
+       }
+
+
+       .minoo-product-search-submit,
+       .minoo-product-visual-link {
+           width: 100%;
+       }
+
+
+       .minoo-product-search-summary {
+           align-items: flex-start;
+           flex-direction: column;
+       }
+   }
+
+
+
+</style>
+
+<div class="products-page">
+
+
+   <!-- =================================================
+        HEADER
+   ================================================== -->
+
+
+   <section class="minoo-product-hero">
+
+
+       <!-- VIỀN ÁNH SÁNG CHẠY QUANH BANNER -->
+       <div class="minoo-product-hero__animated-border"></div>
+
+
+       <div class="minoo-product-hero__inner">
+
+
+           <!-- =============================================
+                BÊN TRÁI
+           ============================================== -->
+
+
+           <div class="minoo-product-hero__content">
+
+
+               <span class="minoo-product-hero__label">
+                   MINOO EYEWEAR
+               </span>
+
+
+
+
+               <h1 class="minoo-product-hero__title">
+                   Gọng kính
+               </h1>
+
+
+
+
+               <p class="minoo-product-hero__description">
+                   Khám phá những thiết kế kính hiện đại,
+                   thanh lịch và dễ ứng dụng trong cuộc sống hằng ngày.
+                   Chọn chiếc kính phù hợp với phong cách riêng của bạn.
+               </p>
+
+
+
+
+               <div class="minoo-product-hero__actions">
+
+
+                   <a
+                       href="#product-list"
+                       class="minoo-product-hero__btn primary"
+                   >
+                       Xem sản phẩm
+                       <span>→</span>
+                   </a>
+
+
+
+
+                   <a
+                       href="{% url 'contact' %}"
+                       class="minoo-product-hero__btn secondary"
+                   >
+                       Tư vấn ngay
+                   </a>
+
+
+               </div>
+
+
+           </div>
+
+
+
+
+           <!-- =============================================
+                Ô NỔI BẬT BÊN PHẢI
+           ============================================== -->
+
+
+           <div class="minoo-product-hero__side">
+
+
+               <div class="minoo-product-hero__card">
+
+
+                   <span class="minoo-product-hero__card-label">
+                       MINOO COLLECTION
+                   </span>
+
+
+
+
+                   <h2>
+                       Chọn kính theo
+                       phong cách của bạn
+                   </h2>
+
+
+
+
+                   <p>
+                       Những thiết kế dễ phối, dễ lựa chọn
+                       và phù hợp với nhiều phong cách hằng ngày.
+                   </p>
+
+
+
+
+                   <div class="minoo-product-hero__features">
+
+
+                       <div class="minoo-product-hero__feature">
+
+
+                           <span>
+                               PHONG CÁCH
+                           </span>
+
+
+                           <strong>
+                               Nam · Nữ · Unisex
+                           </strong>
+
+
+                       </div>
+
+
+
+
+                       <div class="minoo-product-hero__feature">
+
+
+                           <span>
+                               TRẢI NGHIỆM
+                           </span>
+
+
+                           <strong>
+                               Dễ xem · Dễ chọn
+                           </strong>
+
+
+                       </div>
+
+
+                   </div>
+
+
+               </div>
+
+
+           </div>
+
+
+       </div>
+
+
+   </section>
+
+
+
+
+
+
+
+
+   <!-- =================================================
+        TÌM KIẾM SẢN PHẨM - NEW
+        Dùng query ?q=... đã được xử lý trong views.py
+   ================================================== -->
+
+
+   <section
+       class="minoo-product-search-panel"
+       id="product-search-panel"
+       aria-label="Tìm kiếm sản phẩm"
+   >
+
+
+       <form
+           method="get"
+           action="{% url 'products' %}"
+           class="minoo-product-search-form"
+           role="search"
+       >
+
+
+           {% if selected_gender %}
+               <input
+                   type="hidden"
+                   name="gender"
+                   value="{{ selected_gender }}"
+               >
+           {% endif %}
+
+{% if min_price %}
+    <input type="hidden" name="min_price" value="{{ min_price }}">
+{% endif %}
+
+{% if max_price %}
+    <input type="hidden" name="max_price" value="{{ max_price }}">
+{% endif %}
+
+{% if selected_category %}
+    <input type="hidden" name="category" value="{{ selected_category }}">
+{% endif %}
+
+{% if selected_shape %}
+    <input type="hidden" name="shape" value="{{ selected_shape }}">
+{% endif %}
+
+{% if selected_sort %}
+    <input type="hidden" name="sort" value="{{ selected_sort }}">
+{% endif %}
+
+
+           <div class="minoo-product-search-input-wrap">
+
+
+               <svg viewBox="0 0 24 24" aria-hidden="true">
+                   <circle cx="11" cy="11" r="7"></circle>
+                   <path d="m20 20-4-4"></path>
+               </svg>
+
+
+               <input
+                   type="search"
+                   name="q"
+                   value="{{ q|default:'' }}"
+                   class="minoo-product-search-input"
+                   placeholder="Tìm theo tên, mã SKU, màu, kiểu dáng, chất liệu..."
+                   aria-label="Từ khóa tìm kiếm sản phẩm"
+                   autocomplete="off"
+               >
+
+
+           </div>
+
+
+           <button
+               type="submit"
+               class="minoo-product-search-submit"
+           >
+               Tìm sản phẩm
+           </button>
+
+
+           <a
+               href="{% url 'customer_visual_search' %}"
+               class="minoo-product-visual-link"
+           >
+               <svg viewBox="0 0 24 24" aria-hidden="true">
+                   <path d="M4 7h3l1.5-2h7L17 7h3a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z"></path>
+                   <circle cx="12" cy="13" r="4"></circle>
+               </svg>
+               Tìm bằng ảnh
+           </a>
+
+
+       </form>
+
+
+       {% if q %}
+
+
+           <div class="minoo-product-search-summary">
+
+
+               <span>
+                   Kết quả tìm kiếm cho:
+                   <strong>“{{ q }}”</strong>
+               </span>
+
+
+               <a
+                   href="{% url 'products' %}"
+                   class="minoo-product-search-clear"
+               >
+                   Xóa tìm kiếm
+               </a>
+
+
+           </div>
+
+
+       {% endif %}
+
+
+   </section>
+
+
+
+
+   <!-- =================================================
+        FILTER
+   ================================================== -->
+   <div class="products-filter-row">
+   <div class="products-filter">
+
+
+
+<a
+    href="{% url 'products' %}"
+    data-gender=""
+    class="{% if not selected_gender %}filter-active{% endif %}"
+>
+    Tất cả
+</a>
+
+<a
+    href="?gender=male"
+    data-gender="male"
+    class="{% if selected_gender == 'male' %}filter-active{% endif %}"
+>
+    Nam
+</a>
+
+<a
+    href="?gender=female"
+    data-gender="female"
+    class="{% if selected_gender == 'female' %}filter-active{% endif %}"
+>
+    Nữ
+</a>
+
+<a
+    href="?gender=unisex"
+    data-gender="unisex"
+    class="{% if selected_gender == 'unisex' %}filter-active{% endif %}"
+>
+    Unisex
+</a>
+
+
+
+   </div>
+
+
+
+
+<!-- =================================================
+    BỘ LỌC GIÁ RANGE SLIDER
+================================================== -->
+
+
+<section class="minoo-price-range" id="minoo-price-range">
+
+
+   <h3 class="minoo-price-range__heading">
+       Lọc theo khoảng giá
+   </h3>
+
+
+   <div class="minoo-price-range__values">
+
+
+       <div class="minoo-price-range__value">
+           <span class="minoo-price-range__label">
+               Giá thấp nhất
+           </span>
+
+
+           <span
+               class="minoo-price-range__number"
+               id="minoo-price-min-value"
+           >
+               0₫
+           </span>
+       </div>
+
+
+       <div class="minoo-price-range__value">
+           <span class="minoo-price-range__label">
+               Giá cao nhất
+           </span>
+
+
+           <span
+               class="minoo-price-range__number"
+               id="minoo-price-max-value"
+           >
+               0₫
+           </span>
+       </div>
+
+
+   </div>
+
+
+   <div class="minoo-price-range__slider">
+
+
+       <div class="minoo-price-range__track"></div>
+
+
+       <div
+           class="minoo-price-range__selected"
+           id="minoo-price-selected"
+       ></div>
+
+
+       <input
+           type="range"
+           id="minoo-price-min"
+           min="0"
+           max="{{ price_max_limit|default:1000000 }}"
+           step="10000"
+           value="{{ min_price|default:0 }}"
+           aria-label="Giá thấp nhất"
+       >
+
+
+       <input
+           type="range"
+           id="minoo-price-max"
+           min="0"
+           max="{{ price_max_limit|default:1000000 }}"
+           step="10000"
+           value="{{ max_price|default:price_max_limit }}"
+           aria-label="Giá cao nhất"
+       >
+
+
+   </div>
+
+
+   <div class="minoo-price-range__buttons">
+
+
+       <button
+           type="button"
+           class="minoo-price-range__button"
+           id="minoo-price-apply"
+       >
+           Lọc giá
+       </button>
+
+
+       <button
+           type="button"
+           class="minoo-price-range__button minoo-price-range__button--reset"
+           id="minoo-price-reset"
+       >
+           Xóa lọc
+       </button>
+
+
+   </div>
+
+
+   <p
+       class="minoo-price-range__status"
+       id="minoo-price-status"
+       aria-live="polite"
+   >
+       Kéo hai đầu thanh trượt để chọn khoảng giá.
+   </p>
+
+
+</section>
+</div>
+<div
+   class="minoo-price-range__empty"
+   id="minoo-price-empty"
+>
+   Không có sản phẩm phù hợp với khoảng giá này.
+</div>
+
+
+   <!-- =================================================
+        PRODUCT GRID
+   ================================================== -->
+
+
+   {% if products %}
+
+
+       <div class="products-grid" id="product-list">
+
+
+           {% for product in products %}
+
+
+               <div class="product-card" data-price="{{ product.sale_price|unlocalize }}">
+
+
+                   <!-- =================================================
+                        ẢNH SẢN PHẨM
+                   ================================================== -->
+
+
+                   <a
+                       href="{% url 'product_detail' product.id %}"
+                       class="product-image"
+                   >
+
+
+                       {% if product.image %}
+
+
+                           <img
+                               src="{{ product.image.url }}"
+                               alt="{{ product.name }}"
+                           >
+
+
+                       {% else %}
+
+
+                           <div class="product-image-placeholder">
+                               Chưa có hình ảnh
+                           </div>
+
+
+                       {% endif %}
+
+
+                   </a>
+
+
+
+
+                   <!-- =================================================
+                        THÔNG TIN SẢN PHẨM
+                   ================================================== -->
+
+
+                   <div class="product-info">
+
+
+                       <h3 class="product-name">
+
+
+                           <a
+                               href="{% url 'product_detail' product.id %}"
+                           >
+                               {{ product.name }}
+                           </a>
+
+
+                       </h3>
+
+
+
+
+                       <!-- GIÁ -->
+
+
+                       <div class="product-price">
+
+
+                           <span class="sale-price">
+                               {{ product.sale_price|vnd }}₫
+                           </span>
+
+
+                           {% if product.original_price > product.sale_price %}
+
+
+                               <span class="original-price">
+                                   {{ product.original_price|vnd }}₫
+                               </span>
+
+
+                           {% endif %}
+
+
+                       </div>
+
+
+
+
+                       <!-- =================================================
+                            ACTIONS
+                       ================================================== -->
+
+
+                       <div class="product-actions">
+
+
+                           <!-- XEM CHI TIẾT -->
+
+
+                           <a
+                               href="{% url 'product_detail' product.id %}"
+                               class="product-detail-btn"
+                           >
+                               Xem chi tiết
+                           </a>
+
+
+
+
+                           <!-- =================================================
+                                SẢN PHẨM CÓ BIẾN THỂ
+                           ================================================== -->
+
+
+                           {% if product.has_variants %}
+
+
+                               {% if product.total_variant_stock > 0 %}
+
+
+                                   <button
+                                       type="button"
+                                       class="add-cart-btn open-variant-modal"
+                                       data-product-id="{{ product.id }}"
+                                       data-product-name="{{ product.name }}"
+                                       data-product-image="{% if product.image %}{{ product.image.url }}{% endif %}"
+                                       data-product-price="{{ product.sale_price|vnd }}"
+                                   >
+                                       Thêm vào giỏ
+                                   </button>
+
+
+                               {% else %}
+
+
+                                   <button
+                                       type="button"
+                                       class="add-cart-btn disabled"
+                                       disabled
+                                   >
+                                       Hết hàng
+                                   </button>
+
+
+                               {% endif %}
+
+
+
+
+                           <!-- =================================================
+                                SẢN PHẨM KHÔNG CÓ BIẾN THỂ
+                           ================================================== -->
+
+
+                           {% else %}
+
+
+                               {% if product.stock > 0 %}
+
+
+                                   <form
+                                       method="post"
+                                       action="{% url 'add_to_cart' product.id %}"
+                                       class="add-cart-form"
+                                   >
+
+
+                                       {% csrf_token %}
+
+
+                                       <input
+                                           type="hidden"
+                                           name="quantity"
+                                           value="1"
+                                       >
+
+
+                                       <button
+                                           type="submit"
+                                           class="add-cart-btn"
+                                       >
+                                           Thêm vào giỏ
+                                       </button>
+
+
+                                   </form>
+
+
+                               {% else %}
+
+
+                                   <button
+                                       type="button"
+                                       class="add-cart-btn disabled"
+                                       disabled
+                                   >
+                                       Hết hàng
+                                   </button>
+
+
+                               {% endif %}
+
+
+                           {% endif %}
+
+
+                       </div>
+
+
+                   </div>
+
+
+               </div>
+
+
+
+
+               <!-- =================================================
+                    POPUP CHỌN BIẾN THỂ
+               ================================================== -->
+
+
+               {% if product.has_variants %}
+
+
+                   <div
+                       class="variant-modal"
+                       id="variant-modal-{{ product.id }}"
+                   >
+
+
+                       <div class="variant-modal-box">
+
+
+                           <!-- ĐÓNG -->
+
+
+                           <button
+                               type="button"
+                               class="variant-modal-close"
+                               data-close-modal
+                           >
+                               ×
+                           </button>
+
+
+
+
+                           <!-- TIÊU ĐỀ -->
+
+
+                           <h3 class="variant-modal-title">
+                               Chọn biến thể
+                           </h3>
+
+
+                           <p class="variant-modal-product">
+                               {{ product.name }}
+                           </p>
+
+
+
+
+                           <!-- =================================================
+                                PREVIEW
+                           ================================================== -->
+
+
+                           <div class="variant-product-preview">
+
+
+                               {% if product.image %}
+
+
+                                   <img
+                                       src="{{ product.image.url }}"
+                                       alt="{{ product.name }}"
+                                       class="variant-product-preview-image"
+                                   >
+
+
+                               {% else %}
+
+
+                                   <div
+                                       class="variant-product-preview-image"
+                                       style="
+                                           display:flex;
+                                           align-items:center;
+                                           justify-content:center;
+                                           color:var(--brown-light);
+                                           font-size:12px;
+                                       "
+                                   >
+                                       Chưa có ảnh
+                                   </div>
+
+
+                               {% endif %}
+
+
+
+
+                               <div>
+
+
+                                   <div class="variant-product-preview-name">
+                                       {{ product.name }}
+                                   </div>
+
+
+                                   <div class="variant-product-preview-price">
+                                       {{ product.sale_price|vnd }}₫
+                                   </div>
+
+
+                               </div>
+
+
+                           </div>
+
+
+
+
+                           <!-- =================================================
+                                FORM CHỌN BIẾN THỂ
+                           ================================================== -->
+
+
+                           <form
+                               method="post"
+                               action="{% url 'add_to_cart' product.id %}"
+                           >
+
+
+                               {% csrf_token %}
+
+
+
+
+                               <!-- BIẾN THỂ -->
+
+
+                               <div class="variant-group">
+
+
+                                   <span class="variant-group-title">
+                                       Chọn phiên bản
+                                   </span>
+
+
+
+
+                                   <div class="variant-options">
+
+
+                                       {% for variant in product.active_variants %}
+
+
+                                           <div class="variant-option">
+
+
+                                               <input
+                                                   type="radio"
+                                                   name="variant_id"
+                                                   id="variant-{{ product.id }}-{{ variant.id }}"
+                                                   value="{{ variant.id }}"
+                                                   data-stock="{{ variant.stock }}"
+                                                   {% if variant.stock <= 0 %}disabled{% endif %}
+                                                   required
+                                               >
+
+
+                                               <label
+                                                   for="variant-{{ product.id }}-{{ variant.id }}"
+                                               >
+
+
+                                                   <span>
+
+
+                                                       {% if variant.color %}
+                                                           {{ variant.color }}
+                                                       {% endif %}
+
+
+                                                       {% if variant.size %}
+
+
+                                                           {% if variant.color %}
+                                                               -
+                                                           {% endif %}
+
+
+                                                           {{ variant.size }}
+
+
+                                                       {% endif %}
+
+
+                                                       {% if not variant.color and not variant.size %}
+
+
+                                                           Phiên bản {{ forloop.counter }}
+
+
+                                                       {% endif %}
+
+
+
+
+                                                       <small class="variant-stock">
+
+
+                                                           {% if variant.stock > 0 %}
+
+
+                                                               Còn {{ variant.stock }} sản phẩm
+
+
+                                                           {% else %}
+
+
+                                                               Hết hàng
+
+
+                                                           {% endif %}
+
+
+                                                       </small>
+
+
+                                                   </span>
+
+
+                                               </label>
+
+
+                                           </div>
+
+
+                                       {% empty %}
+
+
+                                           <p
+                                               style="
+                                                   color:var(--brown-light);
+                                                   margin:0;
+                                               "
+                                           >
+                                               Hiện chưa có biến thể đang bán.
+                                           </p>
+
+
+                                       {% endfor %}
+
+
+                                   </div>
+
+
+                               </div>
+
+
+
+
+                               <!-- =================================================
+                                    SỐ LƯỢNG
+                               ================================================== -->
+
+
+                               <div class="variant-quantity">
+
+
+                                   <label
+                                       for="quantity-{{ product.id }}"
+                                   >
+                                       Số lượng
+                                   </label>
+
+
+                                   <input
+                                       type="number"
+                                       id="quantity-{{ product.id }}"
+                                       name="quantity"
+                                       value="1"
+                                       min="1"
+                                       max="1"
+                                   >
+
+
+                               </div>
+
+
+
+
+                               <!-- =================================================
+                                    SUBMIT
+                               ================================================== -->
+
+
+                               <button
+                                   type="submit"
+                                   class="variant-submit"
+                                   {% if product.total_variant_stock <= 0 %}disabled{% endif %}
+                               >
+                                   Thêm vào giỏ hàng
+                               </button>
+
+
+                           </form>
+
+
+                       </div>
+
+
+                   </div>
+
+
+               {% endif %}
+
+
+           {% endfor %}
+
+
+       </div>
+
+
+
+
+   {% else %}
+
+
+       <!-- =================================================
+            EMPTY
+       ================================================== -->
+
+
+       <div class="products-empty">
+
+
+           {% if q %}
+
+
+               <h3>
+                   Không tìm thấy sản phẩm
+               </h3>
+
+
+               <p>
+                   Không tìm thấy sản phẩm phù hợp với “{{ q }}”.
+                   Hãy thử từ khóa khác hoặc tìm bằng hình ảnh.
+               </p>
+
+
+               <a
+                   href="{% url 'customer_visual_search' %}"
+                   class="products-empty-search-link"
+               >
+                   Tìm kính bằng ảnh
+               </a>
+
+
+           {% else %}
+
+
+               <h3>Chưa có sản phẩm</h3>
+
+
+               <p>
+                   Hiện tại chưa có sản phẩm phù hợp.
+               </p>
+
+
+           {% endif %}
+
+
+       </div>
+
+
+   {% endif %}
+
+
+</div>
+
+
+
+
+<!-- =====================================================
+    JAVASCRIPT
+====================================================== -->
+
+
+<script>
+
+
+document.addEventListener("DOMContentLoaded", function () {
+
+
+
+
+
+/* =================================================
+   PRICE RANGE FILTER - DJANGO VERSION
+================================================= */
+const priceMin = document.getElementById("minoo-price-min");
+const priceMax = document.getElementById("minoo-price-max");
+const priceMinValue = document.getElementById("minoo-price-min-value");
+const priceMaxValue = document.getElementById("minoo-price-max-value");
+const priceSelected = document.getElementById("minoo-price-selected");
+const priceApply = document.getElementById("minoo-price-apply");
+const priceReset = document.getElementById("minoo-price-reset");
+const priceStatus = document.getElementById("minoo-price-status");
+const priceEmpty = document.getElementById("minoo-price-empty");
+
+if (
+    priceMin && priceMax && priceMinValue && priceMaxValue &&
+    priceSelected && priceApply && priceReset && priceStatus && priceEmpty
+) {
+    const params = new URLSearchParams(window.location.search);
+
+    // Lấy giới hạn giá toàn bộ sản phẩm từ Django
+    const baseMax = Number(priceMax.max) || 1000000;
+    const urlMin = Number(params.get("min_price"));
+    const urlMax = Number(params.get("max_price"));
+
+    const sliderMax = Math.max(
+        100000,
+        Math.ceil(Math.max(
+            baseMax,
+            Number.isFinite(urlMax) ? urlMax : 0
+        ) / 100000) * 100000
+    );
+
+    priceMin.max = sliderMax;
+    priceMax.max = sliderMax;
+
+    // Khôi phục khoảng giá từ URL
+    priceMin.value = params.has("min_price") && Number.isFinite(urlMin)
+        ? Math.max(0, Math.min(urlMin, sliderMax))
+        : 0;
+
+    priceMax.value = params.has("max_price") && Number.isFinite(urlMax)
+        ? Math.max(Number(priceMin.value), Math.min(urlMax, sliderMax))
+        : sliderMax;
+
+    const formatVND = value =>
+        Number(value).toLocaleString("vi-VN") + "₫";
+
+    function updatePriceDisplay() {
+        let min = Number(priceMin.value);
+        let max = Number(priceMax.value);
+
+        if (min > max) {
+            min = max;
+            priceMin.value = min;
+        }
+
+        priceMinValue.textContent = formatVND(min);
+        priceMaxValue.textContent = formatVND(max);
+
+        priceSelected.style.left = (min / sliderMax * 100) + "%";
+        priceSelected.style.right = (100 - max / sliderMax * 100) + "%";
+    }
+
+    // Chỉ cập nhật giao diện khi kéo thanh trượt
+    priceMin.addEventListener("input", function () {
+        if (Number(priceMin.value) > Number(priceMax.value)) {
+            priceMin.value = priceMax.value;
+        }
+        updatePriceDisplay();
+    });
+
+    priceMax.addEventListener("input", function () {
+        if (Number(priceMax.value) < Number(priceMin.value)) {
+            priceMax.value = priceMin.value;
+        }
+        updatePriceDisplay();
+    });
+
+    // Gửi khoảng giá lên Django để lọc dữ liệu thực tế
+    priceApply.addEventListener("click", function () {
+        const min = Number(priceMin.value);
+        const max = Number(priceMax.value);
+
+        params.set("min_price", String(min));
+        params.set("max_price", String(max));
+
+        window.location.search = params.toString();
+    });
+
+    // Xóa riêng bộ lọc giá, giữ các điều kiện khác
+    priceReset.addEventListener("click", function () {
+        params.delete("min_price");
+        params.delete("max_price");
+
+        const query = params.toString();
+        window.location.href = window.location.pathname +
+            (query ? "?" + query : "");
+    });
+
+    updatePriceDisplay();
+
+    // Trạng thái thông báo dựa trên dữ liệu Django trả về
+    const productGrid = document.getElementById("product-list");
+    const productCount = productGrid
+        ? productGrid.querySelectorAll(".product-card").length
+        : 0;
+
+    if (params.has("min_price") || params.has("max_price")) {
+        priceStatus.textContent = productCount > 0
+            ? productCount + " sản phẩm phù hợp với khoảng " +
+              formatVND(Number(priceMin.value)) + " – " +
+              formatVND(Number(priceMax.value)) + "."
+            : "Không có sản phẩm phù hợp với khoảng giá này.";
+
+        priceEmpty.classList.toggle("show", productCount === 0);
+    } else {
+        priceEmpty.classList.remove("show");
+        priceStatus.textContent =
+            "Kéo hai đầu thanh trượt để chọn khoảng giá.";
+    }
+}
+
+    // Giữ nguyên các bộ lọc khi thay đổi giới tính
+    document.querySelectorAll(
+        ".products-filter a[data-gender]"
+    ).forEach(function (link) {
+        link.addEventListener("click", function (event) {
+            event.preventDefault();
+
+            const params = new URLSearchParams(
+                window.location.search
+            );
+
+            const gender = link.dataset.gender;
+
+            if (gender) {
+                params.set("gender", gender);
+            } else {
+                params.delete("gender");
+            }
+
+            const query = params.toString();
+
+            window.location.href =
+                window.location.pathname +
+                (query ? "?" + query : "");
+        });
+    });
+
+
+
+   /*
+    * =================================================
+    * MỞ POPUP
+    * =================================================
+    */
+
+
+   const openButtons = document.querySelectorAll(
+       ".open-variant-modal"
+   );
+
+
+   openButtons.forEach(function (button) {
+
+
+       button.addEventListener("click", function () {
+
+
+           const productId = button.dataset.productId;
+
+
+           const modal = document.getElementById(
+               "variant-modal-" + productId
+           );
+
+
+           if (!modal) {
+               return;
+           }
+
+
+           modal.classList.add("show");
+
+
+           document.body.style.overflow = "hidden";
+
+
+       });
+
+
+   });
+
+
+
+
+   /*
+    * =================================================
+    * ĐÓNG POPUP
+    * =================================================
+    */
+
+
+   const closeButtons = document.querySelectorAll(
+       "[data-close-modal]"
+   );
+
+
+   closeButtons.forEach(function (button) {
+
+
+       button.addEventListener("click", function () {
+
+
+           const modal = button.closest(
+               ".variant-modal"
+           );
+
+
+           if (modal) {
+
+
+               modal.classList.remove("show");
+
+
+               document.body.style.overflow = "";
+
+
+           }
+
+
+       });
+
+
+   });
+
+
+
+
+   /*
+    * =================================================
+    * CLICK RA NGOÀI POPUP
+    * =================================================
+    */
+
+
+   const modals = document.querySelectorAll(
+       ".variant-modal"
+   );
+
+
+   modals.forEach(function (modal) {
+
+
+       modal.addEventListener("click", function (event) {
+
+
+           if (event.target === modal) {
+
+
+               modal.classList.remove("show");
+
+
+               document.body.style.overflow = "";
+
+
+           }
+
+
+       });
+
+
+   });
+
+
+
+
+   /*
+    * =================================================
+    * ESC → ĐÓNG POPUP
+    * =================================================
+    */
+
+
+   document.addEventListener(
+       "keydown",
+       function (event) {
+
+
+           if (event.key === "Escape") {
+
+
+               const openedModal = document.querySelector(
+                   ".variant-modal.show"
+               );
+
+
+               if (openedModal) {
+
+
+                   openedModal.classList.remove("show");
+
+
+                   document.body.style.overflow = "";
+
+
+               }
+
+
+           }
+
+
+       }
+   );
+
+
+
+
+   /*
+    * =================================================
+    * CHỌN BIẾN THỂ
+    * =================================================
+    */
+
+
+   const variantInputs = document.querySelectorAll(
+       ".variant-modal input[name='variant_id']"
+   );
+
+
+   variantInputs.forEach(function (input) {
+
+
+       input.addEventListener("change", function () {
+
+
+           const modal = input.closest(
+               ".variant-modal"
+           );
+
+
+           if (!modal) {
+               return;
+           }
+
+
+
+
+           const quantityInput = modal.querySelector(
+               "input[name='quantity']"
+           );
+
+
+           const submitButton = modal.querySelector(
+               ".variant-submit"
+           );
+
+
+           const stock = parseInt(
+               input.dataset.stock || "0",
+               10
+           );
+
+
+
+
+           if (!quantityInput) {
+               return;
+           }
+
+
+
+
+           /* -----------------------------------------
+              CÒN HÀNG
+           ----------------------------------------- */
+
+
+           if (stock > 0) {
+
+
+               quantityInput.max = stock;
+
+
+               let currentQuantity = parseInt(
+                   quantityInput.value || "1",
+                   10
+               );
+
+
+               if (currentQuantity < 1) {
+                   currentQuantity = 1;
+               }
+
+
+               if (currentQuantity > stock) {
+                   currentQuantity = stock;
+               }
+
+
+               quantityInput.value = currentQuantity;
+
+
+
+
+               if (submitButton) {
+                   submitButton.disabled = false;
+               }
+
+
+           }
+
+
+
+
+           /* -----------------------------------------
+              HẾT HÀNG
+           ----------------------------------------- */
+
+
+           else {
+
+
+               quantityInput.max = 1;
+
+
+               quantityInput.value = 1;
+
+
+               if (submitButton) {
+                   submitButton.disabled = true;
+               }
+
+
+           }
+
+
+       });
+
+
+   });
+
+
+
+
+   /*
+    * =================================================
+    * KHÔNG CHO NHẬP QUÁ TỒN KHO
+    * =================================================
+    */
+
+
+   const quantityInputs = document.querySelectorAll(
+       ".variant-modal input[name='quantity']"
+   );
+
+
+   quantityInputs.forEach(function (input) {
+
+
+       input.addEventListener("input", function () {
+
+
+           const max = parseInt(
+               input.max || "999",
+               10
+           );
+
+
+           let value = parseInt(
+               input.value || "1",
+               10
+           );
+
+
+
+
+           if (value < 1) {
+               value = 1;
+           }
+
+
+
+
+           if (value > max) {
+               value = max;
+           }
+
+
+
+
+           input.value = value;
+
+
+       });
+
+
+   });
+
+
+
+
+   /*
+    * =================================================
+    * KHÔNG CHO SUBMIT NẾU CHƯA CHỌN VARIANT
+    * =================================================
+    */
+
+
+   const variantForms = document.querySelectorAll(
+       ".variant-modal form"
+   );
+
+
+   variantForms.forEach(function (form) {
+
+
+       form.addEventListener("submit", function (event) {
+
+
+           const selectedVariant = form.querySelector(
+               "input[name='variant_id']:checked"
+           );
+
+
+           if (!selectedVariant) {
+
+
+               event.preventDefault();
+
+
+               alert("Vui lòng chọn một phiên bản sản phẩm.");
+
+
+               return;
+
+
+           }
+
+
+
+
+           const stock = parseInt(
+               selectedVariant.dataset.stock || "0",
+               10
+           );
+
+
+
+
+           if (stock <= 0) {
+
+
+               event.preventDefault();
+
+
+               alert("Phiên bản này hiện đã hết hàng.");
+
+
+               return;
+
+
+           }
+
+
+
+
+           const quantityInput = form.querySelector(
+               "input[name='quantity']"
+           );
+
+
+           const quantity = parseInt(
+               quantityInput?.value || "1",
+               10
+           );
+
+
+
+
+           if (quantity > stock) {
+
+
+               event.preventDefault();
+
+
+               alert(
+                   "Số lượng mua vượt quá số lượng tồn kho."
+               );
+
+
+               return;
+
+
+           }
+
+
+       });
+
+
+   });
+
+
+});
+
+
+</script>
+
+
+{% endblock %}
+

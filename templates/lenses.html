@@ -1,0 +1,2707 @@
+{% extends 'base.html' %}
+{% load static minoo_filters %}
+
+{% block title %}
+Tròng kính | MINOO Eyewear
+{% endblock %}
+
+{% block content %}
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap');
+
+/* =========================================================
+   MINOO LENSES PAGE
+   Class riêng hoàn toàn để không ảnh hưởng trang khác.
+========================================================= */
+
+.minoo-lenses-page {
+    --lens-brown: #3D1C0F;
+    --lens-brown-soft: #6E5345;
+    --lens-primary: #BD875C;
+    --lens-primary-soft: #D7A97F;
+    --lens-cream: #F6E1C8;
+    --lens-cream-light: #FFF8EF;
+    --lens-white: #FFFDF9;
+    --lens-border: #EAD7C4;
+    --lens-muted: #8A7468;
+
+    background: var(--lens-white);
+    color: var(--lens-brown);
+    font-family: 'Be Vietnam Pro', sans-serif;
+}
+
+
+/* =========================================================
+   HERO FULL WIDTH
+========================================================= */
+
+.lenses-hero {
+    position: relative;
+    overflow: hidden;
+
+    width: 100%;
+    min-height: 520px;
+
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.15fr)
+        minmax(380px, .85fr);
+
+    align-items: center;
+    gap: 70px;
+
+    padding:
+        72px
+        max(
+            70px,
+            calc((100vw - 1320px) / 2 + 58px)
+        );
+
+    background:
+        radial-gradient(
+            circle at 81% 17%,
+            rgba(255,255,255,.94) 0 8%,
+            transparent 8.3%
+        ),
+        radial-gradient(
+            circle at 93% 78%,
+            rgba(255,255,255,.42) 0 20%,
+            transparent 20.3%
+        ),
+        linear-gradient(
+            135deg,
+            #FFF9F2 0%,
+            #F7E8D7 46%,
+            #E5C5A4 100%
+        );
+
+    border-bottom:
+        1px solid
+        var(--lens-border);
+
+    box-shadow:
+        0 18px 52px
+        rgba(61, 28, 15, .07);
+}
+
+
+.lenses-hero::before {
+    content: "";
+
+    position: absolute;
+
+    width: 340px;
+    height: 340px;
+
+    top: -112px;
+    right: 9%;
+
+    border:
+        1px solid
+        rgba(189,135,92,.28);
+
+    border-radius: 50%;
+
+    pointer-events: none;
+}
+
+
+.lenses-hero::after {
+    content: "";
+
+    position: absolute;
+
+    width: 220px;
+    height: 220px;
+
+    right: -55px;
+    bottom: -70px;
+
+    border:
+        1px solid
+        rgba(189,135,92,.22);
+
+    border-radius: 50%;
+
+    pointer-events: none;
+}
+
+
+.lenses-hero-copy {
+    position: relative;
+    z-index: 2;
+}
+
+
+.lenses-hero-label {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 22px;
+
+    color: var(--lens-primary);
+
+    font-size: 20px;
+    font-weight: 800;
+
+    letter-spacing: 2.7px;
+
+    text-transform: uppercase;
+}
+
+
+.lenses-hero-label::before {
+    content: "";
+
+    width: 42px;
+    height: 1px;
+
+    background: currentColor;
+}
+
+
+.lenses-hero-title {
+    max-width: 760px;
+
+    margin: 0 0 24px;
+
+    color: var(--lens-brown);
+
+    font-family:
+        'Playfair Display',
+        Georgia,
+        serif;
+
+    font-size:
+        clamp(
+            68px,
+            6vw,
+            92px
+        );
+
+    font-weight: 700;
+
+    line-height: 1.02;
+
+    letter-spacing: -2.4px;
+}
+
+
+.lenses-hero-description {
+    max-width: 760px;
+
+    margin: 0 0 34px;
+
+    color: var(--lens-brown-soft);
+
+    font-size: 25px;
+
+    line-height: 1.75;
+}
+
+
+.lenses-hero-actions {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 16px;
+}
+
+
+.lenses-hero-btn {
+    min-width: 175px;
+    min-height: 58px;
+
+    padding: 0 28px;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 999px;
+
+    text-decoration: none;
+
+    font-size: 20px;
+    font-weight: 700;
+
+    transition:
+        transform .22s ease,
+        background .22s ease,
+        border-color .22s ease;
+}
+
+
+.lenses-hero-btn.primary {
+    border:
+        1px solid
+        var(--lens-primary);
+
+    background:
+        var(--lens-primary);
+
+    color: #FFFFFF;
+
+    box-shadow:
+        0 10px 24px
+        rgba(189,135,92,.26);
+}
+
+
+.lenses-hero-btn.primary:hover {
+    transform: translateY(-2px);
+
+    background: #A97149;
+
+    border-color: #A97149;
+}
+
+
+.lenses-hero-btn.secondary {
+    border:
+        1px solid
+        rgba(61,28,15,.15);
+
+    background:
+        rgba(255,255,255,.72);
+
+    color:
+        var(--lens-brown);
+}
+
+
+.lenses-hero-btn.secondary:hover {
+    transform: translateY(-2px);
+
+    background: #FFFFFF;
+}
+
+
+/* =========================================================
+   HERO FEATURE CARD
+========================================================= */
+
+.lenses-hero-visual {
+    position: relative;
+    z-index: 2;
+
+    min-height: 360px;
+}
+
+
+.lenses-hero-glow {
+    position: absolute;
+
+    width: 320px;
+    height: 320px;
+
+    top: -15px;
+    right: 18px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,.40);
+
+    backdrop-filter: blur(7px);
+}
+
+
+.lenses-hero-glow.small {
+    width: 150px;
+    height: 150px;
+
+    top: auto;
+    right: auto;
+
+    left: 10px;
+    bottom: 0;
+
+    background:
+        rgba(255,255,255,.24);
+}
+
+
+.lenses-feature-card {
+    position: absolute;
+    overflow: hidden;
+
+    right: 0;
+    bottom: 8px;
+
+    width: 390px;
+
+    padding: 38px 34px;
+
+    border:
+        1px solid
+        rgba(189,135,92,.42);
+
+    border-radius: 28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.97),
+            rgba(255,248,239,.93)
+        );
+
+    box-shadow:
+        0 28px 70px
+        rgba(61,28,15,.18);
+
+    animation:
+        lensesFeatureFloat
+        4.2s
+        ease-in-out
+        infinite;
+
+    transition:
+        transform .35s ease,
+        box-shadow .35s ease;
+}
+
+
+.lenses-feature-card::before {
+    content: "";
+
+    position: absolute;
+
+    width: 150px;
+    height: 150%;
+
+    top: -25%;
+    left: -180px;
+
+    transform: rotate(16deg);
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.72),
+            transparent
+        );
+
+    pointer-events: none;
+
+    animation:
+        lensesFeatureShine
+        5.2s
+        ease-in-out
+        infinite;
+}
+
+
+.lenses-feature-card:hover {
+    transform:
+        translateY(-8px)
+        scale(1.018);
+
+    box-shadow:
+        0 34px 86px
+        rgba(61,28,15,.24);
+}
+
+
+.lenses-feature-label {
+    position: relative;
+    z-index: 2;
+
+    display: block;
+
+    margin-bottom: 16px;
+
+    color: var(--lens-primary);
+
+    font-size: 20px;
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+}
+
+
+.lenses-feature-card strong {
+    position: relative;
+    z-index: 2;
+
+    display: block;
+
+    margin-bottom: 16px;
+
+    color: var(--lens-brown);
+
+    font-family:
+        'Playfair Display',
+        Georgia,
+        serif;
+
+    font-size: 43px;
+
+    font-weight: 700;
+
+    line-height: 1.12;
+
+    letter-spacing: -1px;
+}
+
+
+.lenses-feature-card > p {
+    position: relative;
+    z-index: 2;
+
+    margin: 0;
+
+    color: var(--lens-brown-soft);
+
+    font-size: 20px;
+    font-weight: 500;
+
+    line-height: 1.75;
+}
+
+
+.lenses-feature-stats {
+    position: relative;
+    z-index: 2;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 12px;
+
+    margin-top: 24px;
+}
+
+
+.lenses-feature-stat {
+    min-height: 82px;
+
+    padding: 15px 14px;
+
+    border:
+        1px solid
+        #EEDFD2;
+
+    border-radius: 14px;
+
+    background:
+        rgba(255,255,255,.92);
+}
+
+
+.lenses-feature-stat b {
+    display: block;
+
+    color: var(--lens-primary);
+
+    font-size: 20px;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+}
+
+
+.lenses-feature-stat small {
+    display: block;
+
+    margin-top: 7px;
+
+    color: var(--lens-brown);
+
+    font-size: 20px;
+
+    font-weight: 500;
+
+    line-height: 1.45;
+}
+
+
+@keyframes lensesFeatureFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+
+}
+
+
+@keyframes lensesFeatureShine {
+
+    0%,
+    72% {
+        left: -180px;
+        opacity: 0;
+    }
+
+    78% {
+        opacity: 1;
+    }
+
+    92% {
+        left: 470px;
+        opacity: .85;
+    }
+
+    100% {
+        left: 470px;
+        opacity: 0;
+    }
+
+}
+
+
+/* =========================================================
+   QUICK BENEFITS
+========================================================= */
+
+.lenses-benefits {
+    width:
+        min(
+            1280px,
+            calc(100% - 48px)
+        );
+
+    margin:
+        30px auto 0;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    border:
+        1px solid
+        var(--lens-border);
+
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    background: #FFFFFF;
+}
+
+
+.lenses-benefit {
+    position: relative;
+
+    padding: 20px 22px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+}
+
+
+.lenses-benefit:not(:last-child)::after {
+    content: "";
+
+    position: absolute;
+
+    top: 20%;
+    right: 0;
+
+    width: 1px;
+    height: 60%;
+
+    background:
+        var(--lens-border);
+}
+
+
+.lenses-benefit-icon {
+    width: 40px;
+    height: 40px;
+
+    flex:
+        0 0 40px;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 50%;
+
+    background:
+        var(--lens-cream-light);
+
+    color:
+        var(--lens-primary);
+
+    font-size: 20px;
+    font-weight: 800;
+}
+
+
+.lenses-benefit strong {
+    display: block;
+
+    color: var(--lens-brown);
+
+    font-size: 20px;
+}
+
+
+.lenses-benefit small {
+    display: block;
+
+    margin-top: 4px;
+
+    color: var(--lens-muted);
+
+    font-size: 20px;
+
+    line-height: 1.45;
+}
+
+
+/* =========================================================
+   PRODUCTS SECTION
+========================================================= */
+
+.lenses-products-section {
+    width:
+        min(
+            1280px,
+            calc(100% - 48px)
+        );
+
+    margin:
+        72px auto 0;
+
+    padding-bottom: 100px;
+}
+
+
+.lenses-section-header {
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 24px;
+
+    margin-bottom: 30px;
+}
+
+
+.lenses-section-eyebrow {
+    display: block;
+
+    margin-bottom: 9px;
+
+    color:
+        var(--lens-primary);
+
+    font-size: 20px;
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+}
+
+
+.lenses-section-header h2 {
+    margin: 0;
+
+    color:
+        var(--lens-brown);
+
+    font-family:
+        'Playfair Display',
+        Georgia,
+        serif;
+
+    font-size:
+        clamp(
+            38px,
+            4vw,
+            54px
+        );
+
+    line-height: 1.1;
+}
+
+
+.lenses-section-header p {
+    max-width: 520px;
+
+    margin: 0;
+
+    color:
+        var(--lens-brown-soft);
+
+    font-size: 20px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   LENS CARD GRID
+========================================================= */
+
+.lenses-product-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap: 26px;
+}
+
+
+.lens-product-card {
+    overflow: hidden;
+
+    border:
+        1px solid
+        var(--lens-border);
+
+    border-radius: 22px;
+
+    background:
+        #FFFFFF;
+
+    box-shadow:
+        0 10px 30px
+        rgba(61,28,15,.045);
+
+    transition:
+        transform .28s ease,
+        box-shadow .28s ease,
+        border-color .28s ease;
+}
+
+
+.lens-product-card:hover {
+    transform:
+        translateY(-7px);
+
+    border-color:
+        #DAB896;
+
+    box-shadow:
+        0 24px 50px
+        rgba(61,28,15,.10);
+}
+
+
+/* =========================================================
+   LENS VISUAL PLACEHOLDER
+========================================================= */
+
+.lens-product-visual {
+    position: relative;
+
+    height: 310px;
+
+    overflow: hidden;
+
+    display: grid;
+
+    place-items: center;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(255,255,255,.96) 0 24%,
+            rgba(255,255,255,.42) 24.5% 42%,
+            transparent 42.5%
+        ),
+        linear-gradient(
+            160deg,
+            #FBF7F2,
+            #F4E7D9
+        );
+}
+
+
+.lens-product-visual::before,
+.lens-product-visual::after {
+    content: "";
+
+    position: absolute;
+
+    width: 150px;
+    height: 150px;
+
+    border:
+        8px solid
+        rgba(189,135,92,.65);
+
+    border-radius: 50%;
+
+    box-shadow:
+        inset 0 0 30px
+        rgba(255,255,255,.85);
+}
+
+
+.lens-product-visual::before {
+    left:
+        calc(50% - 158px);
+}
+
+
+.lens-product-visual::after {
+    right:
+        calc(50% - 158px);
+}
+
+
+.lens-product-bridge {
+    position: absolute;
+
+    width: 46px;
+    height: 8px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(189,135,92,.65);
+}
+
+
+.lens-product-shine {
+    position: absolute;
+
+    width: 56px;
+    height: 125px;
+
+    top: 75px;
+    left:
+        calc(50% - 105px);
+
+    transform:
+        rotate(28deg);
+
+    border-radius: 999px;
+
+    background:
+        rgba(255,255,255,.52);
+
+    filter:
+        blur(1px);
+}
+
+
+.lens-product-badge {
+    position: absolute;
+
+    top: 16px;
+    left: 16px;
+
+    padding:
+        8px 12px;
+
+    border-radius:
+        999px;
+
+    background:
+        rgba(255,255,255,.92);
+
+    color:
+        var(--lens-primary);
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: .6px;
+}
+
+
+.lens-product-body {
+    padding:
+        22px;
+}
+
+
+.lens-product-type {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color:
+        var(--lens-primary);
+
+    font-size: 20px;
+    font-weight: 800;
+
+    letter-spacing: 1.2px;
+
+    text-transform: uppercase;
+}
+
+
+.lens-product-title {
+    margin:
+        0 0 11px;
+
+    color:
+        var(--lens-brown);
+
+    font-family:
+        'Playfair Display',
+        Georgia,
+        serif;
+
+    font-size: 26px;
+
+    line-height: 1.25;
+}
+
+
+.lens-product-description {
+    min-height: 66px;
+
+    margin:
+        0 0 18px;
+
+    color:
+        var(--lens-brown-soft);
+
+    font-size: 13px;
+
+    line-height: 1.7;
+}
+
+
+.lens-product-tags {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    margin-bottom: 20px;
+}
+
+
+.lens-product-tag {
+    padding:
+        6px 9px;
+
+    border-radius:
+        999px;
+
+    background:
+        var(--lens-cream-light);
+
+    color:
+        var(--lens-brown-soft);
+
+    font-size: 20px;
+    font-weight: 600;
+}
+
+
+.lens-product-footer {
+    padding-top:
+        17px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+    border-top:
+        1px solid
+        #EFE4DA;
+}
+
+
+.lens-product-price-wrap small {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color:
+        var(--lens-muted);
+
+    font-size: 10px;
+
+    text-transform: uppercase;
+
+    letter-spacing: .8px;
+}
+
+
+.lens-product-price-wrap strong {
+    color:
+        var(--lens-brown);
+
+    font-size: 20px;
+}
+
+
+.lens-product-soon {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 38px;
+
+    padding:
+        0 14px;
+
+    border:
+        1px solid
+        var(--lens-border);
+
+    border-radius:
+        999px;
+
+    background:
+        var(--lens-cream-light);
+
+    color:
+        var(--lens-primary);
+
+    font-size: 20px;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   INFO CTA
+========================================================= */
+
+.lenses-consult {
+    width:
+        min(
+            1280px,
+            calc(100% - 48px)
+        );
+
+    margin:
+        0 auto 100px;
+
+    padding:
+        38px 42px;
+
+    display: grid;
+
+    grid-template-columns:
+        1fr auto;
+
+    align-items: center;
+
+    gap: 30px;
+
+    border-radius:
+        24px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #3D1C0F,
+            #5C3020
+        );
+
+    color:
+        #FFFFFF;
+}
+
+
+.lenses-consult h3 {
+    margin:
+        0 0 8px;
+
+    font-family:
+        'Playfair Display',
+        Georgia,
+        serif;
+
+    font-size:
+        36px;
+
+    line-height:
+        1.15;
+}
+
+
+.lenses-consult p {
+    max-width:
+        720px;
+
+    margin:
+        0;
+
+    color:
+        rgba(255,255,255,.78);
+
+    font-size:
+        14px;
+
+    line-height:
+        1.7;
+}
+
+
+.lenses-consult a {
+    min-height:
+        52px;
+
+    padding:
+        0 22px;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        999px;
+
+    background:
+        var(--lens-primary);
+
+    color:
+        #FFFFFF;
+
+    text-decoration:
+        none;
+
+    font-size:
+        20px;
+
+    font-weight:
+        700;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    .lenses-hero {
+        min-height:
+            500px;
+
+        padding:
+            60px 42px;
+
+        grid-template-columns:
+            minmax(0,1fr)
+            minmax(330px,.75fr);
+
+        gap:
+            36px;
+    }
+
+
+    .lenses-hero-title {
+        font-size:
+            62px;
+    }
+
+
+    .lenses-feature-card {
+        width:
+            340px;
+
+        padding:
+            30px 28px;
+    }
+
+
+    .lenses-feature-card strong {
+        font-size:
+            36px;
+    }
+
+
+    .lenses-product-grid {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0,1fr)
+            );
+    }
+
+}
+
+
+@media (max-width: 900px) {
+
+    .lenses-hero {
+        grid-template-columns:
+            1fr;
+
+        min-height:
+            auto;
+
+        padding:
+            52px 30px;
+
+        gap:
+            28px;
+    }
+
+
+    .lenses-hero-title {
+        font-size:
+            58px;
+    }
+
+
+    .lenses-hero-visual {
+        min-height:
+            300px;
+    }
+
+
+    .lenses-feature-card {
+        position:
+            relative;
+
+        right:
+            auto;
+        bottom:
+            auto;
+
+        width:
+            min(
+                390px,
+                100%
+            );
+    }
+
+
+    .lenses-benefits {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .lenses-benefit:not(:last-child)::after {
+        top:
+            auto;
+
+        left:
+            20px;
+        right:
+            20px;
+        bottom:
+            0;
+
+        width:
+            auto;
+        height:
+            1px;
+    }
+
+
+    .lenses-section-header {
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+    }
+
+
+    .lenses-consult {
+        grid-template-columns:
+            1fr;
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .lenses-hero {
+        padding:
+            42px 22px;
+    }
+
+
+    .lenses-hero-title {
+        font-size:
+            46px;
+
+        letter-spacing:
+            -1.2px;
+    }
+
+
+    .lenses-hero-description {
+        font-size:
+            16px;
+    }
+
+
+    .lenses-hero-actions {
+        flex-direction:
+            column;
+    }
+
+
+    .lenses-hero-btn {
+        width:
+            100%;
+    }
+
+
+    .lenses-feature-card strong {
+        font-size:
+            32px;
+    }
+
+
+    .lenses-feature-stats {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .lenses-benefits,
+    .lenses-products-section,
+    .lenses-consult {
+        width:
+            min(
+                100% - 28px,
+                1280px
+            );
+    }
+
+
+    .lenses-product-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .lens-product-visual {
+        height:
+            290px;
+    }
+
+
+    .lenses-consult {
+        padding:
+            30px 24px;
+    }
+
+
+    .lenses-consult h3 {
+        font-size:
+            30px;
+    }
+
+}
+
+
+@media (
+    prefers-reduced-motion:
+    reduce
+) {
+
+    .lenses-feature-card,
+    .lenses-feature-card::before {
+        animation:
+            none !important;
+    }
+
+}
+
+/* =========================================================
+   IMAGE BANNER FULL WIDTH
+========================================================= */
+
+.lens-image-hero {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: #F7EBDD;
+}
+
+.lens-image-hero__link {
+    position: relative;
+    display: block;
+    width: 100%;
+    text-decoration: none;
+    line-height: 0;
+}
+
+.lens-image-hero__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    object-position: center;
+    transform: scale(1);
+    transition:
+        transform .9s cubic-bezier(.2,.8,.2,1),
+        filter .5s ease;
+}
+
+.lens-image-hero:hover .lens-image-hero__image {
+    transform: scale(1.012);
+    filter: saturate(1.04) contrast(1.015);
+}
+
+/* Nút click thật nằm đúng vùng nút trong hình */
+.lens-image-hero__button {
+    position: absolute;
+    left: 13.8%;
+    bottom: 8.4%;
+
+    min-height: 58px;
+    padding: 0 26px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+
+    border-radius: 999px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(96, 39, 10, .98),
+            rgba(131, 61, 20, .98)
+        );
+
+    color: #FFFFFF;
+
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+
+    box-shadow:
+        0 12px 30px rgba(79, 30, 8, .25);
+
+    opacity: 0;
+    transform: translateY(8px);
+
+    transition:
+        opacity .25s ease,
+        transform .25s ease,
+        box-shadow .25s ease;
+}
+
+/* Ảnh đã có nút sẵn nên chỉ hiện nút thật khi hover */
+.lens-image-hero:hover .lens-image-hero__button {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.lens-image-hero__button b {
+    font-size: 22px;
+    line-height: 1;
+}
+
+
+/* =========================================================
+   MARQUEE BOXES
+========================================================= */
+
+.lens-marquee {
+    position: relative;
+    overflow: hidden;
+
+    width: 100%;
+
+    padding: 22px 0;
+
+    background:
+        linear-gradient(
+            90deg,
+            #3D1C0F,
+            #562814,
+            #3D1C0F
+        );
+
+    border-top:
+        1px solid
+        rgba(255,255,255,.08);
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.08);
+}
+
+.lens-marquee::before,
+.lens-marquee::after {
+    content: "";
+
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    bottom: 0;
+
+    width: 110px;
+
+    pointer-events: none;
+}
+
+.lens-marquee::before {
+    left: 0;
+
+    background:
+        linear-gradient(
+            90deg,
+            #3D1C0F,
+            rgba(61,28,15,0)
+        );
+}
+
+.lens-marquee::after {
+    right: 0;
+
+    background:
+        linear-gradient(
+            270deg,
+            #3D1C0F,
+            rgba(61,28,15,0)
+        );
+}
+
+.lens-marquee__track {
+    display: flex;
+    width: max-content;
+
+    animation:
+        lensMarqueeRun
+        34s
+        linear
+        infinite;
+}
+
+.lens-marquee:hover
+.lens-marquee__track {
+    animation-play-state: paused;
+}
+
+.lens-marquee__group {
+    display: flex;
+    align-items: stretch;
+    gap: 14px;
+
+    padding-right: 14px;
+}
+
+.lens-marquee__item {
+    width: 270px;
+    min-height: 92px;
+
+    padding: 16px 18px;
+
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.14);
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.10),
+            rgba(255,255,255,.045)
+        );
+
+    color: #FFFFFF;
+
+    box-shadow:
+        inset 0 1px 0
+        rgba(255,255,255,.08);
+
+    backdrop-filter: blur(6px);
+
+    transition:
+        transform .25s ease,
+        border-color .25s ease,
+        background .25s ease;
+}
+
+.lens-marquee__item:hover {
+    transform: translateY(-3px);
+
+    border-color:
+        rgba(215,169,127,.62);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(215,169,127,.18),
+            rgba(255,255,255,.06)
+        );
+}
+
+.lens-marquee__icon {
+    width: 50px;
+    height: 50px;
+    flex: 0 0 50px;
+
+    display: grid;
+    place-items: center;
+
+    border:
+        1px solid
+        rgba(215,169,127,.60);
+
+    border-radius: 50%;
+
+    color: #F6D9BE;
+
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.lens-marquee__item strong {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #FFFFFF;
+
+    font-family:
+        'Be Vietnam Pro',
+        sans-serif;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    line-height: 1.35;
+}
+
+.lens-marquee__item small {
+    display: block;
+
+    color:
+        rgba(255,255,255,.66);
+
+    font-family:
+        'Be Vietnam Pro',
+        sans-serif;
+
+    font-size: 11px;
+
+    line-height: 1.45;
+}
+
+@keyframes lensMarqueeRun {
+
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE IMAGE BANNER + MARQUEE
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .lens-image-hero__button {
+        left: 12%;
+        bottom: 8%;
+
+        min-height: 48px;
+
+        padding: 0 18px;
+
+        font-size: 13px;
+    }
+
+    .lens-marquee__item {
+        width: 235px;
+        min-height: 82px;
+
+        padding: 14px 16px;
+    }
+
+    .lens-marquee__icon {
+        width: 44px;
+        height: 44px;
+        flex-basis: 44px;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .lens-image-hero {
+        overflow-x: hidden;
+    }
+
+    .lens-image-hero__image {
+        width: 150%;
+        max-width: none;
+        margin-left: -25%;
+    }
+
+    .lens-image-hero__button {
+        display: none;
+    }
+
+    .lens-marquee {
+        padding: 16px 0;
+    }
+
+    .lens-marquee::before,
+    .lens-marquee::after {
+        width: 42px;
+    }
+
+    .lens-marquee__item {
+        width: 220px;
+    }
+
+}
+
+@media (
+    prefers-reduced-motion:
+    reduce
+) {
+
+    .lens-marquee__track {
+        animation: none;
+    }
+
+    .lens-image-hero__image {
+        transition: none;
+    }
+
+}
+
+
+/* =========================================================
+   SẢN PHẨM TRÒNG KÍNH TỪ DATABASE
+========================================================= */
+
+.real-lens-product .lens-product-visual::before,
+.real-lens-product .lens-product-visual::after {
+    display: none;
+}
+
+.real-lens-image {
+    text-decoration: none;
+    background: #FBF7F2;
+}
+
+.real-lens-image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+    transition: transform .35s ease;
+}
+
+.real-lens-product:hover .real-lens-image img {
+    transform: scale(1.035);
+}
+
+.lens-no-image {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    color: var(--lens-muted);
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.lens-product-title-link {
+    color: inherit;
+    text-decoration: none;
+    transition: color .2s ease;
+}
+
+.lens-product-title-link:hover {
+    color: var(--lens-primary);
+}
+
+.real-lens-product .lens-product-description {
+    min-height: 72px;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.lens-db-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin: 0 0 18px;
+}
+
+.lens-db-tag {
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: var(--lens-cream-light);
+    color: var(--lens-brown-soft);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.lens-old-price {
+    display: block;
+    margin-top: 4px;
+    color: var(--lens-muted);
+    font-size: 13px;
+    text-decoration: line-through;
+}
+
+.lens-product-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 38px;
+    padding: 0 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.lens-product-status.in-stock {
+    background: #F4EEE7;
+    color: var(--lens-primary);
+}
+
+.lens-product-status.out-stock {
+    background: #F3F3F3;
+    color: #999999;
+}
+
+.lens-add-form {
+    margin: 14px 0 0;
+}
+
+.lens-variant-select {
+    width: 100%;
+    min-height: 46px;
+    padding: 0 14px;
+    border: 1px solid var(--lens-border);
+    border-radius: 12px;
+    background: #FFFFFF;
+    color: var(--lens-brown);
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 14px;
+    outline: none;
+}
+
+.lens-variant-select:focus {
+    border-color: var(--lens-primary);
+}
+
+.lens-product-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.lens-detail-btn,
+.lens-cart-btn {
+    min-height: 46px;
+    padding: 0 15px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform .2s ease, background .2s ease, border-color .2s ease;
+}
+
+.lens-detail-btn {
+    border: 1px solid var(--lens-border);
+    background: #FFFFFF;
+    color: var(--lens-brown);
+}
+
+.lens-cart-btn {
+    width: 100%;
+    border: 1px solid var(--lens-primary);
+    background: var(--lens-primary);
+    color: #FFFFFF;
+}
+
+.lens-detail-btn:hover,
+.lens-cart-btn:hover {
+    transform: translateY(-1px);
+}
+
+.lens-cart-btn:hover {
+    background: #A97149;
+    border-color: #A97149;
+}
+
+.lens-cart-btn.disabled,
+.lens-cart-btn:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.lens-products-empty {
+    grid-column: 1 / -1;
+    padding: 55px 28px;
+    border: 1px dashed var(--lens-border);
+    border-radius: 22px;
+    background: #FFFFFF;
+    text-align: center;
+}
+
+.lens-products-empty h3 {
+    margin: 0 0 8px;
+    color: var(--lens-brown);
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 30px;
+}
+
+.lens-products-empty p {
+    margin: 0;
+    color: var(--lens-brown-soft);
+    font-size: 15px;
+}
+
+@media (max-width: 650px) {
+    .lens-product-actions {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =====================================================
+   MINOO - LENS PRODUCT CARD COMPACT
+   GIAO DIỆN GIỐNG TRANG GỌNG KÍNH
+===================================================== */
+
+/* Lưới sản phẩm: 4 cột */
+.minoo-lenses-page .lenses-product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 25px;
+}
+
+/* Thẻ sản phẩm */
+.minoo-lenses-page .lens-product-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-width: 0;
+    border-radius: 14px;
+    overflow: visible;
+}
+
+/* Ảnh sản phẩm */
+.minoo-lenses-page .lens-product-visual {
+    height: auto;
+    aspect-ratio: 1 / 1;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-radius: 14px 14px 0 0;
+}
+
+.minoo-lenses-page .real-lens-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Phần thông tin */
+.minoo-lenses-page .lens-product-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    padding: 18px;
+}
+
+/* Tên sản phẩm */
+.minoo-lenses-page .lens-product-title {
+    margin: 0 0 12px;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+/* Giá nằm cùng vị trí trong mỗi hàng */
+.minoo-lenses-page .lens-simple-price {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: auto;
+    margin-bottom: 15px;
+}
+
+.minoo-lenses-page .lens-simple-price strong {
+    color: #A97149;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.minoo-lenses-page .lens-simple-price del {
+    color: #8A7468;
+    font-size: 14px;
+}
+
+/* Hai nút cùng một hàng */
+.minoo-lenses-page .lens-product-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 8px;
+    margin-top: 0;
+}
+
+.minoo-lenses-page .lens-detail-btn,
+.minoo-lenses-page .lens-cart-btn {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 8px;
+    box-sizing: border-box;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.minoo-lenses-page .lens-simple-cart-form {
+    margin: 0;
+    min-width: 0;
+}
+
+/* Khung chọn biến thể */
+.minoo-lenses-page .lens-variant-picker {
+    position: relative;
+    min-width: 0;
+}
+
+.minoo-lenses-page .lens-variant-picker summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    list-style: none;
+    cursor: pointer;
+}
+
+.minoo-lenses-page .lens-variant-picker summary::-webkit-details-marker {
+    display: none;
+}
+
+.minoo-lenses-page .lens-variant-picker-form {
+    position: absolute;
+    z-index: 20;
+    top: calc(100% + 10px);
+    right: 0;
+    width: min(280px, 80vw);
+    padding: 15px;
+    border: 1px solid #EAD7C4;
+    border-radius: 14px;
+    background: #FFFFFF;
+    box-shadow: 0 12px 30px rgba(61,28,15,.12);
+}
+
+.minoo-lenses-page .lens-variant-picker-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.minoo-lenses-page .lens-variant-picker-form select {
+    width: 100%;
+    min-height: 42px;
+    margin-bottom: 12px;
+    padding: 8px;
+    border: 1px solid #EAD7C4;
+    border-radius: 10px;
+    background: #FFFFFF;
+    color: #3D1C0F;
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+    .minoo-lenses-page .lenses-product-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 800px) {
+    .minoo-lenses-page .lenses-product-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 15px;
+    }
+}
+
+@media (max-width: 550px) {
+    .minoo-lenses-page .lenses-product-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .minoo-lenses-page .lens-product-actions {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+</style>
+
+
+<div class="minoo-lenses-page">
+
+    <!-- =====================================================
+         HERO IMAGE BANNER
+         Ảnh banner được giữ nguyên, không crop mạnh.
+    ====================================================== -->
+
+    <section class="lens-image-hero">
+
+        <a
+            href="#lens-products"
+            class="lens-image-hero__link"
+            aria-label="Khám phá tròng kính"
+        >
+
+            <img
+                src="{% static 'images/lenses/lens-banner.png' %}"
+                alt="MINOO Lens Collection - Tròng kính chính hãng"
+                class="lens-image-hero__image"
+            >
+
+            <!-- Nút thật đặt đè lên ảnh để khách bấm được -->
+            <span class="lens-image-hero__button">
+                Khám phá tròng kính
+                <b>→</b>
+            </span>
+
+        </a>
+
+    </section>
+
+
+    <!-- =====================================================
+         MARQUEE - CÁC Ô CHẠY DƯỚI BANNER
+    ====================================================== -->
+
+    <section class="lens-marquee" aria-label="Tính năng tròng kính">
+
+        <div class="lens-marquee__track">
+
+            <!-- NHÓM 1 -->
+            <div class="lens-marquee__group">
+
+                <div class="lens-marquee__item">
+                    <span class="lens-marquee__icon">◉</span>
+                    <div>
+                        <strong>Lọc ánh sáng xanh</strong>
+                        <small>Hỗ trợ khi dùng màn hình</small>
+                    </div>
+                </div>
+
+                <div class="lens-marquee__item">
+                    <span class="lens-marquee__icon">◐</span>
+                    <div>
+                        <strong>Đổi màu</strong>
+                        <small>Thích ứng theo môi trường sáng</small>
+                    </div>
+                </div>
+
+                <div class="lens-marquee__item">
+                    <span class="lens-marquee__icon">◇</span>
+                    <div>
+                        <strong>Chống chói</strong>
+                        <small>Giảm phản xạ khó chịu</small>
+                    </div>
+                </div>
+
+                <div class="lens-marquee__item">
+                    <span class="lens-marquee__icon">UV</span>
+                    <div>
+                        <strong>Chống tia UV</strong>
+                        <small>Hỗ trợ bảo vệ mắt ngoài trời</small>
+                    </div>
+                </div>
+
+                <div class="lens-marquee__item">
+                    <span class="lens-marquee__icon">＋</span>
+                    <div>
+                        <strong>Kiểm soát cận thị</strong>
+                        <small>Lựa chọn theo nhu cầu thị lực</small>
+                    </div>
+                </div>
+
+                <div class="lens-marquee__item">
+                    <span class="lens-marquee__icon">✦</span>
+                    <div>
+                        <strong>Chống bể</strong>
+                        <small>Tăng độ bền khi sử dụng</small>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- NHÓM 2 - LẶP LẠI ĐỂ CHẠY LIÊN TỤC -->
+            <div class="lens-marquee__group" aria-hidden="true">
+
+                <div class="lens-marquee__item">
+                    <span class="lens-marquee__icon">◉</span>
+                    <div>
+                        <strong>Lọc ánh sáng xanh</strong>
+                        <small>Hỗ trợ khi dùng màn hình</small>
+                    </div>
+                </div>
+
+                <div class="lens-marquee__item">
+                    <span class="lens-marquee__icon">◐</span>
+                    <div>
+                        <strong>Đổi màu</strong>
+                        <small>Thích ứng theo môi trường sáng</small>
+                    </div>
+                </div>
+
+                <div class="lens-marquee__item">
+                    <span class="lens-marquee__icon">◇</span>
+                    <div>
+                        <strong>Chống chói</strong>
+                        <small>Giảm phản xạ khó chịu</small>
+                    </div>
+                </div>
+
+                <div class="lens-marquee__item">
+                    <span class="lens-marquee__icon">UV</span>
+                    <div>
+                        <strong>Chống tia UV</strong>
+                        <small>Hỗ trợ bảo vệ mắt ngoài trời</small>
+                    </div>
+                </div>
+
+                <div class="lens-marquee__item">
+                    <span class="lens-marquee__icon">＋</span>
+                    <div>
+                        <strong>Kiểm soát cận thị</strong>
+                        <small>Lựa chọn theo nhu cầu thị lực</small>
+                    </div>
+                </div>
+
+                <div class="lens-marquee__item">
+                    <span class="lens-marquee__icon">✦</span>
+                    <div>
+                        <strong>Chống bể</strong>
+                        <small>Tăng độ bền khi sử dụng</small>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         BENEFITS
+    ====================================================== -->
+
+    <section class="lenses-benefits">
+
+        <div class="lenses-benefit">
+
+            <span class="lenses-benefit-icon">
+                ◉
+            </span>
+
+            <div>
+
+                <strong>
+                    Chọn theo nhu cầu
+                </strong>
+
+                <small>
+                    Học tập, công việc, lái xe và sử dụng thiết bị số
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="lenses-benefit">
+
+            <span class="lenses-benefit-icon">
+                ✦
+            </span>
+
+            <div>
+
+                <strong>
+                    Tư vấn dễ hiểu
+                </strong>
+
+                <small>
+                    MINOO giúp bạn hiểu sự khác nhau giữa từng lựa chọn
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="lenses-benefit">
+
+            <span class="lenses-benefit-icon">
+                ✓
+            </span>
+
+            <div>
+
+                <strong>
+                    Phù hợp với gọng
+                </strong>
+
+                <small>
+                    Lựa chọn tròng hài hòa với mẫu gọng và nhu cầu sử dụng
+                </small>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PRODUCT FRAME - DỮ LIỆU THẬT TỪ DATABASE
+    ====================================================== -->
+
+    <section
+        class="lenses-products-section"
+        id="lens-products"
+    >
+
+        <div class="lenses-section-header">
+
+            <div>
+
+                <span class="lenses-section-eyebrow">
+                    LENS COLLECTION
+                </span>
+
+                <h2>
+                    Các dòng tròng kính
+                </h2>
+
+            </div>
+
+
+            <p>
+                Khám phá các sản phẩm tròng kính đang được MINOO cung cấp.
+                Sản phẩm được cập nhật trực tiếp từ trang quản trị.
+            </p>
+
+        </div>
+
+
+        <div class="lenses-product-grid">
+
+            {% for product in products %}
+
+                <article class="lens-product-card real-lens-product">
+
+                    <!-- =========================================
+                         ẢNH SẢN PHẨM
+                    ========================================== -->
+                    <a
+                        href="{% url 'product_detail' product.id %}"
+                        class="lens-product-visual real-lens-image"
+                    >
+
+                        {% if product.image %}
+
+                            <img
+                                src="{{ product.image.url }}"
+                                alt="{{ product.name }}"
+                            >
+
+                        {% else %}
+
+                            <div class="lens-no-image">
+                                Chưa có hình ảnh
+                            </div>
+
+                        {% endif %}
+
+
+                        {% if product.discount_percent > 0 %}
+
+                            <span class="lens-product-badge">
+                                -{{ product.discount_percent }}%
+                            </span>
+
+                        {% else %}
+
+                            <span class="lens-product-badge">
+                                TRÒNG KÍNH
+                            </span>
+
+                        {% endif %}
+
+                    </a>
+
+
+                    <!-- =========================================
+                         NỘI DUNG SẢN PHẨM
+                    ========================================== -->
+
+<div class="lens-product-body">
+
+    <!-- TÊN SẢN PHẨM -->
+    <h3 class="lens-product-title">
+        <a
+            href="{% url 'product_detail' product.id %}"
+            class="lens-product-title-link"
+        >
+            {{ product.name }}
+        </a>
+    </h3>
+
+    <!-- GIÁ SẢN PHẨM -->
+    <div class="lens-simple-price">
+        <strong>
+            {{ product.sale_price|vnd }}₫
+        </strong>
+
+        {% if product.original_price > product.sale_price %}
+            <del>
+                {{ product.original_price|vnd }}₫
+            </del>
+        {% endif %}
+    </div>
+
+    <!-- HAI NÚT -->
+    <div class="lens-product-actions">
+
+        <a
+            href="{% url 'product_detail' product.id %}"
+            class="lens-detail-btn"
+        >
+            Xem chi tiết
+        </a>
+
+        {% if product.has_variants %}
+
+            {% if product.total_variant_stock > 0 %}
+
+                <!-- Chỉ mở chọn phiên bản khi bấm -->
+                <details class="lens-variant-picker">
+                    <summary class="lens-cart-btn">
+                        Thêm vào giỏ
+                    </summary>
+
+                    <form
+                        method="post"
+                        action="{% url 'add_to_cart' product.id %}"
+                        class="lens-variant-picker-form"
+                    >
+                        {% csrf_token %}
+
+                        <input type="hidden"
+                               name="quantity"
+                               value="1">
+
+                        <input type="hidden"
+                               name="next"
+                               value="{{ request.get_full_path }}">
+
+                        <label>
+                            Chọn phiên bản
+                        </label>
+
+                        <select name="variant_id" required>
+                            <option value="">
+                                -- Chọn phiên bản --
+                            </option>
+
+                            {% for variant in product.active_variants %}
+                                <option
+                                    value="{{ variant.id }}"
+                                    {% if variant.stock <= 0 %}disabled{% endif %}
+                                >
+                                    {{ variant }}
+                                    — Còn {{ variant.stock }}
+                                </option>
+                            {% endfor %}
+                        </select>
+
+                        <button
+                            type="submit"
+                            class="lens-cart-btn"
+                        >
+                            Xác nhận thêm vào giỏ
+                        </button>
+                    </form>
+                </details>
+
+            {% else %}
+
+                <button
+                    type="button"
+                    class="lens-cart-btn disabled"
+                    disabled
+                >
+                    Hết hàng
+                </button>
+
+            {% endif %}
+
+        {% else %}
+
+            {% if product.stock > 0 %}
+
+                <form
+                    method="post"
+                    action="{% url 'add_to_cart' product.id %}"
+                    class="lens-simple-cart-form"
+                >
+                    {% csrf_token %}
+
+                    <input type="hidden"
+                           name="quantity"
+                           value="1">
+
+                    <input type="hidden"
+                           name="next"
+                           value="{{ request.get_full_path }}">
+
+                    <button
+                        type="submit"
+                        class="lens-cart-btn"
+                    >
+                        Thêm vào giỏ
+                    </button>
+                </form>
+
+            {% else %}
+
+                <button
+                    type="button"
+                    class="lens-cart-btn disabled"
+                    disabled
+                >
+                    Hết hàng
+                </button>
+
+            {% endif %}
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+
+                </article>
+
+            {% empty %}
+
+                <div class="lens-products-empty">
+
+                    <h3>
+                        Chưa có sản phẩm tròng kính
+                    </h3>
+
+                    <p>
+                        Vào Admin → Sản phẩm → thêm sản phẩm mới,
+                        chọn danh mục “Tròng kính” và bật hiển thị trên website.
+                    </p>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CONSULT CTA
+    ====================================================== -->
+
+    <section class="lenses-consult">
+
+        <div>
+
+            <h3>
+                Chưa biết nên chọn tròng kính nào?
+            </h3>
+
+            <p>
+                Mỗi nhu cầu sử dụng sẽ phù hợp với một lựa chọn khác nhau.
+                Liên hệ MINOO để được tư vấn theo thói quen sử dụng,
+                mẫu gọng và nhu cầu thực tế của bạn.
+            </p>
+
+        </div>
+
+
+        <a href="{% url 'contact' %}">
+            Nhận tư vấn từ MINOO
+        </a>
+
+    </section>
+
+</div>
+
+{% endblock %}

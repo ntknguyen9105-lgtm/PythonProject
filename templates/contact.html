@@ -1,0 +1,243 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Liên hệ | MINOO Eyewear
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/contact.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+<!-- =====================================================
+     01. HERO
+===================================================== -->
+<section class="contact-hero">
+
+    <img
+        src="{% static 'images/about/store-main.jpg' %}"
+        alt="Không gian MINOO Eyewear"
+        class="contact-hero-image"
+    >
+
+    <div class="contact-hero-overlay"></div>
+
+    <div class="container contact-hero-content">
+
+        <span class="contact-label">MINOO EYEWEAR</span>
+
+        <h1>
+            Liên hệ với <em>MINOO</em>
+        </h1>
+
+        <p>
+            Bạn cần tư vấn chọn kính hoặc muốn ghé cửa hàng?
+            Hãy để lại lời nhắn, MINOO sẽ phản hồi cho bạn sớm nhất.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     02. FORM + THÔNG TIN CỬA HÀNG
+===================================================== -->
+<section class="contact-main">
+
+    <div class="container contact-grid">
+
+
+        <!-- FORM -->
+        <div class="contact-card">
+
+            <h2>Gửi lời nhắn cho MINOO</h2>
+
+            <p>
+                Điền thông tin bên dưới, MINOO sẽ liên hệ lại với bạn.
+            </p>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="contact-alert {% if message.tags == 'error' %}error{% else %}success{% endif %}" role="status">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="post" class="contact-form" novalidate>
+
+                {% csrf_token %}
+
+                <!-- Ô chống spam: người thật sẽ không thấy và không điền -->
+                <div class="contact-hp" aria-hidden="true">
+                    <label for="id_website">Website</label>
+                    <input type="text" name="website" id="id_website" tabindex="-1" autocomplete="off">
+                </div>
+
+                <div class="contact-row-2">
+
+                    <div class="contact-field">
+                        <label for="id_name">
+                            Họ và tên <span class="req">*</span>
+                        </label>
+                        <input type="text" name="name" id="id_name" value="{{ form.name.value|default:'' }}" placeholder="Nguyễn Văn A" maxlength="100" autocomplete="name" required>
+                        {% for error in form.name.errors %}
+                            <div class="contact-error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="contact-field">
+                        <label for="id_phone">
+                            Số điện thoại <span class="req">*</span>
+                        </label>
+                        <input type="tel" name="phone" id="id_phone" value="{{ form.phone.value|default:'' }}" placeholder="090 xxx xx xx" maxlength="20" inputmode="tel" autocomplete="tel" required>
+                        {% for error in form.phone.errors %}
+                            <div class="contact-error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                </div>
+
+                <div class="contact-field">
+                    <label for="id_email">Email</label>
+                    <input type="email" name="email" id="id_email" value="{{ form.email.value|default:'' }}" placeholder="email@example.com" maxlength="254" autocomplete="email">
+                    {% for error in form.email.errors %}
+                        <div class="contact-error">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="contact-field grow">
+                    <label for="id_message">
+                        Nội dung <span class="req">*</span>
+                    </label>
+                    <textarea name="message" id="id_message" rows="5" placeholder="Bạn cần MINOO tư vấn điều gì?" required>{{ form.message.value|default:'' }}</textarea>
+                    {% for error in form.message.errors %}
+                        <div class="contact-error">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div>
+                    <button type="submit" class="contact-submit">
+                        Gửi lời nhắn
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <!-- THÔNG TIN -->
+        <div class="contact-card contact-info">
+
+            <span class="store-label">MINOO EYEWEAR</span>
+
+            <h2>112 Thái Thị Bôi</h2>
+
+            <p class="store-location">Đà Nẵng, Việt Nam</p>
+
+            <div class="contact-item">
+                <div class="contact-icon">📍</div>
+                <div>
+                    <small>Địa chỉ</small>
+                    <strong>112 Thái Thị Bôi, Đà Nẵng</strong>
+                </div>
+            </div>
+
+            <div class="contact-item">
+                <div class="contact-icon">☎</div>
+                <div>
+                    <small>Hotline</small>
+                    <a href="tel:0906971796">090 697 17 96</a>
+                </div>
+            </div>
+
+            <div class="contact-item">
+                <div class="contact-icon">✉</div>
+                <div>
+                    <small>Email</small>
+                    <a href="mailto:matkinhminoo@gmail.com">matkinhminoo@gmail.com</a>
+                </div>
+            </div>
+
+            <a
+                href="https://www.google.com/maps/search/?api=1&query=112%20Th%C3%A1i%20Th%E1%BB%8B%20B%C3%B4i%2C%20%C4%90%C3%A0%20N%E1%BA%B5ng%2C%20Vietnam"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="contact-direction"
+            >
+                Chỉ đường trên Google Maps
+                <span>↗</span>
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     03. BẢN ĐỒ
+===================================================== -->
+<section class="contact-map">
+
+    <div class="container">
+
+        <div class="store-locator">
+
+            <!-- DANH SÁCH CỬA HÀNG
+                 Thêm chi nhánh: copy 1 nút <button> bên dưới, đổi data-address, tên và địa chỉ -->
+            <div class="store-list" role="tablist" aria-label="Danh sách cửa hàng MINOO">
+
+                <button
+                    type="button"
+                    class="store-item active"
+                    role="tab"
+                    aria-selected="true"
+                    data-address="112 Thái Thị Bôi, Đà Nẵng, Vietnam"
+                >
+                    <strong>MINOO Eyewear Đà Nẵng</strong>
+                    <span>112 Thái Thị Bôi, Đà Nẵng</span>
+                </button>
+
+            </div>
+
+            <!-- BẢN ĐỒ -->
+            <div class="store-map">
+                <iframe
+                    id="storeMap"
+                    src="https://www.google.com/maps?q=112%20Th%C3%A1i%20Th%E1%BB%8B%20B%C3%B4i%2C%20%C4%90%C3%A0%20N%E1%BA%B5ng%2C%20Vietnam&output=embed"
+                    title="Bản đồ MINOO Eyewear"
+                    loading="lazy"
+                    allowfullscreen=""
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<script>
+(function () {
+    var items = document.querySelectorAll('.store-item');
+    var map = document.getElementById('storeMap');
+    items.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            items.forEach(function (b) { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+            btn.classList.add('active');
+            btn.setAttribute('aria-selected', 'true');
+            map.src = 'https://www.google.com/maps?q=' + encodeURIComponent(btn.dataset.address) + '&output=embed';
+        });
+    });
+})();
+</script>
+
+{% endblock %}

@@ -1,0 +1,395 @@
+{% extends 'base.html' %}
+
+{% block title %}Đơn hàng của tôi | Minoo Eyewear{% endblock %}
+
+{% block content %}
+
+<div class="orders-page">
+
+    <div class="orders-container">
+
+        <!-- HEADER -->
+        <div class="orders-header">
+            <div>
+                <p class="orders-eyebrow">MINOO EYEWEAR</p>
+
+                <h1>Đơn hàng của tôi</h1>
+
+                <p class="orders-description">
+                    Theo dõi các đơn hàng bạn đã đặt tại Minoo.
+                </p>
+            </div>
+        </div>
+
+
+        {% if orders %}
+
+            <!-- DANH SÁCH ĐƠN -->
+            <div class="orders-list">
+
+                {% for order in orders %}
+
+                    <div class="order-card">
+
+                        <!-- TOP -->
+                        <div class="order-card-top">
+
+                            <div>
+                                <span class="order-label">
+                                    MÃ ĐƠN HÀNG
+                                </span>
+
+                                <h2>
+                                    {{ order.order_code }}
+                                </h2>
+                            </div>
+
+                            <span class="order-status status-{{ order.status }}">
+                                {{ order.get_status_display }}
+                            </span>
+
+                        </div>
+
+
+                        <!-- THÔNG TIN -->
+                        <div class="order-info">
+
+                            <div class="order-info-item">
+                                <span>Ngày đặt</span>
+
+                                <strong>
+                                    {{ order.created_at|date:"d/m/Y H:i" }}
+                                </strong>
+                            </div>
+
+
+                            <div class="order-info-item">
+                                <span>Sản phẩm</span>
+
+                                <strong>
+                                    {{ order.items.count }} sản phẩm
+                                </strong>
+                            </div>
+
+
+                            <div class="order-info-item">
+                                <span>Thanh toán</span>
+
+                                <strong>
+                                    {{ order.get_payment_status_display }}
+                                </strong>
+                            </div>
+
+
+                            <div class="order-info-item">
+                                <span>Tổng tiền</span>
+
+                                <strong>
+                                    {{ order.total|floatformat:0 }} ₫
+                                </strong>
+                            </div>
+
+                        </div>
+
+
+                        <!-- BUTTON -->
+                        <div class="order-card-bottom">
+
+                            <a
+                                href="{% url 'order_tracking_detail' order.id %}"
+                                class="order-track-btn"
+                            >
+                                Theo dõi đơn hàng
+                                <span>→</span>
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <!-- KHÔNG CÓ ĐƠN -->
+            <div class="empty-orders">
+
+                <div class="empty-orders-icon">
+                    ◌
+                </div>
+
+                <h2>Bạn chưa có đơn hàng nào</h2>
+
+                <p>
+                    Các đơn hàng bạn đặt sẽ xuất hiện tại đây.
+                </p>
+
+                <a
+                    href="{% url 'products' %}"
+                    class="order-shopping-btn"
+                >
+                    Khám phá sản phẩm
+                    <span>→</span>
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+<style>
+
+.orders-page {
+    padding: 70px 20px 100px;
+    background: #f8f7f4;
+    min-height: 70vh;
+}
+
+.orders-container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.orders-header {
+    margin-bottom: 40px;
+}
+
+.orders-eyebrow {
+    margin: 0 0 10px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    font-weight: 600;
+}
+
+.orders-header h1 {
+    margin: 0 0 12px;
+    font-size: 42px;
+    font-weight: 500;
+    letter-spacing: -1px;
+}
+
+.orders-description {
+    margin: 0;
+    color: #777;
+    font-size: 15px;
+}
+
+
+/* LIST */
+
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+
+/* CARD */
+
+.order-card {
+    background: #fff;
+    border: 1px solid #e8e5df;
+    padding: 28px;
+    transition: 0.2s ease;
+}
+
+.order-card:hover {
+    border-color: #cfcac1;
+}
+
+
+/* TOP */
+
+.order-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid #eee;
+}
+
+.order-label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: #999;
+    margin-bottom: 6px;
+}
+
+.order-card h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+
+/* STATUS */
+
+.order-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 13px;
+    font-size: 12px;
+    border-radius: 30px;
+    background: #f3f1ed;
+}
+
+.status-cancelled {
+    background: #f5e7e7;
+    color: #a33;
+}
+
+
+/* INFO */
+
+.order-info {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 24px 0;
+}
+
+.order-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.order-info-item span {
+    font-size: 12px;
+    color: #999;
+}
+
+.order-info-item strong {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+
+/* BOTTOM */
+
+.order-card-bottom {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.order-track-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 20px;
+    background: #111;
+    color: #fff;
+    text-decoration: none;
+    font-size: 13px;
+    transition: 0.2s ease;
+}
+
+.order-track-btn:hover {
+    background: #333;
+    color: #fff;
+}
+
+.order-track-btn span {
+    font-size: 17px;
+}
+
+
+/* EMPTY */
+
+.empty-orders {
+    background: #fff;
+    border: 1px solid #e8e5df;
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.empty-orders-icon {
+    font-size: 45px;
+    color: #aaa;
+    margin-bottom: 20px;
+}
+
+.empty-orders h2 {
+    margin: 0 0 10px;
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.empty-orders p {
+    margin: 0 0 28px;
+    color: #888;
+}
+
+.order-shopping-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    background: #111;
+    color: #fff;
+    padding: 13px 22px;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.order-shopping-btn:hover {
+    color: #fff;
+    background: #333;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+
+    .orders-page {
+        padding: 45px 15px 70px;
+    }
+
+    .orders-header h1 {
+        font-size: 32px;
+    }
+
+    .order-card {
+        padding: 20px;
+    }
+
+    .order-card-top {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .order-info {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .order-card-bottom {
+        justify-content: stretch;
+    }
+
+    .order-track-btn {
+        justify-content: center;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .order-info {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+</style>
+
+{% endblock %}

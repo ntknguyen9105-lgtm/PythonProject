@@ -1,0 +1,357 @@
+/* =========================================================
+   MINOO - UPSELL & CROSS-SELL
+   PRODUCT RECOMMENDATION CARDS
+========================================================= */
+
+.product-recommendations {
+    width: min(1200px, calc(100% - 20px));
+    margin: 70px auto 0;
+    padding-top: 45px;
+    border-top: 1px solid #eee4dc;
+}
+
+
+/* =========================================================
+   TIÊU ĐỀ KHU VỰC
+========================================================= */
+
+.recommendations-heading {
+    margin-bottom: 28px;
+    text-align: left;
+}
+
+.recommendations-eyebrow {
+    display: block;
+    margin-bottom: 8px;
+    color: #BD875C;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+}
+
+.recommendations-heading h2 {
+    margin: 0;
+    color: #3D1C0F;
+    font-size: 25px;
+    font-weight: 600;
+    line-height: 1.35;
+}
+
+.recommendations-heading p {
+    margin: 8px 0 0;
+    color: #806f65;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.recommendation-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+}
+
+
+/* =========================================================
+   CARD SẢN PHẨM
+========================================================= */
+
+.recommendation-card {
+    position: relative;
+    overflow: hidden;
+
+    background: #ffffff;
+    border: 1px solid #eee5df;
+    border-radius: 12px;
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.recommendation-card:hover {
+    transform: translateY(-4px);
+
+    border-color: #d8b9a3;
+
+    box-shadow:
+        0 12px 28px rgba(61, 28, 15, 0.10);
+}
+
+
+/* =========================================================
+   ẢNH
+========================================================= */
+
+.recommendation-image {
+    position: relative;
+
+    display: block;
+
+    width: 100%;
+    aspect-ratio: 1 / 1;
+
+    overflow: hidden;
+
+    background: #f8f4ef;
+}
+
+.recommendation-image img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    transition: transform 0.45s ease;
+}
+
+.recommendation-card:hover
+.recommendation-image img {
+    transform: scale(1.04);
+}
+
+
+/* Không có ảnh */
+
+.recommendation-no-image {
+    display: flex;
+
+    width: 100%;
+    height: 100%;
+
+    align-items: center;
+    justify-content: center;
+
+    color: #BD875C;
+
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: 2px;
+}
+
+
+/* =========================================================
+   NHÃN UPSELL / CROSS-SELL
+========================================================= */
+
+.recommendation-label {
+    display: inline-flex;
+
+    margin-bottom: 9px;
+    padding: 4px 8px;
+
+    background: #fdf1e5;
+
+    color: #9b6847;
+
+    font-size: 9px;
+    font-weight: 600;
+
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   THÔNG TIN
+========================================================= */
+
+.recommendation-info {
+    padding: 17px 17px 18px;
+}
+
+
+/* Tên sản phẩm */
+
+.recommendation-info h3 {
+    margin: 0 0 12px;
+
+    min-height: 42px;
+}
+
+.recommendation-info h3 a {
+    display: -webkit-box;
+
+    overflow: hidden;
+
+    color: #3D1C0F;
+
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.45;
+
+    text-decoration: none;
+
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+
+    transition: color 0.2s ease;
+}
+
+.recommendation-info h3 a:hover {
+    color: #BD875C;
+}
+
+
+/* =========================================================
+   GIÁ
+========================================================= */
+
+.recommendation-price {
+    display: flex;
+
+    align-items: baseline;
+
+    gap: 9px;
+
+    margin-bottom: 15px;
+}
+
+.recommendation-price strong {
+    color: #BD875C;
+
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.recommendation-price del {
+    color: #a99d96;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   LINK XEM SẢN PHẨM
+========================================================= */
+
+/* =========================================================
+   NÚT XEM SẢN PHẨM
+========================================================= */
+
+.recommendation-link {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 20px 40px;
+
+    border: 1px solid #d9c2b1;
+    border-radius: 30px;
+
+    background: #ffffff;
+
+    color: #3D1C0F;
+
+    font-size: 15px;
+    font-weight: 500;
+
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none;
+
+    transition:
+        background-color 0.25s ease,
+        border-color 0.25s ease,
+        color 0.25s ease;
+}
+
+
+/* KHI RÊ CHUỘT */
+
+.recommendation-link:hover {
+    border-color: #BD875C;
+
+    background: #BD875C;
+
+    color: #ffffff !important;
+}
+
+
+/* =========================================================
+   CROSS-SELL
+========================================================= */
+
+.product-cross-sell {
+    margin-top: 65px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1000px) {
+
+    .recommendation-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .product-recommendations {
+        width: calc(100% - 24px);
+        margin-top: 50px;
+        padding-top: 35px;
+    }
+
+    .recommendations-heading h2 {
+        font-size: 21px;
+    }
+
+    .recommendations-heading p {
+        font-size: 13px;
+    }
+
+    .recommendation-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .recommendation-info {
+        padding: 20px;
+    }
+
+    .recommendation-info h3 {
+        min-height: 38px;
+        margin-bottom: 9px;
+    }
+
+    .recommendation-info h3 a {
+        font-size: 13px;
+    }
+
+    .recommendation-price {
+        gap: 5px;
+        margin-bottom: 10px;
+    }
+
+    .recommendation-price strong {
+        font-size: 14px;
+    }
+
+    .recommendation-price del {
+        font-size: 10px;
+    }
+
+    .recommendation-link {
+        font-size: 11px;
+    }
+
+}

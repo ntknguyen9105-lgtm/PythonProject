@@ -1,0 +1,566 @@
+{% extends "base.html" %}
+{% load static minoo_filters %}
+
+{% block title %}
+Tìm kính bằng hình ảnh | MINOO Eyewear
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/visual_search.css' %}">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+<section class="visual-search-hero">
+
+    <div class="visual-search-hero-overlay"></div>
+
+    <div class="container visual-search-hero-inner">
+
+        <div class="visual-search-hero-copy">
+
+            <span class="visual-search-hero-label">
+                MINOO VISUAL SEARCH
+            </span>
+
+            <h1>
+                Tìm kính bằng
+                <span>hình ảnh.</span>
+            </h1>
+
+            <p>
+                Bạn đã có một mẫu kính mình thích?
+                Chụp trực tiếp hoặc tải ảnh từ điện thoại, máy tính.
+                MINOO sẽ tìm những sản phẩm giống hoặc tương tự nhất
+                đang có tại cửa hàng.
+            </p>
+
+            <div class="visual-search-hero-actions">
+
+                <a href="#visual-search-upload" class="visual-hero-button visual-hero-button-primary">
+                    Tìm kính ngay
+                    <span>→</span>
+                </a>
+
+                <a href="{% url 'products' %}" class="visual-hero-button visual-hero-button-secondary">
+                    Xem tất cả gọng kính
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <aside class="visual-search-hero-card">
+
+            <span class="visual-search-hero-card-label">
+                CÁCH HOẠT ĐỘNG
+            </span>
+
+            <h2>
+                Từ một bức ảnh đến mẫu kính phù hợp.
+            </h2>
+
+            <div class="visual-hero-step">
+                <strong>01</strong>
+                <div>
+                    <span>Chụp hoặc tải ảnh</span>
+                    <p>Ảnh càng rõ, kết quả càng tốt.</p>
+                </div>
+            </div>
+
+            <div class="visual-hero-step">
+                <strong>02</strong>
+                <div>
+                    <span>MINOO so sánh</span>
+                    <p>Đối chiếu với hình ảnh trong catalog.</p>
+                </div>
+            </div>
+
+            <div class="visual-hero-step">
+                <strong>03</strong>
+                <div>
+                    <span>Xem mẫu tương tự</span>
+                    <p>Hiển thị tối đa 5 sản phẩm gần nhất.</p>
+                </div>
+            </div>
+
+        </aside>
+
+    </div>
+
+</section>
+
+
+<div class="visual-search-page" id="visual-search-upload">
+
+    <header class="visual-search-header">
+
+        <span class="visual-search-label">
+            TÌM BẰNG HÌNH ẢNH
+        </span>
+
+        <h2>
+            Chọn ảnh mẫu kính
+        </h2>
+
+        <p>
+            Dùng camera để chụp trực tiếp hoặc chọn ảnh có sẵn từ điện thoại và máy tính.
+            Nên sử dụng ảnh rõ, nhìn thấy toàn bộ gọng kính, ánh sáng tốt và nền không quá phức tạp.
+        </p>
+
+    </header>
+
+
+    <form
+        method="post"
+        enctype="multipart/form-data"
+        class="visual-search-card"
+        id="visualSearchForm"
+    >
+
+        {% csrf_token %}
+
+
+        <div class="visual-upload-zone">
+
+            <div class="visual-upload-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                    <path d="M4 7h3l1.5-2h7L17 7h3a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z"></path>
+                    <circle cx="12" cy="13" r="4"></circle>
+                </svg>
+            </div>
+
+
+            <h2>
+                Chọn hình ảnh kính
+            </h2>
+
+
+            <p>
+                Nên sử dụng ảnh rõ,
+                nhìn thấy toàn bộ gọng kính
+                và hạn chế nền quá phức tạp
+                để kết quả tốt hơn.
+            </p>
+
+
+            <!-- =============================================
+                 FILE THỰC SỰ GỬI LÊN SERVER
+            ============================================== -->
+
+            <input
+                type="file"
+                id="visualImageInput"
+                name="image"
+                accept="image/jpeg,image/png,image/webp"
+                hidden
+            >
+
+
+            <!-- =============================================
+                 CAMERA MOBILE FALLBACK
+            ============================================== -->
+
+            <input
+                type="file"
+                id="cameraImageInput"
+                accept="image/*"
+                capture="environment"
+                hidden
+            >
+
+
+            <div class="visual-search-actions">
+
+                <button
+                    type="button"
+                    class="visual-action-button primary"
+                    id="cameraButton"
+                >
+                    📷 Chụp ảnh
+                </button>
+
+
+                <button
+                    type="button"
+                    class="visual-action-button secondary"
+                    id="uploadButton"
+                >
+                    🖼 Tải ảnh từ thiết bị
+                </button>
+
+            </div>
+
+
+            <div
+                class="visual-preview {% if preview_url %}active{% endif %}"
+                id="visualPreview"
+            >
+
+                <img
+                    id="visualPreviewImage"
+
+                    {% if preview_url %}
+                        src="{{ preview_url }}"
+                    {% endif %}
+
+                    alt="Ảnh tìm kiếm"
+                >
+
+            </div>
+
+        </div>
+
+
+        <button
+            type="submit"
+            class="visual-search-submit"
+        >
+            Tìm mẫu tương tự
+        </button>
+
+    </form>
+
+
+    <div class="visual-search-guide">
+
+        <article class="visual-guide-item">
+            <span class="visual-guide-number">01</span>
+            <strong>Chụp rõ toàn bộ kính</strong>
+            <p>Không để gọng bị cắt mất cạnh hoặc bị vật khác che khuất.</p>
+        </article>
+
+        <article class="visual-guide-item">
+            <span class="visual-guide-number">02</span>
+            <strong>Ánh sáng đủ tốt</strong>
+            <p>Hạn chế ảnh quá tối, cháy sáng hoặc bị rung khi chụp.</p>
+        </article>
+
+        <article class="visual-guide-item">
+            <span class="visual-guide-number">03</span>
+            <strong>Nền đơn giản</strong>
+            <p>Giúp hệ thống tập trung tốt hơn vào hình dạng của gọng kính.</p>
+        </article>
+
+    </div>
+
+    {% if error_message %}
+
+        <div class="visual-error">
+            {{ error_message }}
+        </div>
+
+    {% endif %}
+
+
+
+    {% if searched %}
+
+        <section class="visual-results">
+
+
+            <div class="visual-results-heading">
+
+                <h2>
+                    Kết quả tìm kiếm
+                </h2>
+
+                <p>
+                    MINOO hiển thị tối đa 5 sản phẩm
+                    có hình ảnh gần với mẫu bạn cung cấp nhất.
+                    Tỷ lệ tương đồng chỉ mang tính hỗ trợ tham khảo.
+                </p>
+
+            </div>
+
+
+            {% if results %}
+
+
+                <div class="visual-result-grid">
+
+
+                    {% for item in results %}
+
+
+                        <article class="visual-result-card">
+
+
+                            <div class="visual-result-image">
+
+
+                                {% if item.image_url %}
+
+                                    <img
+                                        src="{{ item.image_url }}"
+                                        alt="{{ item.product.name }}"
+                                    >
+
+                                {% elif item.product.image %}
+
+                                    <img
+                                        src="{{ item.product.image.url }}"
+                                        alt="{{ item.product.name }}"
+                                    >
+
+                                {% endif %}
+
+
+                                <span class="visual-result-score">
+
+                                    {{ item.similarity }}%
+
+                                </span>
+
+                            </div>
+
+
+                            <div class="visual-result-body">
+
+
+                                <span class="visual-result-status">
+
+                                    {{ item.match_label }}
+
+                                </span>
+
+
+                                <h3>
+
+                                    {{ item.product.name }}
+
+                                </h3>
+
+
+                                <div class="visual-result-price">
+
+                                    {{ item.product.sale_price|vnd }}₫
+
+                                </div>
+
+
+                                <a
+                                    href="{% url 'product_detail' item.product.id %}"
+                                    class="visual-result-link"
+                                >
+                                    Xem sản phẩm
+                                </a>
+
+
+                            </div>
+
+                        </article>
+
+
+                    {% endfor %}
+
+
+                </div>
+
+
+            {% else %}
+
+
+                <div class="visual-no-result">
+
+                    <h3>
+                        Chưa tìm thấy mẫu phù hợp
+                    </h3>
+
+                    <p>
+                        Hãy thử một ảnh rõ hơn,
+                        chụp thẳng sản phẩm
+                        và hạn chế vật thể xung quanh.
+                    </p>
+
+                </div>
+
+
+            {% endif %}
+
+
+        </section>
+
+
+    {% endif %}
+
+
+</div>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        const fileInput =
+            document.getElementById(
+                "visualImageInput"
+            );
+
+
+        const cameraInput =
+            document.getElementById(
+                "cameraImageInput"
+            );
+
+
+        const uploadButton =
+            document.getElementById(
+                "uploadButton"
+            );
+
+
+        const cameraButton =
+            document.getElementById(
+                "cameraButton"
+            );
+
+
+        const preview =
+            document.getElementById(
+                "visualPreview"
+            );
+
+
+        const previewImage =
+            document.getElementById(
+                "visualPreviewImage"
+            );
+
+
+        /* =============================================
+           TẢI ẢNH TỪ THIẾT BỊ
+        ============================================== */
+
+        uploadButton.addEventListener(
+            "click",
+            function () {
+
+                fileInput.click();
+
+            }
+        );
+
+
+        fileInput.addEventListener(
+            "change",
+            function () {
+
+                if (
+                    !fileInput.files
+                    ||
+                    !fileInput.files[0]
+                ) {
+                    return;
+                }
+
+                cameraInput.value = "";
+
+                showPreview(
+                    fileInput.files[0]
+                );
+
+            }
+        );
+
+
+        /* =============================================
+           CAMERA
+        ============================================== */
+
+        cameraButton.addEventListener(
+            "click",
+            function () {
+
+                cameraInput.click();
+
+            }
+        );
+
+
+        cameraInput.addEventListener(
+            "change",
+            function () {
+
+                if (
+                    !cameraInput.files
+                    ||
+                    !cameraInput.files[0]
+                ) {
+                    return;
+                }
+
+
+                const selectedFile =
+                    cameraInput.files[0];
+
+
+                /*
+                 * Chuyển file từ camera
+                 * sang input name="image"
+                 * để Django nhận cùng một field.
+                 */
+
+                const transfer =
+                    new DataTransfer();
+
+
+                transfer.items.add(
+                    selectedFile
+                );
+
+
+                fileInput.files =
+                    transfer.files;
+
+
+                showPreview(
+                    selectedFile
+                );
+
+            }
+        );
+
+
+        /* =============================================
+           PREVIEW
+        ============================================== */
+
+        function showPreview(file) {
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                function (event) {
+
+                    previewImage.src =
+                        event.target.result;
+
+                    preview.classList.add(
+                        "active"
+                    );
+
+                };
+
+
+            reader.readAsDataURL(
+                file
+            );
+
+        }
+
+
+    }
+);
+
+</script>
+
+
+{% endblock %}

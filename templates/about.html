@@ -1,0 +1,794 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Về chúng tôi | MINOO Eyewear
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/about.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+<!-- =====================================================
+     01. HERO – SLIDER NHIỀU ẢNH
+     Muốn thêm/bớt ảnh: thêm/xóa một khối <div class="hero-slide">
+===================================================== -->
+
+<section class="about-hero" id="aboutHero">
+
+    <div class="hero-slides">
+
+        <div class="hero-slide active">
+            <img src="{% static 'images/about/store-main.jpg' %}" alt="Không gian MINOO Eyewear">
+        </div>
+
+        <div class="hero-slide">
+            <img src="{% static 'images/about/store-wide.jpg' %}" alt="Toàn cảnh cửa hàng MINOO" loading="lazy">
+        </div>
+
+        <div class="hero-slide">
+            <img src="{% static 'images/about/minoo-product.jpg' %}" alt="Gọng kính MINOO" loading="lazy">
+        </div>
+
+        <div class="hero-slide">
+            <img src="{% static 'images/about/store-activity.jpg' %}" alt="Trải nghiệm tại MINOO" loading="lazy">
+        </div>
+
+    </div>
+
+    <div class="about-hero-overlay"></div>
+
+    <div class="container about-hero-content">
+
+        <span class="about-label">MINOO EYEWEAR</span>
+
+        <h1>
+            Không chỉ là một chiếc kính.
+            <br>
+            Đó là <em>phong cách của bạn.</em>
+        </h1>
+
+        <p>
+            MINOO mang đến trải nghiệm chọn kính hiện đại,
+            gần gũi và dễ dàng, nơi mỗi khách hàng tìm được
+            chiếc kính phù hợp với chính mình.
+        </p>
+
+        <div class="about-hero-actions">
+            <a href="{% url 'products' %}" class="about-hero-btn">Khám phá gọng kính</a>
+            <a href="#ghe-minoo" class="about-hero-btn-outline">Xem đường đến cửa hàng</a>
+        </div>
+
+    </div>
+
+    <div class="hero-controls">
+        <div class="container">
+            <button type="button" class="hero-arrow" id="heroPrev" aria-label="Ảnh trước">&#8249;</button>
+            <div class="hero-dots" id="heroDots"></div>
+            <button type="button" class="hero-arrow" id="heroNext" aria-label="Ảnh kế tiếp">&#8250;</button>
+            <span class="hero-count" id="heroCount"></span>
+        </div>
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     01B. THANH CAM KẾT
+===================================================== -->
+
+<section class="about-trust">
+    <div class="container about-trust-grid">
+
+        <div class="trust-item">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11Z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
+            <div>
+                <strong>Cửa hàng tại Đà Nẵng</strong>
+                <span>112 Thái Thị Bôi</span>
+            </div>
+        </div>
+
+        <div class="trust-item">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            <div>
+                <strong>Thử kính trực tiếp</strong>
+                <span>Nhiều kiểu dáng, màu sắc</span>
+            </div>
+        </div>
+
+        <div class="trust-item">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H8l-4 4V5Z"></path><path d="M8 9h8M8 12h5"></path></svg>
+            <div>
+                <strong>Tư vấn tận tâm</strong>
+                <span>Hỗ trợ chọn mẫu phù hợp</span>
+            </div>
+        </div>
+
+        <div class="trust-item">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5z"></path><path d="M9 9h6M9 13h6M9 17h3"></path></svg>
+            <div>
+                <strong>Xem mẫu trực tuyến</strong>
+                <span>Thông tin rõ ràng, dễ so sánh</span>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- =====================================================
+     02. GIỚI THIỆU MINOO
+===================================================== -->
+
+<section class="about-story">
+
+    <div class="container about-story-grid">
+
+        <div class="about-story-image reveal">
+
+            <img
+                src="{% static 'images/about/store-left.jpg' %}"
+                alt="Không gian trưng bày kính MINOO"
+                loading="lazy"
+            >
+
+            <div class="about-image-note">
+                <strong>See Better. Live Better.</strong>
+                <span>Không gian MINOO Eyewear</span>
+            </div>
+
+        </div>
+
+        <div class="about-story-content reveal">
+
+            <span class="about-section-label">Về MINOO</span>
+
+            <h2>
+                Một không gian dành cho
+                phong cách và trải nghiệm
+            </h2>
+
+            <p>
+                MINOO Eyewear hướng đến phong cách trẻ trung,
+                hiện đại và dễ ứng dụng trong cuộc sống hằng ngày.
+                Chúng tôi tin rằng kính mắt không chỉ là một phụ kiện,
+                mà còn là một phần thể hiện cá tính của mỗi người.
+            </p>
+
+            <p>
+                Vì vậy, MINOO xây dựng trải nghiệm mua sắm
+                đơn giản, rõ ràng và thuận tiện: khách hàng dễ dàng
+                khám phá nhiều kiểu dáng, màu sắc và chất liệu
+                trước khi chọn mẫu kính phù hợp.
+            </p>
+
+            <div class="about-brand-line">
+                <div>
+                    <strong>Hiện đại</strong>
+                    <span>Không gian và sản phẩm trẻ trung</span>
+                </div>
+                <div>
+                    <strong>Gần gũi</strong>
+                    <span>Trải nghiệm lựa chọn dễ dàng</span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     03. GIÁ TRỊ CỐT LÕI
+===================================================== -->
+
+<section class="about-values">
+
+    <div class="container">
+
+        <div class="about-heading reveal">
+            <span class="about-section-label">Giá trị MINOO</span>
+            <h2>Điều MINOO muốn mang đến</h2>
+            <p>
+                Một trải nghiệm lựa chọn kính
+                đẹp hơn, dễ dàng hơn và phù hợp hơn.
+            </p>
+        </div>
+
+        <div class="about-value-grid reveal">
+
+            <article class="about-value-card">
+                <span class="value-number">1</span>
+                <h3>Phong cách</h3>
+                <p>
+                    Những mẫu kính mang hơi hướng hiện đại,
+                    đa dạng kiểu dáng và dễ kết hợp
+                    với nhiều phong cách cá nhân.
+                </p>
+            </article>
+
+            <article class="about-value-card">
+                <span class="value-number">2</span>
+                <h3>Chất lượng</h3>
+                <p>
+                    Chú trọng chất liệu, độ hoàn thiện
+                    và trải nghiệm sử dụng của từng mẫu kính.
+                </p>
+            </article>
+
+            <article class="about-value-card">
+                <span class="value-number">3</span>
+                <h3>Tận tâm</h3>
+                <p>
+                    Tư vấn gần gũi, giúp khách hàng
+                    dễ dàng lựa chọn mẫu phù hợp.
+                </p>
+            </article>
+
+            <article class="about-value-card">
+                <span class="value-number">4</span>
+                <h3>Thuận tiện</h3>
+                <p>
+                    Kết nối trải nghiệm tại cửa hàng
+                    với nền tảng trực tuyến để khách
+                    dễ dàng xem và chọn sản phẩm.
+                </p>
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     04. KHÔNG GIAN MINOO
+===================================================== -->
+
+<section class="about-space">
+
+    <div class="container">
+
+        <div class="about-space-heading reveal">
+
+            <div>
+                <span class="about-section-label">Không gian MINOO</span>
+                <h2>
+                    Nơi bạn có thể thử, chọn
+                    và tìm phong cách riêng
+                </h2>
+            </div>
+
+            <p>
+                Không gian sáng, cách trưng bày trực quan
+                và nhiều lựa chọn giúp việc tìm kiếm
+                một chiếc kính phù hợp trở nên dễ dàng hơn.
+            </p>
+
+        </div>
+
+        <div class="about-gallery reveal">
+
+            <div class="about-gallery-big">
+                <img src="{% static 'images/about/store-wide.jpg' %}" alt="Toàn cảnh cửa hàng MINOO" loading="lazy">
+            </div>
+
+            <div class="about-gallery-small">
+                <img src="{% static 'images/about/store-main.jpg' %}" alt="Không gian trưng bày MINOO" loading="lazy">
+            </div>
+
+            <div class="about-gallery-small">
+                <img src="{% static 'images/about/store-left.jpg' %}" alt="Kệ kính MINOO" loading="lazy">
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     05. TRẢI NGHIỆM THỰC TẾ
+===================================================== -->
+
+<section class="about-experience">
+
+    <div class="container about-experience-grid">
+
+        <div class="about-experience-content reveal">
+
+            <span class="about-section-label">Trải nghiệm tại cửa hàng</span>
+
+            <h2>MINOO trong những khoảnh khắc thực tế</h2>
+
+            <p>
+                Không chỉ là nơi trưng bày sản phẩm,
+                MINOO còn là không gian để khách hàng
+                trực tiếp thử kính, xem nhiều mẫu khác nhau
+                và nhận hỗ trợ trong quá trình lựa chọn.
+            </p>
+
+            <p>
+                Những hình ảnh thực tế giúp khách hàng trực tuyến
+                hiểu rõ hơn về không gian và trải nghiệm
+                trước khi ghé MINOO.
+            </p>
+
+        </div>
+
+        <div class="about-experience-images reveal">
+
+            <img
+                src="{% static 'images/about/store-activity.jpg' %}"
+                alt="Hoạt động tại MINOO Eyewear"
+                loading="lazy"
+                class="experience-main"
+            >
+
+            <img
+                src="{% static 'images/about/store-customer.jpg' %}"
+                alt="Không gian mua sắm thực tế tại MINOO"
+                loading="lazy"
+                class="experience-small"
+            >
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     06. 3 BƯỚC CHỌN KÍNH (MỚI)
+===================================================== -->
+
+<section class="about-steps">
+
+    <div class="container">
+
+        <div class="about-heading reveal">
+            <span class="about-section-label">Cách chọn kính</span>
+            <h2>Chọn kính tại MINOO chỉ với 3 bước</h2>
+            <p>Đơn giản, rõ ràng, không áp lực.</p>
+        </div>
+
+        <div class="about-steps-grid reveal">
+
+            <article class="about-step">
+                <h3>Xem mẫu</h3>
+                <p>
+                    Duyệt các mẫu gọng kính trên website
+                    hoặc ghé cửa hàng để xem trực tiếp.
+                </p>
+            </article>
+
+            <article class="about-step">
+                <h3>Thử và so sánh</h3>
+                <p>
+                    Thử nhiều kiểu dáng, màu sắc
+                    để chọn chiếc hợp với gương mặt
+                    và phong cách của bạn.
+                </p>
+            </article>
+
+            <article class="about-step">
+                <h3>Nhận tư vấn và chọn</h3>
+                <p>
+                    Đội ngũ MINOO hỗ trợ bạn chọn mẫu
+                    phù hợp với nhu cầu sử dụng hằng ngày.
+                </p>
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     07. VIDEO MINOO
+===================================================== -->
+
+<section class="about-video">
+
+    <div class="container">
+
+        <div class="about-video-box">
+
+            <div class="about-video-text reveal">
+
+                <span class="about-section-label">Khám phá MINOO</span>
+
+                <h2>Xem một vòng không gian MINOO Eyewear</h2>
+
+                <p>
+                    Một góc nhìn gần hơn về không gian,
+                    cách trưng bày sản phẩm và trải nghiệm
+                    tại cửa hàng.
+                </p>
+
+                <a
+                    href="https://www.facebook.com/reel/1699326404498548"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="video-link"
+                >
+                    ▶ Xem video trên Facebook
+                </a>
+
+            </div>
+
+            <div class="facebook-video reveal">
+
+                <iframe
+                    src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1699326404498548&show_text=false&width=500"
+                    width="500"
+                    height="560"
+                    title="Video không gian MINOO Eyewear"
+                    style="border:none;overflow:hidden"
+                    scrolling="no"
+                    frameborder="0"
+                    allowfullscreen="true"
+                    loading="lazy"
+                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
+                </iframe>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     08. TRẢI NGHIỆM MINOO (3 LỢI ÍCH)
+===================================================== -->
+
+<section class="minoo-service">
+
+    <div class="container">
+
+        <div class="minoo-service-heading reveal">
+
+            <span class="about-section-label">Trải nghiệm MINOO</span>
+
+            <h2>Chọn kính dễ dàng hơn cùng MINOO Eyewear</h2>
+
+            <p>
+                Từ việc khám phá mẫu kính đến khi trực tiếp thử
+                và lựa chọn tại cửa hàng, MINOO hướng đến
+                một trải nghiệm rõ ràng, thuận tiện và gần gũi hơn.
+            </p>
+
+        </div>
+
+        <div class="minoo-benefit-grid reveal">
+
+            <article class="minoo-benefit">
+                <div class="benefit-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                </div>
+                <h3>Trải nghiệm hiện đại</h3>
+                <p>
+                    Không gian trưng bày trực quan,
+                    giúp bạn dễ dàng xem, thử
+                    và so sánh nhiều mẫu kính.
+                </p>
+            </article>
+
+            <article class="minoo-benefit">
+                <div class="benefit-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M8 11l3 3 5-6"></path>
+                        <circle cx="12" cy="12" r="9"></circle>
+                    </svg>
+                </div>
+                <h3>Thông tin rõ ràng</h3>
+                <p>
+                    Kiểu dáng, màu sắc, mức giá
+                    và tình trạng sản phẩm được trình bày
+                    thuận tiện cho việc lựa chọn.
+                </p>
+            </article>
+
+            <article class="minoo-benefit">
+                <div class="benefit-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M4 5h16v11H8l-4 4V5Z"></path>
+                        <path d="M8 9h8M8 12h5"></path>
+                    </svg>
+                </div>
+                <h3>Tư vấn tận tâm</h3>
+                <p>
+                    MINOO sẵn sàng hỗ trợ để bạn
+                    tìm được mẫu kính phù hợp
+                    với nhu cầu và phong cách.
+                </p>
+            </article>
+
+        </div>
+
+        <div class="minoo-service-cta">
+            <a href="{% url 'products' %}" class="service-shop-btn">Khám phá gọng kính</a>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     09. FIND YOUR FRAME + HỎI ĐÁP
+===================================================== -->
+
+<section class="minoo-frame-section">
+
+    <div class="container">
+
+        <div class="minoo-service-main">
+
+            <div class="service-product-image reveal">
+
+                <img
+                    src="{% static 'images/about/minoo-product.jpg' %}"
+                    alt="Gọng kính MINOO Eyewear"
+                    loading="lazy"
+                >
+
+                <div class="service-image-tag">
+                    <span>MINOO EYEWEAR</span>
+                    <strong>See Better. Live Better.</strong>
+                </div>
+
+            </div>
+
+            <div class="service-content reveal">
+
+                <span class="about-section-label">Find your frame</span>
+
+                <h3>Sẵn sàng tìm chiếc kính phù hợp với bạn?</h3>
+
+                <p class="service-intro">
+                    Một chiếc kính phù hợp không chỉ hỗ trợ
+                    nhu cầu sử dụng hằng ngày mà còn góp phần
+                    hoàn thiện phong cách cá nhân.
+                    MINOO giúp việc lựa chọn trở nên
+                    đơn giản và thuận tiện hơn.
+                </p>
+
+                <details class="service-faq" open>
+                    <summary>
+                        <span>Tôi có thể xem mẫu online trước không?</span>
+                        <span class="faq-plus">+</span>
+                    </summary>
+                    <div class="service-faq-content">
+                        Có. Bạn có thể xem trước các mẫu gọng kính,
+                        tham khảo thông tin sản phẩm và liên hệ
+                        MINOO trước khi trực tiếp ghé cửa hàng.
+                    </div>
+                </details>
+
+                <details class="service-faq">
+                    <summary>
+                        <span>Tôi thử kính ở đâu?</span>
+                        <span class="faq-plus">+</span>
+                    </summary>
+                    <div class="service-faq-content">
+                        Ghé MINOO tại 112 Thái Thị Bôi, Đà Nẵng
+                        để trực tiếp xem, thử và lựa chọn
+                        các mẫu kính phù hợp.
+                    </div>
+                </details>
+
+                <details class="service-faq">
+                    <summary>
+                        <span>Liên hệ MINOO bằng cách nào?</span>
+                        <span class="faq-plus">+</span>
+                    </summary>
+                    <div class="service-faq-content">
+                        Hotline: <a href="tel:0906971796"><strong>090 697 17 96</strong></a>
+                        <br>
+                        Email: <a href="mailto:matkinhminoo@gmail.com"><strong>matkinhminoo@gmail.com</strong></a>
+                    </div>
+                </details>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     10. GHÉ MINOO / GOOGLE MAPS
+===================================================== -->
+
+<section class="about-contact" id="ghe-minoo">
+
+    <div class="container">
+
+        <div class="visit-heading reveal">
+
+            <span class="about-section-label">Ghé MINOO</span>
+
+            <h2>Trải nghiệm trực tiếp tại MINOO Eyewear</h2>
+
+            <p>
+                Ghé cửa hàng để trực tiếp xem,
+                thử và lựa chọn mẫu kính phù hợp với bạn.
+            </p>
+
+        </div>
+
+        <div class="about-contact-box reveal">
+
+            <div class="about-map">
+                <iframe
+                    src="https://www.google.com/maps?q=112%20Th%C3%A1i%20Th%E1%BB%8B%20B%C3%B4i%2C%20%C4%90%C3%A0%20N%E1%BA%B5ng%2C%20Vietnam&output=embed"
+                    title="Bản đồ MINOO Eyewear"
+                    loading="lazy"
+                    allowfullscreen=""
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+
+            <div class="about-contact-info">
+
+                <span class="store-label">MINOO EYEWEAR</span>
+
+                <h3>112 Thái Thị Bôi</h3>
+
+                <p class="store-location">Đà Nẵng, Việt Nam</p>
+
+                <div class="contact-list">
+
+                    <div class="contact-row">
+                        <div class="contact-icon">📍</div>
+                        <div>
+                            <small>Địa chỉ</small>
+                            <strong>112 Thái Thị Bôi, Đà Nẵng</strong>
+                        </div>
+                    </div>
+
+                    <div class="contact-row">
+                        <div class="contact-icon">☎</div>
+                        <div>
+                            <small>Hotline</small>
+                            <a href="tel:0906971796">090 697 17 96</a>
+                        </div>
+                    </div>
+
+                    <div class="contact-row">
+                        <div class="contact-icon">✉</div>
+                        <div>
+                            <small>Email</small>
+                            <a href="mailto:matkinhminoo@gmail.com">matkinhminoo@gmail.com</a>
+                        </div>
+                    </div>
+
+                    <div class="contact-row">
+                        <div class="contact-icon">🕘</div>
+                        <div>
+                            <small>Giờ mở cửa</small>
+                            <!-- SỬA LẠI GIỜ THỰC TẾ CỦA CỬA HÀNG -->
+                            <strong>Mỗi ngày: 08:30 – 21:00</strong>
+                        </div>
+                    </div>
+
+                </div>
+
+                <a
+                    href="https://www.google.com/maps/search/?api=1&query=112%20Th%C3%A1i%20Th%E1%BB%8B%20B%C3%B4i%2C%20%C4%90%C3%A0%20N%E1%BA%B5ng%2C%20Vietnam"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="direction-btn"
+                >
+                    Chỉ đường trên Google Maps
+                    <span>↗</span>
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     11. CTA CUỐI
+===================================================== -->
+
+<section class="about-cta">
+
+    <div class="container">
+
+        <span>MINOO EYEWEAR</span>
+
+        <h2>Tìm chiếc kính phù hợp với bạn</h2>
+
+        <p>Khám phá những mẫu gọng kính mới tại MINOO.</p>
+
+        <a href="{% url 'products' %}" class="about-cta-btn">Khám phá gọng kính</a>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     JS: HERO SLIDER + HIỆN DẦN KHI CUỘN
+===================================================== -->
+
+<script>
+(function () {
+    var hero   = document.getElementById('aboutHero');
+    var slides = hero.querySelectorAll('.hero-slide');
+    var dotsEl = document.getElementById('heroDots');
+    var count  = document.getElementById('heroCount');
+    var current = 0, timer = null;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    slides.forEach(function (_, i) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'hero-dot' + (i === 0 ? ' active' : '');
+        b.setAttribute('aria-label', 'Ảnh ' + (i + 1));
+        b.addEventListener('click', function () { go(i, true); });
+        dotsEl.appendChild(b);
+    });
+    var dots = dotsEl.querySelectorAll('.hero-dot');
+
+    function go(n, manual) {
+        slides[current].classList.remove('active');
+        dots[current].classList.remove('active');
+        current = (n + slides.length) % slides.length;
+        slides[current].classList.add('active');
+        dots[current].classList.add('active');
+        count.textContent = (current + 1) + ' / ' + slides.length;
+        if (manual) restart();
+    }
+    function start()   { if (!reduce) timer = setInterval(function () { go(current + 1); }, 5500); }
+    function restart() { clearInterval(timer); start(); }
+
+    document.getElementById('heroPrev').addEventListener('click', function () { go(current - 1, true); });
+    document.getElementById('heroNext').addEventListener('click', function () { go(current + 1, true); });
+    hero.addEventListener('mouseenter', function () { clearInterval(timer); });
+    hero.addEventListener('mouseleave', restart);
+
+    count.textContent = '1 / ' + slides.length;
+    start();
+
+    /* Hiện dần khi cuộn */
+    var items = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+                if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+            });
+        }, { threshold: 0.12 });
+        items.forEach(function (el) { io.observe(el); });
+    } else {
+        items.forEach(function (el) { el.classList.add('visible'); });
+    }
+})();
+</script>
+
+{% endblock %}

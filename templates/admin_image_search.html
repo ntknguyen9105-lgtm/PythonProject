@@ -1,0 +1,547 @@
+{% extends "base.html" %}
+
+{% block title %}
+Tìm kính bằng hình ảnh | MINOO
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+.image-search-page {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 0 24px 80px;
+}
+
+.image-search-header {
+    margin-bottom: 35px;
+}
+
+.image-search-header h1 {
+    margin: 0 0 10px;
+    font-size: 32px;
+    font-weight: 700;
+    color: #111;
+}
+
+.image-search-header p {
+    margin: 0;
+    color: #777;
+    font-size: 15px;
+}
+
+
+/* =====================================================
+   UPLOAD BOX
+===================================================== */
+
+.image-search-box {
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 18px;
+    padding: 35px;
+    margin-bottom: 45px;
+}
+
+.upload-area {
+    border: 2px dashed #d7d7d7;
+    border-radius: 16px;
+    padding: 45px 25px;
+    text-align: center;
+    transition: .2s;
+}
+
+.upload-area:hover {
+    border-color: #111;
+}
+
+.upload-icon {
+    font-size: 42px;
+    margin-bottom: 15px;
+}
+
+.upload-area h2 {
+    margin: 0 0 8px;
+    font-size: 21px;
+}
+
+.upload-area p {
+    color: #777;
+    margin-bottom: 22px;
+}
+
+.upload-input {
+    display: none;
+}
+
+.upload-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #111;
+    color: #fff;
+    padding: 13px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.search-submit {
+    margin-top: 20px;
+    width: 100%;
+    border: none;
+    background: #111;
+    color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.search-submit:hover {
+    background: #333;
+}
+
+
+/* =====================================================
+   RESULT
+===================================================== */
+
+.result-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 22px;
+}
+
+.result-title h2 {
+    margin: 0;
+    font-size: 23px;
+}
+
+.result-count {
+    color: #777;
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   PRODUCT GRID
+===================================================== */
+
+.similar-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
+
+.similar-card {
+    border: 1px solid #e8e8e8;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.similar-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    background: #f7f7f7;
+}
+
+.similar-body {
+    padding: 20px;
+}
+
+.similar-body h3 {
+    margin: 0 0 8px;
+    font-size: 17px;
+}
+
+.similar-sku {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 15px;
+}
+
+.similarity {
+    display: inline-block;
+    padding: 6px 10px;
+    background: #f2f2f2;
+    border-radius: 20px;
+    font-size: 13px;
+    margin-bottom: 15px;
+}
+
+.product-stock {
+    margin-bottom: 18px;
+    font-size: 14px;
+}
+
+.stock-number {
+    font-weight: 700;
+}
+
+.stock-form {
+    display: flex;
+    gap: 8px;
+}
+
+.stock-input {
+    width: 90px;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+    padding: 10px;
+}
+
+.stock-button {
+    flex: 1;
+    border: none;
+    background: #111;
+    color: white;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.product-link {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+    text-decoration: none;
+    color: #111;
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   NO RESULT
+===================================================== */
+
+.no-result {
+    text-align: center;
+    border: 1px solid #e8e8e8;
+    border-radius: 16px;
+    padding: 45px 25px;
+}
+
+.no-result-icon {
+    font-size: 42px;
+    margin-bottom: 15px;
+}
+
+.no-result h2 {
+    margin-bottom: 8px;
+}
+
+.no-result p {
+    color: #777;
+    margin-bottom: 22px;
+}
+
+.add-product-button {
+    display: inline-block;
+    background: #111;
+    color: #fff;
+    text-decoration: none;
+    padding: 13px 24px;
+    border-radius: 8px;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 900px) {
+
+    .similar-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .image-search-page {
+        margin-top: 30px;
+    }
+
+    .image-search-box {
+        padding: 20px;
+    }
+
+    .similar-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+</style>
+
+
+<div class="image-search-page">
+
+    <div class="image-search-header">
+
+        <h1>
+            Tìm kính bằng hình ảnh
+        </h1>
+
+        <p>
+            Chụp hoặc tải ảnh mẫu kính để kiểm tra
+            sản phẩm đã có trên website hay chưa.
+        </p>
+
+    </div>
+
+
+    <!-- =================================================
+         UPLOAD
+    ================================================== -->
+
+    <div class="image-search-box">
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+        >
+
+            {% csrf_token %}
+
+            <div class="upload-area">
+
+                <div class="upload-icon">
+                    📷
+                </div>
+
+                <h2>
+                    Chọn hoặc chụp ảnh mẫu kính
+                </h2>
+
+                <p>
+                    Hỗ trợ JPG, PNG, WEBP — tối đa 10MB
+                </p>
+
+                <label
+                    for="image"
+                    class="upload-label"
+                >
+                    Chọn ảnh
+                </label>
+
+                <input
+                    id="image"
+                    name="image"
+                    type="file"
+                    class="upload-input"
+                    accept="image/jpeg,image/png,image/webp"
+                    capture="environment"
+                    required
+                >
+
+                <div id="file-name"
+                     style="margin-top:15px;color:#777;font-size:14px;">
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="search-submit"
+            >
+                🔍 Kiểm tra mẫu kính
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- =================================================
+         KẾT QUẢ
+    ================================================== -->
+
+    {% if searched %}
+
+        {% if results %}
+
+            <div class="result-title">
+
+                <h2>
+                    Mẫu kính tương đồng
+                </h2>
+
+                <span class="result-count">
+                    {{ results|length }} kết quả
+                </span>
+
+            </div>
+
+
+            <div class="similar-grid">
+
+                {% for result in results %}
+
+                    <div class="similar-card">
+
+                        {% if result.matched_image %}
+
+                            <img
+                                src="{{ result.matched_image.url }}"
+                                class="similar-image"
+                                alt="{{ result.product.name }}"
+                            >
+
+                        {% elif result.product.image %}
+
+                            <img
+                                src="{{ result.product.image.url }}"
+                                class="similar-image"
+                                alt="{{ result.product.name }}"
+                            >
+
+                        {% endif %}
+
+
+                        <div class="similar-body">
+
+                            <h3>
+                                {{ result.product.name }}
+                            </h3>
+
+                            <div class="similar-sku">
+                                SKU:
+                                {{ result.product.sku }}
+                            </div>
+
+                            <div class="similarity">
+
+                                Độ tương đồng:
+                                <strong>
+                                    {{ result.similarity }}%
+                                </strong>
+
+                            </div>
+
+
+                            <div class="product-stock">
+
+                                Tồn kho hiện tại:
+
+                                <span class="stock-number">
+                                    {{ result.product.stock }}
+                                </span>
+
+                            </div>
+
+
+                            <!-- CẬP NHẬT SỐ LƯỢNG -->
+
+                            <form
+                                method="POST"
+                                action="{% url 'admin_update_stock' result.product.id %}"
+                                class="stock-form"
+                            >
+
+                                {% csrf_token %}
+
+                                <input
+                                    type="number"
+                                    name="quantity"
+                                    value="1"
+                                    min="1"
+                                    class="stock-input"
+                                >
+
+                                <button
+                                    type="submit"
+                                    class="stock-button"
+                                >
+                                    + Nhập thêm
+                                </button>
+
+                            </form>
+
+
+                            <a
+                                href="{% url 'product_detail' result.product.id %}"
+                                class="product-link"
+                                target="_blank"
+                            >
+                                Xem sản phẩm
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+        {% else %}
+
+            <div class="no-result">
+
+                <div class="no-result-icon">
+                    ✨
+                </div>
+
+                <h2>
+                    Chưa tìm thấy mẫu kính tương đồng
+                </h2>
+
+                <p>
+                    Có thể đây là một mẫu kính mới.
+                    Bạn có thể thêm sản phẩm này vào hệ thống.
+                </p>
+
+                <a
+                    href="/admin/store/product/add/"
+                    class="add-product-button"
+                >
+                    + Thêm sản phẩm mới
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    {% endif %}
+
+</div>
+
+
+<script>
+
+const imageInput = document.getElementById("image");
+const fileName = document.getElementById("file-name");
+
+if (imageInput) {
+
+    imageInput.addEventListener(
+        "change",
+        function () {
+
+            if (this.files.length > 0) {
+
+                fileName.textContent =
+                    "Ảnh đã chọn: "
+                    + this.files[0].name;
+
+            }
+
+        }
+    );
+
+}
+
+</script>
+
+{% endblock %}

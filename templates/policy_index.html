@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Chính sách | MINOO Eyewear
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/policy.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+<!-- HERO -->
+<section class="policy-hero">
+
+    <img
+        src="{% static 'images/about/store-main.jpg' %}"
+        alt="Không gian MINOO Eyewear"
+        class="policy-hero-image"
+    >
+
+    <div class="policy-hero-overlay"></div>
+
+    <div class="container policy-hero-content">
+
+        <span class="policy-label">MINOO EYEWEAR</span>
+
+        <h1>Chính sách <em>của MINOO</em></h1>
+
+        <p>
+            Chính sách thanh toán, giao hàng, đổi trả, bảo hành
+            và bảo mật thông tin, được trình bày rõ ràng để bạn yên tâm mua sắm.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- DANH SÁCH CHÍNH SÁCH -->
+<section class="policy-main">
+
+    <div class="container">
+
+        <div class="policy-card-grid">
+
+            {% for p in policies %}
+            <a href="{% url 'policy_detail' p.slug %}" class="policy-card">
+
+                <span class="policy-card-num">{{ forloop.counter }}</span>
+
+                <h2>{{ p.title }}</h2>
+
+                <p>{{ p.summary }}</p>
+
+                <span class="policy-card-link">Xem chi tiết →</span>
+
+            </a>
+            {% endfor %}
+
+        </div>
+
+        <div class="policy-help">
+
+            <div>
+                <strong>Cần hỗ trợ thêm?</strong>
+                <span>MINOO luôn sẵn sàng giải đáp mọi thắc mắc của bạn.</span>
+            </div>
+
+            <a href="{% url 'contact' %}">Liên hệ MINOO</a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

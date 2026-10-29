@@ -1,0 +1,138 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+{{ policy.title }} | MINOO Eyewear
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/policy.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+<!-- HERO -->
+<section class="policy-hero">
+
+    <img
+        src="{% static 'images/about/store-main.jpg' %}"
+        alt="Không gian MINOO Eyewear"
+        class="policy-hero-image"
+    >
+
+    <div class="policy-hero-overlay"></div>
+
+    <div class="container policy-hero-content">
+
+        <span class="policy-label">CHÍNH SÁCH</span>
+
+        <h1>{{ policy.title }}</h1>
+
+        <p>{{ policy.summary }}</p>
+
+    </div>
+
+</section>
+
+
+<!-- MENU TRÁI + NỘI DUNG -->
+<section class="policy-main">
+
+    <div class="container policy-layout">
+
+
+        <!-- MENU CÁC CHÍNH SÁCH -->
+        <nav class="policy-nav" aria-label="Danh mục chính sách">
+
+            <span class="policy-nav-title">Chính sách</span>
+
+            {% for p in policies %}
+                <a
+                    href="{% url 'policy_detail' p.slug %}"
+                    class="{% if p.slug == policy.slug %}active{% endif %}"
+                    {% if p.slug == policy.slug %}aria-current="page"{% endif %}
+                >
+                    {{ p.title }}
+                </a>
+            {% endfor %}
+
+        </nav>
+
+
+        <!-- NỘI DUNG CHI TIẾT CHÍNH SÁCH -->
+        <article class="policy-content">
+
+            <h2>{{ policy.title }}</h2>
+
+            <p class="policy-lead">{{ policy.summary }}</p>
+
+            <div class="policy-divider"></div>
+
+            {% for section in policy.sections %}
+
+                <section class="policy-section">
+
+                    <!-- TIÊU ĐỀ TỪNG MỤC -->
+                    <h3>{{ section.heading }}</h3>
+
+                    <!-- CÁC ĐOẠN VĂN -->
+                    {% for paragraph in section.paragraphs %}
+                        <p>{{ paragraph }}</p>
+                    {% endfor %}
+
+                    <!-- DANH SÁCH GẠCH ĐẦU DÒNG -->
+                    {% if section.bullets %}
+                        <ul class="policy-list">
+                            {% for bullet in section.bullets %}
+                                <li>{{ bullet }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                    <!-- ĐOẠN VĂN BỔ SUNG -->
+                    {% if section.paragraphs_extra %}
+                        {% for paragraph in section.paragraphs_extra %}
+                            <p>{{ paragraph }}</p>
+                        {% endfor %}
+                    {% endif %}
+
+                </section>
+
+            {% empty %}
+
+                <p>Nội dung chính sách đang được cập nhật.</p>
+
+            {% endfor %}
+
+
+            <!-- THÔNG TIN LIÊN HỆ -->
+            <div class="policy-contact">
+
+                <strong>Cần hỗ trợ thêm?</strong>
+
+                <p>
+                    Hotline:
+                    <a href="tel:0906971796">{{ HOTLINE }}</a>
+                </p>
+
+                <p>
+                    Email:
+                    <a href="mailto:{{ EMAIL }}">{{ EMAIL }}</a>
+                </p>
+
+                <p>
+                    Cửa hàng: {{ ADDRESS }}
+                </p>
+
+            </div>
+
+        </article>
+
+
+    </div>
+
+</section>
+
+{% endblock %}

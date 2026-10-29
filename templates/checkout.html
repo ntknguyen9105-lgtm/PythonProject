@@ -1,0 +1,918 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load minoo_filters %}
+
+{% block title %}
+Thanh toán | MINOO Eyewear
+{% endblock %}
+
+{% block content %}
+
+
+
+<style>
+/* =========================================================
+   MINOO - COUPON TRONG CHECKOUT
+========================================================= */
+.checkout-coupon-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin: 18px 0 4px;
+    padding: 14px;
+    border: 1px dashed #BD875C;
+    border-radius: 12px;
+    background: #FFF9F2;
+}
+
+.checkout-coupon-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.checkout-coupon-label {
+    color: #BD875C;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.checkout-coupon-info strong {
+    color: #3D1C0F;
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+.checkout-coupon-info small {
+    color: #6E5345;
+    font-size: 11px;
+}
+
+.coupon-button {
+    flex-shrink: 0;
+    padding: 9px 13px;
+    border: 0;
+    border-radius: 999px;
+    background: #3D1C0F;
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.coupon-button:hover {
+    background: #BD875C;
+}
+
+.coupon-button.is-applied {
+    background: #BD875C;
+}
+
+.coupon-button:disabled {
+    opacity: .65;
+    cursor: wait;
+}
+
+.checkout-discount-row strong {
+    color: #B35442 !important;
+}
+</style>
+
+
+<section class="checkout-page">
+
+    <!-- =========================================
+         HEADER
+         ========================================= -->
+    <div class="checkout-header">
+
+        <div class="checkout-header-content">
+
+            <span class="checkout-eyebrow">
+                MINOO EYEWEAR
+            </span>
+
+            <h1>Thanh toán</h1>
+
+            <p>
+                Hoàn tất thông tin để MINOO chuẩn bị đơn hàng của bạn.
+            </p>
+
+        </div>
+
+        <a href="{% url 'cart' %}" class="checkout-back">
+            <span>←</span>
+            Quay lại giỏ hàng
+        </a>
+
+    </div>
+
+
+    <!-- =========================================
+         CHECKOUT FORM
+         ========================================= -->
+    <form
+        method="post"
+        action="{% url 'checkout' %}"
+        class="checkout-layout"
+    >
+
+        {% csrf_token %}
+
+
+        <!-- =========================================
+             LEFT - CUSTOMER INFORMATION
+             ========================================= -->
+        <div class="checkout-main">
+
+
+            <!-- =====================================
+                 THÔNG TIN NHẬN HÀNG
+                 ===================================== -->
+            <section class="checkout-card">
+
+                <div class="checkout-card-heading">
+
+                    <div class="checkout-number">
+                        01
+                    </div>
+
+                    <div>
+                        <h2>Thông tin nhận hàng</h2>
+
+                        <p>
+                            Vui lòng nhập chính xác thông tin người nhận.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="checkout-form-grid">
+
+
+                    <!-- HỌ TÊN -->
+                    <div class="checkout-field checkout-field-full">
+
+                        <label for="full_name">
+                            Họ và tên
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="full_name"
+                            name="full_name"
+                            placeholder="Nhập họ và tên"
+                            autocomplete="name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- SỐ ĐIỆN THOẠI -->
+                    <div class="checkout-field">
+
+                        <label for="phone">
+                            Số điện thoại
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            placeholder="Nhập số điện thoại"
+                            autocomplete="tel"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+                    <div class="checkout-field">
+
+                        <label for="email">
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="example@gmail.com"
+                            autocomplete="email"
+                        >
+
+                    </div>
+
+
+                    <!-- ĐỊA CHỈ -->
+                    <div class="checkout-field checkout-field-full">
+
+                        <label for="address">
+                            Địa chỉ nhận hàng
+                            <span>*</span>
+                        </label>
+
+                        <textarea
+                            id="address"
+                            name="address"
+                            rows="3"
+                            placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành phố"
+                            autocomplete="street-address"
+                            required
+                        ></textarea>
+
+                    </div>
+
+
+                    <!-- GHI CHÚ -->
+                    <div class="checkout-field checkout-field-full">
+
+                        <label for="note">
+                            Ghi chú đơn hàng
+                        </label>
+
+                        <textarea
+                            id="note"
+                            name="note"
+                            rows="3"
+                            placeholder="Ví dụ: Giao hàng giờ hành chính..."
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =====================================
+                 PHƯƠNG THỨC THANH TOÁN
+                 ===================================== -->
+            <section class="checkout-card">
+
+                <div class="checkout-card-heading">
+
+                    <div class="checkout-number">
+                        02
+                    </div>
+
+                    <div>
+                        <h2>Phương thức thanh toán</h2>
+
+                        <p>
+                            Chọn phương thức thanh toán phù hợp.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="payment-methods">
+
+
+                    <!-- =================================
+                         COD
+                         ================================= -->
+                    <label class="payment-option">
+
+                        <input
+                            type="radio"
+                            name="payment_method"
+                            value="cod"
+                            checked
+                        >
+
+                        <span class="payment-radio"></span>
+
+                        <span class="payment-content">
+
+                            <strong>
+                                Thanh toán khi nhận hàng
+                            </strong>
+
+                            <small>
+                                Bạn thanh toán cho nhân viên giao hàng
+                                khi nhận kính.
+                            </small>
+
+                        </span>
+
+                    </label>
+
+
+                    <!-- =================================
+                         BANK TRANSFER
+                         ================================= -->
+                    <label class="payment-option">
+
+                        <input
+                            type="radio"
+                            name="payment_method"
+                            value="bank"
+                        >
+
+                        <span class="payment-radio"></span>
+
+                        <span class="payment-content">
+
+                            <strong>
+                                Chuyển khoản ngân hàng
+                            </strong>
+
+                            <small>
+                                Sau khi đặt hàng, bạn sẽ được chuyển
+                                đến trang thanh toán QR.
+                            </small>
+
+                        </span>
+
+                    </label>
+
+                </div>
+
+
+                <!-- =====================================
+                     BANK INFORMATION NOTE
+                     ===================================== -->
+
+                <div
+                    id="bank-payment-box"
+                    class="bank-payment-box"
+                    style="display: none;"
+                >
+
+                    <div class="bank-payment-header">
+
+                        <span class="bank-payment-label">
+                            THANH TOÁN QUA QR
+                        </span>
+
+                        <h3>
+                            Chuyển khoản sau khi đặt hàng
+                        </h3>
+
+                        <p>
+                            Sau khi bạn nhấn "Đặt hàng", MINOO sẽ tạo
+                            đơn hàng và chuyển bạn đến trang thanh toán
+                            để hiển thị mã QR cùng thông tin chuyển khoản.
+                        </p>
+
+                    </div>
+
+                    <div class="bank-payment-warning">
+
+                        <span>!</span>
+
+                        <p>
+                            Vui lòng hoàn tất đặt hàng trước.
+                            Mã QR sẽ được tạo theo đúng số tiền và
+                            mã đơn hàng của bạn.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =====================================
+                 CAM KẾT
+                 ===================================== -->
+            <div class="checkout-note">
+
+                <span class="checkout-note-icon">
+                    ✓
+                </span>
+
+                <p>
+                    Bằng việc đặt hàng, bạn xác nhận rằng các thông tin
+                    giao hàng đã cung cấp là chính xác.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =========================================
+             RIGHT - ORDER SUMMARY
+             ========================================= -->
+        <aside class="checkout-summary">
+
+            <div class="checkout-summary-inner">
+
+
+                <!-- =================================
+                     HEADING
+                     ================================= -->
+                <div class="checkout-summary-heading">
+
+                    <div>
+
+                        <span>
+                            ĐƠN HÀNG
+                        </span>
+
+                        <h2>
+                            Thông tin đơn hàng
+                        </h2>
+
+                    </div>
+
+                    <span class="checkout-item-count">
+                        {{ selected_items|length }} sản phẩm
+                    </span>
+
+                </div>
+
+
+
+                <!-- =================================
+                     PRODUCT LIST
+                     ================================= -->
+                <div class="checkout-products">
+
+                    {% for item in selected_items %}
+
+                    <div class="checkout-product">
+
+
+                        <!-- IMAGE -->
+                        <div class="checkout-product-image">
+
+                            {% if item.image %}
+
+                                <img
+                                    src="{{ item.image.url }}"
+                                    alt="{{ item.product.name }}"
+                                >
+
+                            {% elif item.product.image %}
+
+                                <img
+                                    src="{{ item.product.image.url }}"
+                                    alt="{{ item.product.name }}"
+                                >
+
+                            {% else %}
+
+                                <div class="checkout-image-placeholder">
+                                    MINOO
+                                </div>
+
+                            {% endif %}
+
+
+                            <span class="checkout-product-quantity">
+                                {{ item.quantity }}
+                            </span>
+
+                        </div>
+
+
+
+                        <!-- PRODUCT INFO -->
+                        <div class="checkout-product-info">
+
+                            <h3>
+                                {{ item.product.name }}
+                            </h3>
+
+
+                            {% if item.variant %}
+
+                                {% if item.variant.color %}
+
+                                <span>
+                                    Màu: {{ item.variant.color }}
+                                </span>
+
+                                {% endif %}
+
+
+                                {% if item.variant.size %}
+
+                                <span>
+                                    Kích thước: {{ item.variant.size }}
+                                </span>
+
+                                {% endif %}
+
+
+                                {% if item.variant.material %}
+
+                                <span>
+                                    Chất liệu: {{ item.variant.material }}
+                                </span>
+
+                                {% endif %}
+
+                            {% endif %}
+
+
+                            <strong>
+                                {{ item.line_total|vnd }}đ
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    {% empty %}
+
+                    <div class="checkout-empty">
+
+                        Không có sản phẩm được chọn.
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+
+                <!-- =================================
+                     PRICE
+                     ================================= -->
+                <div class="checkout-price">
+
+                    <!-- TẠM TÍNH -->
+                    <div>
+
+                        <span>
+                            Tạm tính
+                        </span>
+
+                        <strong>
+                            {{ subtotal|vnd }}đ
+                        </strong>
+
+                    </div>
+
+
+                    <!-- PHÍ VẬN CHUYỂN -->
+                    <div>
+
+                        <span>
+                            Phí vận chuyển
+                        </span>
+
+                        <strong>
+
+                            {% if shipping_fee == 0 %}
+
+                                <span class="free-text">
+                                    Miễn phí
+                                </span>
+
+                            {% else %}
+
+                                {{ shipping_fee|vnd }}đ
+
+                            {% endif %}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================
+                     MÃ GIẢM GIÁ
+                     ================================= -->
+                {% if available_coupon %}
+
+                    <div class="checkout-coupon-box">
+
+                        <div class="checkout-coupon-info">
+
+                            <span class="checkout-coupon-label">
+                                ƯU ĐÃI CỦA BẠN
+                            </span>
+
+                            <strong>
+                                {{ available_coupon.code }}
+                            </strong>
+
+                            <small>
+                                Giảm {{ available_coupon.discount_percent }}%
+                            </small>
+
+                        </div>
+
+
+                        {% if request.session.applied_coupon_code == available_coupon.code %}
+
+                            <button
+                                type="button"
+                                id="coupon-toggle-button"
+                                class="coupon-button is-applied"
+                                data-action="remove"
+                            >
+                                ✓ ĐÃ ÁP DỤNG
+                            </button>
+
+                        {% else %}
+
+                            <button
+                                type="button"
+                                id="coupon-toggle-button"
+                                class="coupon-button"
+                                data-action="apply"
+                            >
+                                ÁP DỤNG
+                            </button>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    {% if discount_amount > 0 %}
+
+                        <div class="checkout-price">
+
+                            <div class="checkout-discount-row">
+
+                                <span>
+                                    Ưu đãi {{ available_coupon.discount_percent }}%
+                                </span>
+
+                                <strong>
+                                    -{{ discount_amount|vnd }}đ
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    {% endif %}
+
+                {% endif %}
+
+
+                <!-- =================================
+                     SHIPPING MESSAGE
+                     ================================= -->
+
+                {% if shipping_fee == 0 %}
+
+                    <div class="checkout-free-shipping">
+
+                        <span>✓</span>
+
+                        <p>
+                            Đơn hàng của bạn được
+                            <strong>
+                                miễn phí vận chuyển
+                            </strong>
+                        </p>
+
+                    </div>
+
+                {% elif free_shipping_remaining > 0 %}
+
+                    <div class="checkout-shipping-hint">
+
+                        <span>♡</span>
+
+                        <p>
+                            Mua thêm
+                            <strong>
+                                {{ free_shipping_remaining|vnd }}đ
+                            </strong>
+                            để được miễn phí vận chuyển.
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+
+
+                <!-- =================================
+                     TOTAL
+                     ================================= -->
+                <div class="checkout-total">
+
+                    <div>
+
+                        <span>
+                            Tổng thanh toán
+                        </span>
+
+                        <small>
+                            Đã bao gồm phí vận chuyển
+                        </small>
+
+                    </div>
+
+                    <strong>
+                        {{ total|vnd }}đ
+                    </strong>
+
+                </div>
+
+
+
+                <!-- =================================
+                     SUBMIT
+                     ================================= -->
+                <button
+                    type="submit"
+                    class="checkout-submit"
+                >
+
+                    <span>
+                        Đặt hàng
+                    </span>
+
+                    <span class="checkout-submit-arrow">
+                        →
+                    </span>
+
+                </button>
+
+
+
+                <!-- =================================
+                     SECURITY
+                     ================================= -->
+                <p class="checkout-secure">
+
+                    <span>⌁</span>
+
+                    Thông tin của bạn được bảo mật và chỉ được sử dụng
+                    để xử lý đơn hàng.
+
+                </p>
+
+            </div>
+
+        </aside>
+
+    </form>
+
+</section>
+
+
+
+<!-- =========================================
+     PAYMENT METHOD JAVASCRIPT
+     ========================================= -->
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const paymentRadios = document.querySelectorAll(
+        'input[name="payment_method"]'
+    );
+
+    const bankPaymentBox = document.getElementById(
+        "bank-payment-box"
+    );
+
+
+    function updatePaymentBox() {
+
+        const selected = document.querySelector(
+            'input[name="payment_method"]:checked'
+        );
+
+
+        if (!selected) {
+
+            bankPaymentBox.style.display = "none";
+
+            return;
+        }
+
+
+        if (selected.value === "bank") {
+
+            bankPaymentBox.style.display = "block";
+
+        } else {
+
+            bankPaymentBox.style.display = "none";
+
+        }
+
+    }
+
+
+    paymentRadios.forEach(function (radio) {
+
+        radio.addEventListener(
+            "change",
+            updatePaymentBox
+        );
+
+    });
+
+
+    updatePaymentBox();
+
+
+    /* =====================================================
+       ÁP DỤNG / BỎ MÃ GIẢM GIÁ
+       ===================================================== */
+
+    const couponButton = document.getElementById(
+        "coupon-toggle-button"
+    );
+
+    if (couponButton) {
+
+        couponButton.addEventListener(
+            "click",
+            async function () {
+
+                const csrfInput = document.querySelector(
+                    'input[name="csrfmiddlewaretoken"]'
+                );
+
+                const formData = new FormData();
+
+                formData.append(
+                    "action",
+                    couponButton.dataset.action || "apply"
+                );
+
+                if (csrfInput) {
+                    formData.append(
+                        "csrfmiddlewaretoken",
+                        csrfInput.value
+                    );
+                }
+
+                couponButton.disabled = true;
+                couponButton.textContent = "ĐANG XỬ LÝ...";
+
+                try {
+
+                    const response = await fetch(
+                        "{% url 'apply_discount_coupon' %}",
+                        {
+                            method: "POST",
+                            body: formData,
+                            headers: {
+                                "X-Requested-With": "XMLHttpRequest"
+                            }
+                        }
+                    );
+
+                    const data = await response.json();
+
+                    if (!data.success) {
+
+                        alert(
+                            data.message ||
+                            "Không thể áp dụng mã giảm giá."
+                        );
+
+                        couponButton.disabled = false;
+                        window.location.reload();
+                        return;
+                    }
+
+                    window.location.reload();
+
+                } catch (error) {
+
+                    console.error(
+                        "Coupon error:",
+                        error
+                    );
+
+                    alert(
+                        "Không thể áp dụng mã giảm giá. Vui lòng thử lại."
+                    );
+
+                    couponButton.disabled = false;
+                    window.location.reload();
+                }
+            }
+        );
+    }
+
+});
+</script>
+
+{% endblock %}
